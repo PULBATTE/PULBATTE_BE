@@ -29,8 +29,6 @@ dependencies {
     runtimeOnly 'com.h2database:h2'
     annotationProcessor 'org.projectlombok:lombok'
 
-    // 스프링 시큐리티
-    implementation 'org.springframework.boot:spring-boot-starter-security'
 
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
