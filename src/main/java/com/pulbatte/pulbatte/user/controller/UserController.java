@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
@@ -30,7 +30,7 @@ public class UserController {
     }
 
 
-    @PostMapping("/login")
+    @PostMapping("/signin")
     public MsgResponseDto login(@RequestBody SignInRequestDto loginRequestDto, HttpServletResponse response) {
         //클라이언트에 반환하기 위해 response 객체
         userService.login(loginRequestDto, response);
@@ -50,8 +50,8 @@ public class UserController {
         return new MsgResponseDto(SuccessCode.LOG_IN);
     }*/
 
-    // 이메일 중복 확인
-    @GetMapping("/signup/checkId/")
+    // 아이디 중복 확인
+    @GetMapping("/api/auth/idDupleCheck")
     public ResponseEntity<Boolean> checkUserNameDuplicate (@RequestParam String userId){
         return ResponseEntity.ok(userService.checkUserIdDuplicate(userId));
     }
