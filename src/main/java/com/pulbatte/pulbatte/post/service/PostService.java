@@ -3,12 +3,15 @@ package com.pulbatte.pulbatte.post.service;
 import com.pulbatte.pulbatte.comment.dto.CommentResponseDto;
 import com.pulbatte.pulbatte.comment.entity.Comment;
 import com.pulbatte.pulbatte.comment.repository.CommentRepository;
+import com.pulbatte.pulbatte.global.MsgResponseDto;
 import com.pulbatte.pulbatte.global.S3Uploader;
 import com.pulbatte.pulbatte.global.exception.CustomException;
 import com.pulbatte.pulbatte.global.exception.ErrorCode;
+import com.pulbatte.pulbatte.global.exception.SuccessCode;
 import com.pulbatte.pulbatte.post.dto.PostRequestDto;
 import com.pulbatte.pulbatte.post.dto.PostResponseDto;
 import com.pulbatte.pulbatte.post.entity.Post;
+import com.pulbatte.pulbatte.post.entity.PostLike;
 import com.pulbatte.pulbatte.post.repository.LikeRepository;
 import com.pulbatte.pulbatte.post.repository.PostRepository;
 import com.pulbatte.pulbatte.user.entity.User;
@@ -35,14 +38,12 @@ public class PostService {
     private final S3Uploader s3Uploader;
 
     //게시글 생성
-    public PostResponseDto createPost(PostRequestDto requestDto, User user, MultipartFile multipartFile) throws IOException {
+    public void createPost(PostRequestDto requestDto, User user, MultipartFile multipartFile) throws IOException {
         String image = null;
         if (!multipartFile.isEmpty()) {
             image = s3Uploader.upload(multipartFile, "static");
         }
-        Post post = postRepository.save(new Post(requestDto, user, image));
-
-        return new PostResponseDto(post, image);
+        postRepository.save(new Post(requestDto, user, image));
     }
     //게시글 전체 출력 페이징 처리
     @Transactional(readOnly = true)
@@ -50,13 +51,12 @@ public class PostService {
         Page<Post> boardList = postRepository.findAllByOrderByCreatedAtDesc(pageable);
         List<PostResponseDto> boardResponseDto = new ArrayList<>();
 
+
         for (Post post : boardList) {
+            Long commentCnt = commentRepository.countByPostId(post.getId());
+            Long likeCnt = likeRepository.likeCnt(post.getId());
             String image = post.getImage();
-            List<CommentResponseDto> commentList = new ArrayList<>();
-            for (Comment comment : post.getCommentList()) {
-                commentList.add(new CommentResponseDto(comment));
-            }
-            boardResponseDto.add(new PostResponseDto(post, commentList, image));
+            boardResponseDto.add(new PostResponseDto(post,likeCnt,commentCnt,image));
         }
         Page<PostResponseDto> page = new PageImpl<>(boardResponseDto);
         return page;
@@ -67,25 +67,22 @@ public class PostService {
         Post post = postRepository.findById(id).orElseThrow(
                 () -> new CustomException(ErrorCode.NO_BOARD_FOUND)
         );
-
+        Long commentCnt = commentRepository.countByPostId(post.getId());
         Long likeCnt = likeRepository.likeCnt(post.getId());
         String image = post.getImage();
-
         List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
         for (Comment comment : post.getCommentList()) {
             List<CommentResponseDto> childCommentList = new ArrayList<>();
-            if(comment.getParent()==null){                                                      //부모 댓글이 없을 경우
-                for (Comment childComment : comment.getChildren()){                              //자식 댓글 리스트의 데이터를 childComment에 저장
+            if(comment.getParent()==null){                                                   //부모 댓글이 없을 경우
+                for (Comment childComment : comment.getChildren()){                          //자식 댓글 리스트의 데이터를 childComment에 저장
                     if (id.equals(childComment.getPost().getId())) {                         //childComment의 id와 받아온 id가 일치할 경우(선택 게시글 저장)
-                        childCommentList.add(new CommentResponseDto(childComment));             //저장된 자식댓글을 리스트에 저장
+                        childCommentList.add(new CommentResponseDto(childComment));          //저장된 자식댓글을 리스트에 저장
                     }
                 }
-                commentResponseDtoList.add(new CommentResponseDto(comment,childCommentList));   //저장된 데이터를 리스트에
+                commentResponseDtoList.add(new CommentResponseDto(comment,childCommentList));//저장된 데이터를 리스트에
             }
         }
-
-
-        return new PostResponseDto(post, commentResponseDtoList, image, likeCnt);
+        return new PostResponseDto(post, commentResponseDtoList, image, likeCnt,commentCnt);
     }
 
     //게시글 수정
@@ -140,6 +137,20 @@ public class PostService {
 
         postRepository.delete(post);
     }
+    //게시글 좋아요, 좋아요 취소
+    @Transactional
+    public MsgResponseDto postLike(Long postId, User user) {
+        Post post = postRepository.findById(postId).orElseThrow(
+                () -> new CustomException(ErrorCode.NO_BOARD_FOUND)
+        );
+        if (likeRepository.findByPostIdAndUserId(postId, user.getId()).isEmpty()) { // postLike 에 값이 있는지 확인
+            likeRepository.save(new PostLike(post, user));                          // 없으면 저장
+            return new MsgResponseDto(SuccessCode.LIKE);
+        } else {
+            likeRepository.deleteByPostIdAndUserId(post.getId(), user.getId());     // 있으면 삭제
+            return new MsgResponseDto(SuccessCode.CANCEL_LIKE);
+        }
 
+    }
 
 }

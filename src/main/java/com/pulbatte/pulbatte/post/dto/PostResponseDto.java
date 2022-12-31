@@ -27,12 +27,14 @@ public class PostResponseDto {
     private LocalDateTime modifiedAt;
 
 
-    public PostResponseDto(Post post , String image){
+    public PostResponseDto(Post post ,Long likeCnt,Long commentCnt ,String image){
         this.id = post.getId();
         this.title = post.getTitle();
         this.content = post.getContent();
         this.nickname = post.getNickname();
         this.image = image;
+        this.likeCnt = likeCnt;
+        this.commentCnt=commentCnt;
         this.category = post.getCategory();
         this.createdAt = post.getCreatedAt();
         this.modifiedAt = post.getModifiedAt();
@@ -50,12 +52,13 @@ public class PostResponseDto {
         this.commentList = commentList;
     }
 
-    public PostResponseDto(Post post ,List<CommentResponseDto> commentList, String image,Long likeCnt){
+    public PostResponseDto(Post post ,List<CommentResponseDto> commentList, String image,Long likeCnt,Long commentCnt){
         this.id = post.getId();
         this.title = post.getTitle();
         this.content = post.getContent();
         this.nickname = post.getNickname();
         this.image = image;
+        this.commentCnt = commentCnt;
         this.likeCnt = likeCnt;
         this.category = post.getCategory();
         this.createdAt = post.getCreatedAt();

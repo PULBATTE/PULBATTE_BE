@@ -26,37 +26,50 @@ public class PostController {
 
     //게시글 생성
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public PostResponseDto createPost(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                       @RequestPart PostRequestDto request,
-                                       @RequestPart("image") MultipartFile multipartFile) throws IOException {
-        return postService.createPost(request, userDetails.getUser(), multipartFile);
+    public MsgResponseDto createPost(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestPart PostRequestDto request,
+            @RequestPart("image") MultipartFile multipartFile) throws IOException {
+        postService.createPost(request, userDetails.getUser(), multipartFile);
+        return new MsgResponseDto(SuccessCode.CREATE_BOARD);
     }
     //게시글 전체 조회
     @GetMapping
-    public Page<PostResponseDto> getListPosts(@PageableDefault(size = 20) Pageable pageable) {
+    public Page<PostResponseDto> getListPosts(
+            @PageableDefault(size = 20) Pageable pageable) {
         return postService.getListPosts(pageable);
     }
 
     // 게시글 상세 조회
     @GetMapping("/{postId}")
-    public PostResponseDto getPost(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public PostResponseDto getPost(
+            @PathVariable Long postId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return postService.getPost(postId, userDetails.getUser());
     }
     //게시글 수정
     @PutMapping("/{postId}")
-    public PostResponseDto updatePost(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                      @PathVariable Long postId,
-                                      @RequestPart PostRequestDto request,
-                                      @RequestPart(value = "image" ,required = false) MultipartFile multipartFile) throws IOException {
+    public PostResponseDto updatePost(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable Long postId,
+            @RequestPart PostRequestDto request,
+            @RequestPart(value = "image" ,required = false) MultipartFile multipartFile) throws IOException {
         return postService.updatePost(userDetails.getUser(), postId, request, multipartFile);
     }
     // 게시글 삭제
     @DeleteMapping("/{postId}")
-    public MsgResponseDto deletePost(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public MsgResponseDto deletePost(
+            @PathVariable Long postId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
         postService.deletePost(postId, userDetails.getUser());
         return new MsgResponseDto(SuccessCode.DELETE_BOARD);
     }
-
-
+    //게시글 좋아요, 좋아요 취소
+    @PostMapping("/{postId}/postLike")
+    public MsgResponseDto saveBoardLike(
+            @PathVariable Long postId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return postService.postLike(postId, userDetails.getUser());
+    }
 
 }
