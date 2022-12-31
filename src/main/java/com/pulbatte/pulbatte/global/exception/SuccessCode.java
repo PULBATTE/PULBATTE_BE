@@ -17,7 +17,8 @@ public enum SuccessCode {
     UPLOAD_NICKNAME(HttpStatus.OK, "닉네임 변경 완료"),
     UPLOAD_JOBANDCAREER(HttpStatus.OK, "직무/경력 등록 완료"),
     DELETE_BOARD(HttpStatus.OK, "게시글을 삭제하였습니다"),
-    DELETE_COMMENT(HttpStatus.OK, "댓글을 삭제하였습니다")
+    DELETE_COMMENT(HttpStatus.OK, "댓글을 삭제하였습니다"),
+    DELETE_USER(HttpStatus.OK,"회원 탈퇴를 완료하였습니다")
     ;
 
     private final HttpStatus httpStatus;
