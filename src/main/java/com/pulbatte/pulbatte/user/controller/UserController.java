@@ -1,16 +1,14 @@
 package com.pulbatte.pulbatte.user.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.pulbatte.pulbatte.global.MsgResponseDto;
 import com.pulbatte.pulbatte.global.exception.SuccessCode;
-import com.pulbatte.pulbatte.user.dto.SignInRequestDto;
+import com.pulbatte.pulbatte.user.dto.UserRequestDto;
 import com.pulbatte.pulbatte.user.dto.SignupRequestDto;
 import com.pulbatte.pulbatte.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -31,7 +29,7 @@ public class UserController {
 
 
     @PostMapping("/signin")
-    public MsgResponseDto login(@RequestBody SignInRequestDto loginRequestDto, HttpServletResponse response) {
+    public MsgResponseDto login(@RequestBody UserRequestDto loginRequestDto, HttpServletResponse response) {
         //클라이언트에 반환하기 위해 response 객체
         userService.login(loginRequestDto, response);
 
@@ -49,9 +47,8 @@ public class UserController {
         response.addCookie(cookie);
         return new MsgResponseDto(SuccessCode.LOG_IN);
     }*/
-
     // 아이디 중복 확인
-    @GetMapping("/api/auth/idDupleCheck")
+    @GetMapping("/idDupleCheck")
     public ResponseEntity<Boolean> checkUserNameDuplicate (@RequestParam String userId){
         return ResponseEntity.ok(userService.checkUserIdDuplicate(userId));
     }

@@ -5,14 +5,13 @@ import com.pulbatte.pulbatte.global.exception.CustomException;
 import com.pulbatte.pulbatte.global.exception.ErrorCode;
 import com.pulbatte.pulbatte.global.exception.SuccessCode;
 import com.pulbatte.pulbatte.global.jwt.JwtUtil;
-import com.pulbatte.pulbatte.user.dto.SignInRequestDto;
+import com.pulbatte.pulbatte.user.dto.UserRequestDto;
 import com.pulbatte.pulbatte.user.dto.SignupRequestDto;
 import com.pulbatte.pulbatte.user.entity.User;
 import com.pulbatte.pulbatte.user.entity.UserRoleEnum;
 import com.pulbatte.pulbatte.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,7 +68,7 @@ public class  UserService {
 
     // 로그인
     @Transactional(readOnly = true)
-    public MsgResponseDto login(SignInRequestDto loginRequestDto, HttpServletResponse response) {
+    public MsgResponseDto login(UserRequestDto loginRequestDto, HttpServletResponse response) {
         String userId = loginRequestDto.getUserId();
         String password = loginRequestDto.getPassword();
 
