@@ -43,6 +43,12 @@ public class PostController {
         return postService.getListBoards(pageable);
     }
 
+    // 게시글 상세 조회
+    @GetMapping("/{postId}")
+    public PostResponseDto getBoards(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return postService.getBoard(postId, userDetails.getUser());
+    }
+
 
 
 }

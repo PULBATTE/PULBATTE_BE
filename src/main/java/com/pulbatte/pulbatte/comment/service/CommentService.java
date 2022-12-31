@@ -36,6 +36,7 @@ public class CommentService {
     }
 
     //댓글 수정
+    @Transactional
     public CommentResponseDto updateComment(Long id, Long commentId, CommentRequestDto commentRequestDto, User user){
         Post post = postRepository.findById(id).orElseThrow(()-> new CustomException(ErrorCode.NO_BOARD_FOUND));
 

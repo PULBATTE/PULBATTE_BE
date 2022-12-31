@@ -2,6 +2,7 @@ package com.pulbatte.pulbatte.post.service;
 
 import com.pulbatte.pulbatte.comment.dto.CommentResponseDto;
 import com.pulbatte.pulbatte.comment.entity.Comment;
+import com.pulbatte.pulbatte.comment.repository.CommentRepository;
 import com.pulbatte.pulbatte.global.exception.CustomException;
 import com.pulbatte.pulbatte.global.exception.ErrorCode;
 import com.pulbatte.pulbatte.post.dto.PostRequestDto;
@@ -27,6 +28,7 @@ import java.util.List;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
 
     //게시글 생성
     public PostResponseDto createBoard(PostRequestDto requestDto, User user, MultipartFile multipartFile) throws IOException {
@@ -92,6 +94,38 @@ public class PostService {
         }
         Page<PostResponseDto> page = new PageImpl<>(boardResponseDto);
         return page;
+    }
+    //게시글 상세 조회
+    @Transactional(readOnly = true)
+    public PostResponseDto getBoard(Long id, User user) {
+        Post post = postRepository.findById(id).orElseThrow(
+                () -> new CustomException(ErrorCode.NO_BOARD_FOUND)
+        );
+
+        /*Long likeCnt = likeRepository.likeCnt(post.getId());
+        String image = post.getImage();*/
+
+        // 댓글 리스트 생성 + 사용자/댓글작성자 일치 여부 확인
+        List<Comment> commentList = commentRepository.findAllByPostId(id);
+        List<CommentResponseDto> commentListResponseDto = new ArrayList<>();
+
+        /*// 사용자가 좋아요 누른 사용자가 일치한지 체크
+        boolean boardlike;
+        if (likeRepository.findByBoardIdAndUserId(id, user.getId()).isPresent()) {
+            boardlike = true;
+        } else {
+            boardlike = false;
+        }
+
+        // 해당 게시물에 사용자가 작성한 댓글 포함 여부
+        boolean commentIncluding;
+        if (commentRepository.findAllByBoardId(id).equals(user.getUserId())){
+            commentIncluding = true;
+        } else {
+            commentIncluding = false;
+        }*/
+
+        return new PostResponseDto(post, commentListResponseDto/*, image, likeCnt, boardlike, commentIncluding*/);
     }
 
 
