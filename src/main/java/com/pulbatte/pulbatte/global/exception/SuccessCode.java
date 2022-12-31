@@ -10,6 +10,7 @@ public enum SuccessCode {
 
     SIGN_UP(HttpStatus.OK, "회원가입에 성공했습니다."),
     LOG_IN(HttpStatus.OK, "로그인에 성공했습니다"),
+    CHECK_NICKNAME(HttpStatus.OK,"사용 가능한 닉네임입니다."),
     LIKE(HttpStatus.OK, "좋아요 성공"),
     CANCEL_LIKE(HttpStatus.OK, "좋아요 취소"),
     UPLOAD_PROFILE(HttpStatus.OK, "프로필 사진 등록 완료"),
