@@ -22,7 +22,6 @@ import java.util.UUID;
 public class S3Uploader {
 
     private final AmazonS3Client amazonS3Client;
-
     @Value("${cloud.aws.s3.bucket}")
     public String bucket;
 
@@ -30,22 +29,18 @@ public class S3Uploader {
         File uploadFile = convert(multipartFile).orElseThrow(() -> new IllegalArgumentException("파일 전환 실패"));
         return upload(uploadFile, dirName);
     }
-
     // S3로 파일 업로드하기
     private String upload(File uploadFile, String dirName) {
         String fileName = dirName + "/" + UUID.randomUUID() + uploadFile.getName();   // S3에 저장된 파일 이름
         String uploadImageUrl = putS3(uploadFile, fileName); // s3로 업로드
         removeNewFile(uploadFile);
-
         return uploadImageUrl;
     }
-
     // S3로 업로드
     private String putS3(File uploadFile, String fileName) {
         amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile).withCannedAcl(CannedAccessControlList.PublicRead));
         return amazonS3Client.getUrl(bucket, fileName).toString();
     }
-
     // 로컬에 저장된 이미지 지우기
     private void removeNewFile(File targetFile) {
         if (targetFile.delete()) {
@@ -54,7 +49,6 @@ public class S3Uploader {
         }
         log.info("File delete fail");
     }
-
     private Optional<File> convert(MultipartFile multipartFile) throws IOException {
         File convertFile = new File(System.getProperty("user.dir") + "/" + multipartFile.getOriginalFilename());
         // 바로 위에서 지정한 경로에 File이 생성됨 (경로가 잘못되었다면 생성 불가능)
@@ -66,8 +60,6 @@ public class S3Uploader {
         }
         return Optional.empty();
     }
-
-
     public String delete(String fileName, String dirName) {
         amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, dirName + "/" + fileName));
         return amazonS3Client.getUrl(bucket, fileName).toString();

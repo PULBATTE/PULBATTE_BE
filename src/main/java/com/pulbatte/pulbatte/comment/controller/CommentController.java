@@ -1,7 +1,6 @@
 package com.pulbatte.pulbatte.comment.controller;
 
 import com.pulbatte.pulbatte.comment.dto.CommentRequestDto;
-import com.pulbatte.pulbatte.comment.dto.CommentResponseDto;
 import com.pulbatte.pulbatte.comment.service.CommentService;
 import com.pulbatte.pulbatte.global.MsgResponseDto;
 import com.pulbatte.pulbatte.global.security.UserDetailsImpl;
@@ -16,27 +15,30 @@ public class CommentController {
 
     // 댓글 생성
     @PostMapping("/{postId}/comments/{commentId}")
-    public CommentResponseDto saveComment(@PathVariable Long postId,
-                                          @PathVariable Long commentId,
-                                          @RequestBody CommentRequestDto commentRequestDto,
-                                          @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
+    public MsgResponseDto saveComment(
+            @PathVariable Long postId,
+            @PathVariable Long commentId,
+            @RequestBody CommentRequestDto commentRequestDto,
+            @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
         return commentService.saveComment(postId,commentId,commentRequestDto, userDetailsImpl.getUser());
     }
 
     //댓글 수정
-    @PutMapping("/{postId}/comments/{commentId}}")
-    public CommentResponseDto updateComment(@PathVariable Long postId,
-                                            @PathVariable Long commentId,
-                                            @RequestBody CommentRequestDto commentRequestDto,
-                                            @AuthenticationPrincipal UserDetailsImpl userDetailsImpl){
+    @PutMapping("/{postId}/comments/{commentId}")
+    public MsgResponseDto updateComment(
+            @PathVariable Long postId,
+            @PathVariable Long commentId,
+            @RequestBody CommentRequestDto commentRequestDto,
+            @AuthenticationPrincipal UserDetailsImpl userDetailsImpl){
         return commentService.updateComment(postId,commentId,commentRequestDto,userDetailsImpl.getUser());
     }
 
     // 댓글 삭제
     @DeleteMapping("/{postId}/comments/{commentId}")
-    public MsgResponseDto deleteComment(@PathVariable Long postId,
-                                        @PathVariable Long commentId,
-                                        @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
+    public MsgResponseDto deleteComment(
+            @PathVariable Long postId,
+            @PathVariable Long commentId,
+            @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
         return commentService.deleteComment(postId, commentId, userDetailsImpl.getUser());
     }
 }

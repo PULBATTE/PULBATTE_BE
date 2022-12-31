@@ -21,32 +21,25 @@ public class CommentResponseDto {
     private Long parentId;
     private List<CommentResponseDto> children= new ArrayList<>();
 
-
+    //대댓글 Response
     public CommentResponseDto(Comment comment) {
-        this.commentId = comment.getId();
-        this.postId = comment.getPost().getId();
-        this.nickname = comment.getUser().getNickname();
-        this.comment = comment.getContent();
-        this.modifiedAt = comment.getModifiedAt();
-        this.createdAt = comment.getModifiedAt();
+        this.commentId = comment.getId();                   // 댓글 id
+        this.postId = comment.getPost().getId();            // 게시글 id
+        this.nickname = comment.getUser().getNickname();    // 작성자 닉네임
+        this.comment = comment.getContent();                // 댓글 작성 내용
+        this.parentId = comment.getParent().getId();        // 부모 댓글 id
+        this.modifiedAt = comment.getModifiedAt();          // 수정 시간
+        this.createdAt = comment.getModifiedAt();           // 작성 시간
     }
-
-    public CommentResponseDto(Comment comment, Long commentId) {
-        this.commentId = comment.getId();
-        this.postId = comment.getPost().getId();
-        this.nickname = comment.getUser().getNickname();
-        this.comment = comment.getContent();
-        this.parentId = commentId;
-        this.modifiedAt = comment.getModifiedAt();
-        this.createdAt = comment.getModifiedAt();
-    }
-
+    //댓글 ResponseDto
     public CommentResponseDto(Comment comment, List<CommentResponseDto> commentResponseDtoList){
-        this.commentId = comment.getId();                      // 댓글 id
-        this.nickname = comment.getUser().getNickname();                // 작성자명
-        this.comment = comment.getContent();                // 작성내용
-        this.createdAt = comment.getCreatedAt();               // 작성시간
-        this.modifiedAt = comment.getModifiedAt();              // 수정시간
-        this.children = commentResponseDtoList;                // 대댓글
+        this.commentId = comment.getId();                   // 댓글 id
+        this.postId = comment.getPost().getId();            // 게시글 id
+        this.nickname = comment.getUser().getNickname();    // 작성자 닉네임
+        this.comment = comment.getContent();                // 댓글 작성 내용
+        this.createdAt = comment.getCreatedAt();            // 작성 시간
+        this.modifiedAt = comment.getModifiedAt();          // 수정 시간
+        this.parentId = 0L;                                 // 부모 댓글 id
+        this.children = commentResponseDtoList;             // 대댓글
     }
 }

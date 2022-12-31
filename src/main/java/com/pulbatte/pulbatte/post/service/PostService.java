@@ -40,8 +40,8 @@ public class PostService {
     //게시글 생성
     public void createPost(PostRequestDto requestDto, User user, MultipartFile multipartFile) throws IOException {
         String image = null;
-        if (!multipartFile.isEmpty()) {
-            image = s3Uploader.upload(multipartFile, "static");
+        if (!multipartFile.isEmpty()) {                                     // 이미지 파일이 존재 할 경우
+            image = s3Uploader.upload(multipartFile, "static");     // s3이미지 업로드
         }
         postRepository.save(new Post(requestDto, user, image));
     }
@@ -53,12 +53,12 @@ public class PostService {
 
 
         for (Post post : boardList) {
-            Long commentCnt = commentRepository.countByPostId(post.getId());
-            Long likeCnt = likeRepository.likeCnt(post.getId());
-            String image = post.getImage();
+            Long commentCnt = commentRepository.countByPostId(post.getId());            // 댓글 수
+            Long likeCnt = likeRepository.likeCnt(post.getId());                        // 좋아요 수
+            String image = post.getImage();                                             // 이미지 url
             boardResponseDto.add(new PostResponseDto(post,likeCnt,commentCnt,image));
         }
-        Page<PostResponseDto> page = new PageImpl<>(boardResponseDto);
+        Page<PostResponseDto> page = new PageImpl<>(boardResponseDto);                  // 페이징 처리
         return page;
     }
     //게시글 상세 조회
@@ -67,19 +67,19 @@ public class PostService {
         Post post = postRepository.findById(id).orElseThrow(
                 () -> new CustomException(ErrorCode.NO_BOARD_FOUND)
         );
-        Long commentCnt = commentRepository.countByPostId(post.getId());
-        Long likeCnt = likeRepository.likeCnt(post.getId());
-        String image = post.getImage();
-        List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
+        Long commentCnt = commentRepository.countByPostId(post.getId());                         // 댓글 수
+        Long likeCnt = likeRepository.likeCnt(post.getId());                                     // 좋아요 수
+        String image = post.getImage();                                                          // 이미지 url
+        List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();                     // 댓글 리스트
         for (Comment comment : post.getCommentList()) {
             List<CommentResponseDto> childCommentList = new ArrayList<>();
-            if(comment.getParent()==null){                                                   //부모 댓글이 없을 경우
-                for (Comment childComment : comment.getChildren()){                          //자식 댓글 리스트의 데이터를 childComment에 저장
-                    if (id.equals(childComment.getPost().getId())) {                         //childComment의 id와 받아온 id가 일치할 경우(선택 게시글 저장)
-                        childCommentList.add(new CommentResponseDto(childComment));          //저장된 자식댓글을 리스트에 저장
+            if(comment.getParent()==null){                                                       //부모 댓글이 없을 경우
+                for (Comment childComment : comment.getChildren()){                              //자식 댓글 리스트의 데이터를 childComment에 저장
+                    if (id.equals(childComment.getPost().getId())) {                             //childComment의 id와 받아온 id가 일치할 경우(선택 게시글 저장)
+                        childCommentList.add(new CommentResponseDto(childComment));              //저장된 자식댓글을 리스트에 저장
                     }
                 }
-                commentResponseDtoList.add(new CommentResponseDto(comment,childCommentList));//저장된 데이터를 리스트에
+                commentResponseDtoList.add(new CommentResponseDto(comment,childCommentList));
             }
         }
         return new PostResponseDto(post, commentResponseDtoList, image, likeCnt,commentCnt);
@@ -89,30 +89,27 @@ public class PostService {
     @Transactional
     public PostResponseDto updatePost(User user, Long id, PostRequestDto requestDto, MultipartFile multipartFile) throws IOException {
         Post post;
-        if (user.getRole().equals(UserRoleEnum.ADMIN)) {
-            post = postRepository.findById(id).orElseThrow(
-                    () -> new CustomException(ErrorCode.NO_BOARD_FOUND)
+        if (user.getRole().equals(UserRoleEnum.ADMIN)) {                                    // admin 계정일 경우
+            post = postRepository.findById(id).orElseThrow(                                 // 입력받은 id와 같은 데이터 수정
+                    () -> new CustomException(ErrorCode.NO_BOARD_FOUND)                     // 없으면 에러 출력
             );
-        } else {
-            post = postRepository.findByIdAndNickname(id, user.getNickname()).orElseThrow(
+        } else {                                                                            // 일반 user 계정일 경우
+            post = postRepository.findByIdAndNickname(id, user.getNickname()).orElseThrow(  // 추가 검증
                     () -> new CustomException(ErrorCode.NO_BOARD_FOUND)
             );
         }
         post.update(requestDto);
 
-        List<CommentResponseDto> commentList = new ArrayList<>();
+        List<CommentResponseDto> commentList = new ArrayList<>();                           // 댓글 리스트
         for (Comment comment : post.getCommentList()) {
             commentList.add(new CommentResponseDto(comment));
         }
         String image = null;
-        if (!multipartFile.isEmpty()) { // 사진이 수정된 경우
-            image = (s3Uploader.upload(multipartFile, "static")); // 새로들어온 이미지 s3 저장
-
-            Post board1 = postRepository.findById(id).orElseThrow();
-
-            s3Uploader.delete(board1.getImage(), "static");
-
-            board1.update(image);
+        if (!multipartFile.isEmpty()) {                                                     // 사진이 수정된 경우
+            image = (s3Uploader.upload(multipartFile, "static"));                   // 새로들어온 이미지 s3 저장
+            Post posts = postRepository.findById(id).orElseThrow();
+            s3Uploader.delete(posts.getImage(), "static");                         // 이전 이미지 파일 삭제
+            posts.update(image);
 
         }
         return new PostResponseDto(post, commentList, image);
@@ -122,19 +119,17 @@ public class PostService {
     @Transactional
     public void deletePost(Long id, User user) {
         Post post;
-        if (user.getRole().equals(UserRoleEnum.ADMIN)) {
-            post = postRepository.findById(id).orElseThrow(
-                    () -> new CustomException(ErrorCode.NO_BOARD_FOUND)
+        if (user.getRole().equals(UserRoleEnum.ADMIN)) {                                    // admin 계정일 경우
+            post = postRepository.findById(id).orElseThrow(                                 // 입력받은 id와 같은 데이터 삭제
+                    () -> new CustomException(ErrorCode.NO_BOARD_FOUND)                     // 없으면 에러 출력
             );
-        } else {
-            post = postRepository.findByIdAndNickname(id, user.getNickname()).orElseThrow(
+        } else {                                                                            // 일반 user 계정일 경우
+            post = postRepository.findByIdAndNickname(id, user.getNickname()).orElseThrow(  // 추가 검증
                     () -> new CustomException(ErrorCode.NO_BOARD_FOUND)
             );
         }
-        Post post1 = postRepository.findById(id).orElseThrow();
-
-        s3Uploader.delete(post1.getImage(), "static");
-
+        Post posts = postRepository.findById(id).orElseThrow();
+        s3Uploader.delete(posts.getImage(), "static");                              // 입력받은 아이디와 같은 이미지 삭제
         postRepository.delete(post);
     }
     //게시글 좋아요, 좋아요 취소

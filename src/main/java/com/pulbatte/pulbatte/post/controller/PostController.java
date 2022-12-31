@@ -39,7 +39,6 @@ public class PostController {
             @PageableDefault(size = 20) Pageable pageable) {
         return postService.getListPosts(pageable);
     }
-
     // 게시글 상세 조회
     @GetMapping("/{postId}")
     public PostResponseDto getPost(

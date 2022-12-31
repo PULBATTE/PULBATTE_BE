@@ -40,25 +40,25 @@ public class Comment extends TimeStamped {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "parent", orphanRemoval = true)
     private List<Comment> children = new ArrayList<>();  // 대댓글 리스트
 
+    // 댓글 작성
     public Comment(CommentRequestDto commentRequestDto, Post post, User user){
-        this.content = commentRequestDto.getComment();
-        this.userId = user.getUserId();
-        this.post = post;
-        this.user = user;
-        this.nickname = user.getNickname();
+        this.content = commentRequestDto.getComment();  // 입력 받은 댓글 내용
+        this.userId = user.getUserId();                 // 입력한 userId
+        this.nickname = user.getNickname();             // 유저 닉네임
+        this.post = post;                               // 게시글 정보
+        this.user = user;                               // 유저 정보
     }
+    // 대댓글 작성
     public Comment(CommentRequestDto commentRequestDto, Post post, User user,Comment comment){
-        this.content = commentRequestDto.getComment();
-        this.userId = user.getUserId();
-        this.nickname = user.getNickname();
-        this.post = post;
-        this.user = user;
-        this.parent = comment;
+        this.content = commentRequestDto.getComment();  //입력 받은 댓글 내용
+        this.userId = user.getUserId();                 // 입력한 userId
+        this.nickname = user.getNickname();             // 유저 닉네임
+        this.post = post;                               // 게시글 정보
+        this.user = user;                               // 유저 정보
+        this.parent = comment;                          // 부모 댓글 정보
     }
-
+    // 댓글 수정
     public void update(CommentRequestDto commentRequestDto){
-        this.content = commentRequestDto.getComment();
+        this.content = commentRequestDto.getComment();  // 댓글 수정 내용
     }
-
-
 }
