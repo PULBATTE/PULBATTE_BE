@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post ,Long> {
-    Page<Post> findAllByCategoryOrderByCreatedAtDesc(String interestTag, Pageable pageable);
+    /*Page<Post> findAllByCategoryOrderByCreatedAtDesc(String interestTag, Pageable pageable);*/
     Optional<Post> findByIdAndNickname(Long id, String nickname);
     Page<Post> findAllByOrderByCreatedAtDesc(Pageable pageable);
 

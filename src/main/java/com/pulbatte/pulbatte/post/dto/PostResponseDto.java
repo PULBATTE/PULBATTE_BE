@@ -18,7 +18,7 @@ public class PostResponseDto {
     private String title;
     private String content;
     private String nickname;
-    /*private String image;*/
+    private String image;
     private int category;
     private Long likeCnt;
     private Long commentCnt;
@@ -27,27 +27,41 @@ public class PostResponseDto {
     private LocalDateTime modifiedAt;
 
 
-    public PostResponseDto(Post post /*, String image*/){
+    public PostResponseDto(Post post , String image){
         this.id = post.getId();
         this.title = post.getTitle();
         this.content = post.getContent();
         this.nickname = post.getNickname();
-        /*this.image = image;*/
+        this.image = image;
         this.category = post.getCategory();
         this.createdAt = post.getCreatedAt();
         this.modifiedAt = post.getModifiedAt();
     }
 
-    public PostResponseDto(Post post ,List<CommentResponseDto> commentList/*, String image*/){
+    public PostResponseDto(Post post ,List<CommentResponseDto> commentList, String image){
         this.id = post.getId();
         this.title = post.getTitle();
         this.content = post.getContent();
         this.nickname = post.getNickname();
-        /*this.image = image;*/
+        this.image = image;
         this.category = post.getCategory();
         this.createdAt = post.getCreatedAt();
         this.modifiedAt = post.getModifiedAt();
         this.commentList = commentList;
     }
+
+    public PostResponseDto(Post post ,List<CommentResponseDto> commentList, String image,Long likeCnt){
+        this.id = post.getId();
+        this.title = post.getTitle();
+        this.content = post.getContent();
+        this.nickname = post.getNickname();
+        this.image = image;
+        this.likeCnt = likeCnt;
+        this.category = post.getCategory();
+        this.createdAt = post.getCreatedAt();
+        this.modifiedAt = post.getModifiedAt();
+        this.commentList = commentList;
+    }
+
 
 }

@@ -25,23 +25,26 @@ public class Post extends TimeStamped {
     private String nickname;
     @Column(nullable = false)
     private int category;
-    /*@Column(nullable = false)
-    private String image;*/
+    @Column(nullable = false)
+    private String image;
     @OneToMany(mappedBy = "post",cascade = CascadeType.REMOVE)
     private List<Comment> commentList;
 
-    public Post(PostRequestDto postRequestDto , User user/*, String image*/){
+    public Post(PostRequestDto postRequestDto , User user, String image){
         this.title = postRequestDto.getTitle();
         this.content = postRequestDto.getContent();
         this.category = postRequestDto.getCategory();
         this.nickname = user.getNickname();
-        /*this.image = image;*/
+        this.image = image;
 
     }
     public void update(PostRequestDto requestDto){
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
         this.category = requestDto.getCategory();
+    }
+    public void update(String image){
+        this.image = image;
     }
 
 }
