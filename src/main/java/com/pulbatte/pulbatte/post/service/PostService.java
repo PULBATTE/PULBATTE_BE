@@ -11,6 +11,9 @@ import com.pulbatte.pulbatte.post.repository.PostRepository;
 import com.pulbatte.pulbatte.user.entity.User;
 import com.pulbatte.pulbatte.user.entity.UserRoleEnum;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -71,5 +74,25 @@ public class PostService {
         }*/
         return new PostResponseDto(post, commentList/*, image*/);
     }
+    //게시글 전체 출력 페이징 처리
+    @Transactional(readOnly = true)
+    public Page<PostResponseDto> getListBoards(Pageable pageable) {
+        Page<Post> boardList = postRepository.findAllByOrderByCreatedAtDesc(pageable);
+        List<PostResponseDto> boardResponseDto = new ArrayList<>();
+
+        for (Post post : boardList) {
+            /*Long likeCnt = likeRepository.likeCnt(post.getId());*/
+            /*Long commentCnt = commentRepository.countByBoardId(post.getId());*/
+            /*String image = post.getImage();*/
+            List<CommentResponseDto> commentList = new ArrayList<>();
+            for (Comment comment : post.getCommentList()) {
+                commentList.add(new CommentResponseDto(comment));
+            }
+            boardResponseDto.add(new PostResponseDto(post, commentList/*, image, likeCnt, commentCnt*/));
+        }
+        Page<PostResponseDto> page = new PageImpl<>(boardResponseDto);
+        return page;
+    }
+
 
 }
