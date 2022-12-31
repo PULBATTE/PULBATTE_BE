@@ -16,50 +16,27 @@ public class User {
     private String userId;                                  // 사용자 Id
     @Column(nullable = false)
     private String password;                                // 사용자 Password
-
     @Column(nullable = true)
     private String nickname;                                // 사용자 닉네임 (랜덤 난수로 닉네임 생성하여 저장)
-
-    @Column(nullable = false)
-    private int signUpType;                                 // 회원가입 타입 (카카오 Or 이메일 로그인)
-
-    @Column(nullable = false)
-    private int isDelete = 0;                               // 회원 삭제 유무 (0: 정상, 1: 삭제된 회원)
-
     @Column(nullable = true)
     private String profileImage;                            // 프로필 사진 Url (S3 Path)
-
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
-   /* // 카카오 User용 생성자
-    public User(String userId, String password, String nickname, int signUpType, UserRoleEnum role) {
-        this.userId = userId;
-        this.password = password;
-        this.nickname = nickname;
-        this.signUpType = signUpType;
-        this.role = role;
-    }*/
-
     // 일반 User용 생성자
-    public User(String userId, String password, String nickname,int signUpType, UserRoleEnum role) {
-        this.userId = userId;
-        this.password = password;
-        this.nickname = nickname;
-        this.signUpType = signUpType;
-        this.role = role;
+    public User(String userId, String password, String nickname, UserRoleEnum role) {
+        this.userId = userId;               // id(email 형식)
+        this.password = password;           // 비밀번호
+        this.nickname = nickname;           // 닉네임 (난수)
+        this.role = role;                   // 권한
     }
-
-    public void update(int signUpType){
-        this.signUpType = signUpType;
-    }
-
+    // 프로필 사진 업데이트
     public void updateProfile(String profileImage){
-        this.profileImage = profileImage;
+        this.profileImage = profileImage;   // 프로필 이미지 변경
     }
-
+    // 닉네임 업데이트
     public void updateNickname(String nickname){
-        this.nickname = nickname;
+        this.nickname = nickname;           // 닉네임 변경
     }
 }

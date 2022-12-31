@@ -17,7 +17,6 @@ public class MsgResponseDto {
         this.msg = successCode.getMessage();
         this.statusCode = successCode.getHttpStatus().value();
     }
-
     public MsgResponseDto(CustomException customException) {
         this.statusCode = customException.getStatuscode();
         this.msg = customException.getMsg();

@@ -18,26 +18,34 @@ import java.io.IOException;
 public class MypageController {
     private final MypageService mypageService;
 
-    @PostMapping("/nickDupleCheck") // 닉네임 중복 확인
-    public MsgResponseDto nickDupleCheck(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody StringDto stringDto) {
+    // 닉네임 중복 확인
+    @PostMapping("/nickDupleCheck")
+    public MsgResponseDto nickDupleCheck(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestBody StringDto stringDto) {
         mypageService.nickDupleCheck(userDetails.getUser(),stringDto);
         return new MsgResponseDto(SuccessCode.CHECK_NICKNAME);
     }
-
-    @PutMapping("/nickname") // 닉네임 수정
-    public MsgResponseDto nickname(@AuthenticationPrincipal UserDetailsImpl userDetails , @RequestBody StringDto stringDto){
+    // 닉네임 수정
+    @PutMapping("/nickname")
+    public MsgResponseDto nickname(
+            @AuthenticationPrincipal UserDetailsImpl userDetails ,
+            @RequestBody StringDto stringDto){
         mypageService.nickName(userDetails.getUser(), stringDto);
         return new MsgResponseDto(SuccessCode.UPLOAD_NICKNAME);
     }
-
+    // 프로필 이미지 등록
     @PutMapping("/profileImage")
-    public MsgResponseDto profileImage(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestPart(value = "image",required = false) MultipartFile multipartFile) throws IOException {
+    public MsgResponseDto profileImage(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestPart(value = "image",required = false) MultipartFile multipartFile) throws IOException {
         mypageService.profileImage(userDetails.getUser(),multipartFile);
         return new MsgResponseDto(SuccessCode.UPLOAD_PROFILE);
     }
-
+    // 회원 탈퇴
     @DeleteMapping("/deleteuser")
-    public MsgResponseDto deleteUser(@AuthenticationPrincipal UserDetailsImpl userDetails){
+    public MsgResponseDto deleteUser(
+            @AuthenticationPrincipal UserDetailsImpl userDetails){
         mypageService.deleteUser(userDetails.getUser());
             return new MsgResponseDto(SuccessCode.DELETE_USER);
 

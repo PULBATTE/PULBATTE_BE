@@ -26,20 +26,13 @@ import java.util.Date;
 public class JwtUtil {
 
     private final UserDetailsServiceImpl userDetailsService;
-
     public static final String AUTHORIZATION_HEADER = "Authorization";
-
     public static final String AUTHORIZATION_KEY = "auth";
-
     private static final String BEARER_PREFIX = "Bearer ";
-
     private static final long TOKEN_TIME = 60 * 60 * 1000L;
-
     @Value("${jwt.secret.key}")
     private String secretKey;
-
     private Key key;
-
     private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
     @PostConstruct
@@ -47,7 +40,6 @@ public class JwtUtil {
         byte[] bytes = Base64.getDecoder().decode(secretKey);
         key = Keys.hmacShaKeyFor(bytes);
     }
-
     // 토큰 검증
     public String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
@@ -56,10 +48,8 @@ public class JwtUtil {
         }
         return null;
     }
-
     public String createToken(String username, UserRoleEnum role) {
         Date date = new Date();
-
         return BEARER_PREFIX +
                 Jwts.builder()
                         .setSubject(username)
@@ -69,7 +59,6 @@ public class JwtUtil {
                         .signWith(key, signatureAlgorithm)
                         .compact();
     }
-
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
@@ -85,14 +74,12 @@ public class JwtUtil {
         }
         return false;
     }
-
     // 토큰에서 사용자 정보 가져오기
     // 위의 검증식과 일치하나 마지막에 getBody 를 통해서 안에 들어있는 값을 가져온다.
     // 앞의 validateToken 부분에서 이미 검증을 거쳤기 때문에 따로 검증을 거치지 않고 바로 넣어준다.
     public Claims getUserInfoFromToken(String token) {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
-
     // 인증 객체 생성
     public UsernamePasswordAuthenticationToken createAuthentication(String username) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
