@@ -26,6 +26,7 @@ public class MypageController {
         mypageService.nickDupleCheck(userDetails.getUser(),stringDto);
         return new MsgResponseDto(SuccessCode.CHECK_NICKNAME);
     }
+
     // 닉네임 수정
     @PutMapping("/nickname")
     public MsgResponseDto nickname(
@@ -34,6 +35,7 @@ public class MypageController {
         mypageService.nickName(userDetails.getUser(), stringDto);
         return new MsgResponseDto(SuccessCode.UPLOAD_NICKNAME);
     }
+
     // 프로필 이미지 등록
     @PutMapping("/profileImage")
     public MsgResponseDto profileImage(
@@ -42,17 +44,13 @@ public class MypageController {
         mypageService.profileImage(userDetails.getUser(),multipartFile);
         return new MsgResponseDto(SuccessCode.UPLOAD_PROFILE);
     }
+
     // 회원 탈퇴
     @DeleteMapping("/deleteuser")
     public MsgResponseDto deleteUser(
             @AuthenticationPrincipal UserDetailsImpl userDetails){
         mypageService.deleteUser(userDetails.getUser());
             return new MsgResponseDto(SuccessCode.DELETE_USER);
-
     }
-
-
-
-
-
+    
 }

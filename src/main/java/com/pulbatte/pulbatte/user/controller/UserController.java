@@ -26,6 +26,7 @@ public class UserController {
         userService.signup(signupRequestDto);
         return new MsgResponseDto(SuccessCode.SIGN_UP);
     }
+
     // 로그인
     @PostMapping("/signin")
     public MsgResponseDto login(

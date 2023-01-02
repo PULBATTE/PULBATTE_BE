@@ -27,6 +27,7 @@ public class  UserService {
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
     private static final String ADMIN_TOKEN = "HangHae99NoHangHae130Yes";
+    private static int signUpType = 0;
 
     // 회원가입
     @Transactional
@@ -48,7 +49,7 @@ public class  UserService {
             role = UserRoleEnum.ADMIN;                                                      // 맞으면 admin으로 회원가입
         }
 
-        User user = new User(userId, password, nickname, role);
+        User user = new User(userId, password, nickname,signUpType, role);
         userRepository.save(user);
         return new MsgResponseDto(SuccessCode.SIGN_UP);
     }
@@ -61,6 +62,10 @@ public class  UserService {
 
         User user = userRepository.findByUserId(userId).orElseThrow(                                                // 아이디 확인
                 () -> new CustomException(ErrorCode.NO_EXIST_USER));
+
+        if(user.getSignUpType() != signUpType){                                                                     // signUpType 확인
+            throw new CustomException(ErrorCode.NO_LOCAL_USER);
+        }
 
         if(!passwordEncoder.matches(password, user.getPassword())){                                                 // 복호화 한뒤 비밀번호 확인
             throw new CustomException(ErrorCode.DISMATCH_PASSWORD);
