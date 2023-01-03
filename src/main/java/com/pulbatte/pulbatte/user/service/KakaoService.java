@@ -38,11 +38,11 @@ public class KakaoService {
 
     public String kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
 //      1. "인가 코드"로 "액세스 토큰" 요청
-//        String accessToken = getToken(code);
+        String accessToken = getToken(code);
 //
 ////      2. 토큰으로 카카오 API 호출 : "액세스 토큰"으로 "카카오 사용자 정보" 가져오기
-//        LoginKakaoRequestDto kakaoUserInfo = getKakaoUserInfo(accessToken);
-        LoginKakaoRequestDto kakaoUserInfo = getKakaoUserInfo(code);
+        LoginKakaoRequestDto kakaoUserInfo = getKakaoUserInfo(accessToken);
+//        LoginKakaoRequestDto kakaoUserInfo = getKakaoUserInfo(code);
 
         // 3. 필요시에 회원가입
         User kakaoUser = registerKakaoUser(kakaoUserInfo);
@@ -64,8 +64,8 @@ public class KakaoService {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
         body.add("client_id", "84d4cb0f0b38976fab6edba825421247");
-        body.add("redirect_uri", "https://getpostman.com/oauth2/callback");
-//        body.add("redirect_uri", "http://localhost:8080/api/user/kakao/callback");
+        body.add("redirect_uri", "http://3.38.190.107:8080/api/user/kakao/callback");
+////        body.add("redirect_uri", "http://localhost:8080/api/user/kakao/callback");
         body.add("code", code);
 
         // HTTP 요청 보내기
