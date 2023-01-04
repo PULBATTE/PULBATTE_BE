@@ -64,6 +64,7 @@ dependencies {
     implementation 'mysql:mysql-connector-java'
     implementation group: 'com.mysql', name: 'mysql-connector-j', version: '8.0.31'
 
+    testImplementation("org.junit.vintage:junit-vintage-engine") {exclude group: "org.hamcrest", module: "hamcrest-core"}
 
 }
 
