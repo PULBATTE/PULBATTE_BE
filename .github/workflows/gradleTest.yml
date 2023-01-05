@@ -54,8 +54,8 @@ jobs:
       # S3 Bucket으로 copy
     - name: Deliver to AWS S3
       env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRET_ACCESS_KEY }}
+        ACCESS_KEY_ID: ${{ secrets.ACCESS_KEY_ID }}
+        SECRET_ACCESS_KEY: ${{ secrets.SECRET_ACCESS_KEY }}
       run: |
         aws s3 cp \
         --region ap-northeast-2 \
