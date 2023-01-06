@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "beginner")
 @Getter
@@ -13,31 +15,20 @@ public class Beginner {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
     @Column
-    private String beginnerPlantName;       //초보자용 식물
-
+    private String beginnerPlantName;                       //초보자용 식물
     @Column
-    private String tip;                     //식물 성장 팁
-
+    @ElementCollection
+    @CollectionTable
+    private List<String> tipList = new ArrayList<>();       //팁 리스트
     @Column
-    private String image;                   //이미지
-
+    private String image;                                   //이미지
     @Column
-    private String water;                   //물양
-
+    private int water;                                      //물양
     @Column
-    private String sunshine;                //일조량
-
+    private int sunshine;                                   //일조량
     @Column
-    private String humidity;                //습도
-
-    @Column
-    private String temp;                    //온도
-/*
-    @OneToOne
-    @JoinColumn(name = "User_id")
-    private User user;*/
+    private int ventilation;                                //온도
 
 
 }
