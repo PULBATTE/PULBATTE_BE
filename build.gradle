@@ -1,7 +1,14 @@
+buildscript {
+    ext {
+        queryDslVersion = "5.0.0"
+    }
+}
+
 plugins {
     id 'java'
     id 'org.springframework.boot' version '2.7.6'
     id 'io.spring.dependency-management' version '1.1.0'
+    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
 
 group = 'com.example'
@@ -11,6 +18,8 @@ sourceCompatibility = '17'
 repositories {
     mavenCentral()
 }
+
+def querydslDir = "$buildDir/generated/querydsl"
 
 dependencies {
     //AWS에 사진 업로드 위해
@@ -64,7 +73,27 @@ dependencies {
     implementation 'mysql:mysql-connector-java'
     implementation group: 'com.mysql', name: 'mysql-connector-j', version: '8.0.31'
 
+    // Querydsl
+    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+    implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
 
+}
+
+querydsl {
+    jpa = true
+    querydslSourcesDir = querydslDir
+}
+sourceSets {
+    main.java.srcDir querydslDir
+}
+compileQuerydsl{
+    options.annotationProcessorPath = configurations.querydsl
+}
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    querydsl.extendsFrom compileClasspath
 }
 
 tasks.named('test') {
