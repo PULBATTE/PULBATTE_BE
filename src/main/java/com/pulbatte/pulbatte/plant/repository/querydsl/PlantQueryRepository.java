@@ -2,6 +2,7 @@ package com.pulbatte.pulbatte.plant.repository.querydsl;
 
 import com.pulbatte.pulbatte.plant.entity.Plant;
 import com.pulbatte.pulbatte.plant.entity.PlantTag;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -19,7 +20,12 @@ public class PlantQueryRepository {
     public List<Plant> findByPlantTag(PlantTag tag) {
         return queryFactory
                 .selectFrom(plant)
-                .where(plant.plantTag.eq(tag))
+                .where(eqPlantTag(tag))
                 .fetch();
     }
+
+    private BooleanExpression eqPlantTag(PlantTag tag) {
+        return plant.plantTag.eq(tag);
+    }
+
 }

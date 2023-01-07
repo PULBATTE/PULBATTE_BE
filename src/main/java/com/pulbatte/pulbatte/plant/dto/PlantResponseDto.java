@@ -2,6 +2,7 @@ package com.pulbatte.pulbatte.plant.dto;
 
 import com.pulbatte.pulbatte.plant.entity.Plant;
 import com.pulbatte.pulbatte.plant.entity.PlantTag;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,6 +24,7 @@ public class PlantResponseDto {
     private String tempType;
     private String temp;
 
+    @QueryProjection
     public PlantResponseDto(Plant plant){
         this.plantName = plant.getPlantName();
         this.plantTag = plant.getPlantTag();
