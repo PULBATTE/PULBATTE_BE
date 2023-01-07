@@ -71,6 +71,8 @@ public class WebSecurityConfig {
         config.addAllowedOrigin("http://localhost:5173");
         config.addAllowedOrigin("https://miniprojectmeme.s3.ap-northeast-2.amazonaws.com");
         config.addAllowedOrigin("https://devsokdak.shop");
+        config.addAllowedOrigin("https://52.79.239.176");
+        config.addAllowedOrigin("https://52.79.239.176:8080");
         config.addAllowedOrigin("http://localhost:8080");               // 허용할 URl (백엔드 테스트 URL)
         config.addAllowedOrigin("http://3.38.190.107:8080/");               // 허용할 URl (AWS EC2 IP)
         config.addAllowedOrigin("http://3.38.190.107/");
