@@ -1,6 +1,7 @@
 package com.pulbatte.pulbatte.plant.dto;
 
 import com.pulbatte.pulbatte.plant.entity.Plant;
+import com.pulbatte.pulbatte.plant.entity.PlantTag;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -8,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PlantResponseDto {
     private String plantName;
-    private String plantTag;
+    private PlantTag plantTag;
     private int beginner;
     private String content;
     private String image;
