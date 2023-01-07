@@ -1,6 +1,8 @@
 package com.pulbatte.pulbatte.plant.dto;
 
 import com.pulbatte.pulbatte.plant.entity.Plant;
+import com.pulbatte.pulbatte.plant.entity.PlantTag;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -8,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PlantResponseDto {
     private String plantName;
-    private String plantTag;
+    private PlantTag plantTag;
     private int beginner;
     private String content;
     private String image;
@@ -22,6 +24,7 @@ public class PlantResponseDto {
     private String tempType;
     private String temp;
 
+    @QueryProjection            // Q파일 생성
     public PlantResponseDto(Plant plant){
         this.plantName = plant.getPlantName();
         this.plantTag = plant.getPlantTag();

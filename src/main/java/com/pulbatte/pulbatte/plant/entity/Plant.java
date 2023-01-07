@@ -23,7 +23,7 @@ public class Plant {
     private String content;                 //식물 설명
 
     @Column
-    private String PlantTag;                //식물 태그
+    private PlantTag plantTag;                //식물 태그
 
     @Column
     private String image;                   //이미지

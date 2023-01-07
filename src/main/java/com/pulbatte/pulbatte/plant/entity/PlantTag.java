@@ -12,5 +12,5 @@ public enum PlantTag {
     Fruit("열매를 감상하는"),
     Beginner("식린이가 키우기 쉬운");
 
-    private final  String Tag;
+    private final String Tag;
 }
