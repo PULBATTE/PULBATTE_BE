@@ -20,6 +20,19 @@ public class PlantQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
+    public List<PlantSearchDto> findAll() {
+        return queryFactory
+                .select(new QPlantSearchDto(
+                        plant.id,
+                        plant.plantName,
+                        plant.plantTag,
+                        plant.image
+                ))
+                .from(plant)
+                .fetch();
+    }
+
+    // 식물 이름 검색
     public List<PlantSearchDto> findByPlantName(String plantName) {
         return queryFactory
                 .select(new QPlantSearchDto(
@@ -29,7 +42,8 @@ public class PlantQueryRepository {
                         plant.image
                 ))
                 .from(plant)
-                .where(eqPlantName(plantName))
+                .where(plant.plantName.contains(plantName))
+                .orderBy(plant.plantName.asc())
                 .fetch();
     }
 
@@ -44,13 +58,6 @@ public class PlantQueryRepository {
                 .from(plant)
                 .where(eqPlantTag(tag))
                 .fetch();
-    }
-
-    private BooleanExpression eqPlantName(String plantName) {
-        if(!StringUtils.hasText(plantName)) {
-            return null;
-        }
-        return plant.plantName.eq(plantName);
     }
 
     private BooleanExpression eqPlantTag(PlantTag tag) {
