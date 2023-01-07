@@ -1,4 +1,4 @@
-name: coinTalk chatRoom server CI/CD
+name: PULBATTE dev CI / CD
 
 on:
   push:
@@ -47,7 +47,7 @@ jobs:
       run: cp ./scripts/*.sh ./deploy
 
     - name: Make zip file
-      run: zip -r ./coinTalk.zip ./deploy
+      run: zip -r ./pulbatte.zip ./deploy
       shell: bash
 
     - name: Configure AWS credentials
@@ -79,5 +79,5 @@ jobs:
           --application-name sangtriever \
           --deployment-group-name sangtriever-group \
           --file-exists-behavior OVERWRITE \
-          --s3-location bucket=tests2212,bundleType=zip,key=coinTalk.zip \
+          --s3-location bucket=tests2212,bundleType=zip,key=pulbatte.zip \
           --region ap-northeast-2
