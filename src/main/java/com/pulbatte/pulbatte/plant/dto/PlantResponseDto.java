@@ -24,7 +24,6 @@ public class PlantResponseDto {
     private String tempType;
     private String temp;
 
-    @QueryProjection            // Q파일 생성
     public PlantResponseDto(Plant plant){
         this.plantName = plant.getPlantName();
         this.plantTag = plant.getPlantTag();

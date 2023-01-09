@@ -1,33 +1,41 @@
 package com.pulbatte.pulbatte.plantSearch.service;
 
-import com.pulbatte.pulbatte.plant.entity.PlantTag;
-import com.pulbatte.pulbatte.plant.repository.PlantRepository;
+import com.pulbatte.pulbatte.plant.entity.Plant;
+import com.pulbatte.pulbatte.plantSearch.dto.PlantListDto;
+import com.pulbatte.pulbatte.plantSearch.dto.PlantListResponseDto;
 import com.pulbatte.pulbatte.plantSearch.dto.PlantSearchDto;
 import com.pulbatte.pulbatte.plantSearch.repository.PlantQueryRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PlantSearchService {
 
     private final PlantQueryRepository queryRepository;
-    private final PlantRepository plantRepository;
 
-    public List<PlantSearchDto> findByPlantName(String keyword) {
-        List<PlantSearchDto> plants = queryRepository.findByPlantName(keyword);
-        for(PlantSearchDto plant : plants) {
-            String plantName = plant.getPlantName();
-            if(plantName.contains(keyword)) {
-                plants.add(plant);
-            }
-        }
-        return plants;
+    public PlantListResponseDto getAllPlants() {
+        List<PlantListDto> plantList = queryRepository.findAll();
+        return PlantListResponseDto.builder()
+                .plants(plantList)
+                .build();
     }
 
-    public List<PlantSearchDto> findByPlantTag(PlantTag tag) {
-        return queryRepository.findByPlantTag(tag);
+    public PlantListResponseDto findByPlantName(PlantSearchDto searchDto) {
+        List<PlantListDto> plantList = queryRepository.findByPlantName(searchDto);
+        return PlantListResponseDto.builder()
+                .plants(plantList)
+                .build();
+    }
+
+    public PlantListResponseDto findByPlantTag(PlantSearchDto searchDto) {
+        List<PlantListDto> plantList = queryRepository.findByPlantTag(searchDto);
+        return PlantListResponseDto.builder()
+                .plants(plantList)
+                .build();
     }
 }
