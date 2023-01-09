@@ -1,17 +1,14 @@
 package com.pulbatte.pulbatte.plantSearch.repository;
 
-import com.pulbatte.pulbatte.plant.entity.Plant;
 import com.pulbatte.pulbatte.plant.entity.PlantTag;
-import com.pulbatte.pulbatte.plant.entity.QPlant;
 import com.pulbatte.pulbatte.plantSearch.dto.PlantListDto;
-import com.pulbatte.pulbatte.plantSearch.dto.PlantSearchDto;
 import com.pulbatte.pulbatte.plantSearch.dto.QPlantListDto;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ObjectUtils;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
 import static com.pulbatte.pulbatte.plant.entity.QPlant.plant;
@@ -19,13 +16,10 @@ import static com.pulbatte.pulbatte.plant.entity.QPlant.plant;
 
 @Repository
 public class PlantQueryRepository {
-
-    private final EntityManager entityManager;
     private final JPAQueryFactory queryFactory;
 
-    public PlantQueryRepository(EntityManager entityManager) {
-        this.entityManager = entityManager;
-        this.queryFactory = new JPAQueryFactory(entityManager);
+    public PlantQueryRepository(JPAQueryFactory queryFactory) {
+        this.queryFactory = queryFactory;
     }
 
     // 전체 목록 가져오기
@@ -35,31 +29,31 @@ public class PlantQueryRepository {
                         plant
                 ))
                 .from(plant)
-                .orderBy(plant.plantName.desc())
+                .orderBy(plant.plantName.asc())
                 .fetch();
     }
 
     // 식물 이름 검색
-    public List<PlantListDto> findByPlantName(PlantSearchDto searchDto) {
+    public List<PlantListDto> findByPlantName(@Param("plantName") String plantName) {
         return queryFactory
                 .select(new QPlantListDto(
                         plant
                 ))
                 .from(plant)
-                .where(eqPlantName(searchDto.getPlantName()))
-                .orderBy(plant.plantName.desc())
+                .where(eqPlantName(plantName))
+                .orderBy(plant.plantName.asc())
                 .fetch();
     }
 
     // 태그 필터링
-    public List<PlantListDto> findByPlantTag(PlantSearchDto searchDto) {
+    public List<PlantListDto> findByPlantTag(PlantTag tag) {
         return queryFactory
                 .select(new QPlantListDto(
                         plant
                 ))
                 .from(plant)
-                .where(eqPlantTag(searchDto.getPlantTag()))
-                .orderBy(plant.plantName.desc())
+                .where(eqPlantTag(tag))
+                .orderBy(plant.plantName.asc())
                 .fetch();
     }
 

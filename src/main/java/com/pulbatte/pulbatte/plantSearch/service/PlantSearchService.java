@@ -1,9 +1,8 @@
 package com.pulbatte.pulbatte.plantSearch.service;
 
-import com.pulbatte.pulbatte.plant.entity.Plant;
+import com.pulbatte.pulbatte.plant.entity.PlantTag;
 import com.pulbatte.pulbatte.plantSearch.dto.PlantListDto;
 import com.pulbatte.pulbatte.plantSearch.dto.PlantListResponseDto;
-import com.pulbatte.pulbatte.plantSearch.dto.PlantSearchDto;
 import com.pulbatte.pulbatte.plantSearch.repository.PlantQueryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,15 +24,15 @@ public class PlantSearchService {
                 .build();
     }
 
-    public PlantListResponseDto findByPlantName(PlantSearchDto searchDto) {
-        List<PlantListDto> plantList = queryRepository.findByPlantName(searchDto);
+    public PlantListResponseDto findByPlantName(String keyword) {
+        List<PlantListDto> plantList = queryRepository.findByPlantName(keyword);
         return PlantListResponseDto.builder()
                 .plants(plantList)
                 .build();
     }
 
-    public PlantListResponseDto findByPlantTag(PlantSearchDto searchDto) {
-        List<PlantListDto> plantList = queryRepository.findByPlantTag(searchDto);
+    public PlantListResponseDto findByPlantTag(PlantTag tag) {
+        List<PlantListDto> plantList = queryRepository.findByPlantTag(tag);
         return PlantListResponseDto.builder()
                 .plants(plantList)
                 .build();
