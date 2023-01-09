@@ -21,40 +21,40 @@ public class PlantJournal {
 
     @Column
     private String plantName; // 식물 이름
-
     @Column
     private String image; // 식물 사진
-
     @Column
-    private String waterCycle; // 물 주기 사이클
-
+    private int waterCycle; // 물 주기 사이클
     @Column
     private LocalDateTime LastWateringDay; // 마지막 물 준 날
-
     @Column
-    private String fertilizerCycle; // 거름 주기 사이클
-
+    private int waterDDay; // 물주기 디데이
     @Column
-    private LocalDateTime LastFertilizeDay; // 마지막 거름 준 날
-
+    private int nutritionCycle; // 영양 주기 사이클
+//    @Column
+//    private LocalDateTime LastFertilizeDay; // 마지막 거름 준 날
     @Column
-    private String repottingCycle; // 분갈이 주기 사이클
-
+    private int nutritionDDay; // 영양 디데이
     @Column
-    private LocalDateTime LastRepottingDay; // 마지막 분갈이 한 날
-
+    private int repottingCycle; // 분갈이 주기 사이클
+//    @Column
+//    private LocalDateTime LastRepottingDay; // 마지막 분갈이 한 날
     @Column
-    private String selcetSunshine; // 사용자 선택 일조량
-
+    private int repottingDDay; // 분갈이 디데이
     @Column
-    private String selectWater; // 사용자 선택 물량
-
+    private int selectWater; // 사용자 선택 물량
     @Column
-    private Long selcetStartTemp; // 사용자 선택 생육 온도
-
+    private int selcetSunshine; // 사용자 선택 일조량
     @Column
-    private Long selcetEndTemp ; // 사용자 선택 생육 온도
+    private int selcetWind; // 사용자 선택 통풍
 
-    @Column
-    private LocalDateTime firstDayWithPlants; // 식물과 처음 함께 한 날
+
+
+
+//    @Column
+//    private int selcetStartTemp; // 사용자 선택 생육 온도
+//    @Column
+//    private int selcetEndTemp ; // 사용자 선택 생육 온도
+//    @Column
+//    private LocalDateTime firstDayWithPlants; // 식물과 처음 함께 한 날
 }
