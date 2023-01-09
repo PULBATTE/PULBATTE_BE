@@ -2,7 +2,6 @@ package com.pulbatte.pulbatte.plantSearch.controller;
 
 import com.pulbatte.pulbatte.plant.entity.PlantTag;
 import com.pulbatte.pulbatte.plantSearch.dto.PlantListResponseDto;
-import com.pulbatte.pulbatte.plantSearch.dto.PlantSearchDto;
 import com.pulbatte.pulbatte.plantSearch.service.PlantSearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +27,7 @@ public class PlantSearchController {
 
     // 카테고리별 식물 조회
     @GetMapping(value = "/categories/{tag}", produces = "application/json; charset=utf8")
-    public PlantListResponseDto findByPlantTag(@PathVariable PlantTag tag, PlantSearchDto searchDto) {
-        return searchService.findByPlantTag(searchDto);
+    public PlantListResponseDto findByPlantTag(@PathVariable PlantTag tag) {
+        return searchService.findByPlantTag(tag);
     }
 }

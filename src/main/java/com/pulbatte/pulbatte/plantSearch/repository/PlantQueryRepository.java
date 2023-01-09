@@ -2,14 +2,12 @@ package com.pulbatte.pulbatte.plantSearch.repository;
 
 import com.pulbatte.pulbatte.plant.entity.PlantTag;
 import com.pulbatte.pulbatte.plantSearch.dto.PlantListDto;
-import com.pulbatte.pulbatte.plantSearch.dto.PlantSearchDto;
 import com.pulbatte.pulbatte.plantSearch.dto.QPlantListDto;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ObjectUtils;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -48,13 +46,13 @@ public class PlantQueryRepository {
     }
 
     // 태그 필터링
-    public List<PlantListDto> findByPlantTag(PlantSearchDto searchDto) {
+    public List<PlantListDto> findByPlantTag(PlantTag tag) {
         return queryFactory
                 .select(new QPlantListDto(
                         plant
                 ))
                 .from(plant)
-                .where(eqPlantTag(searchDto.getPlantTag()))
+                .where(eqPlantTag(tag))
                 .orderBy(plant.plantName.asc())
                 .fetch();
     }
