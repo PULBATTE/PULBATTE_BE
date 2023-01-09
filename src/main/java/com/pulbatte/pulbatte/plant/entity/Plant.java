@@ -1,5 +1,6 @@
 package com.pulbatte.pulbatte.plant.entity;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -7,7 +8,7 @@ import javax.persistence.*;
 
 @Entity(name = "plant")
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Plant {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,6 +23,7 @@ public class Plant {
     @Column
     private String content;                 //식물 설명
 
+    @Enumerated(value = EnumType.STRING)
     @Column
     private PlantTag plantTag;                //식물 태그
 
