@@ -1,33 +1,40 @@
 package com.pulbatte.pulbatte.plantSearch.service;
 
 import com.pulbatte.pulbatte.plant.entity.PlantTag;
-import com.pulbatte.pulbatte.plant.repository.PlantRepository;
-import com.pulbatte.pulbatte.plantSearch.dto.PlantSearchDto;
+import com.pulbatte.pulbatte.plantSearch.dto.PlantListDto;
+import com.pulbatte.pulbatte.plantSearch.dto.PlantListResponseDto;
 import com.pulbatte.pulbatte.plantSearch.repository.PlantQueryRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PlantSearchService {
 
     private final PlantQueryRepository queryRepository;
-    private final PlantRepository plantRepository;
 
-    public List<PlantSearchDto> findByPlantName(String keyword) {
-        List<PlantSearchDto> plants = queryRepository.findByPlantName(keyword);
-        for(PlantSearchDto plant : plants) {
-            String plantName = plant.getPlantName();
-            if(plantName.contains(keyword)) {
-                plants.add(plant);
-            }
-        }
-        return plants;
+    public PlantListResponseDto getAllPlants() {
+        List<PlantListDto> plantList = queryRepository.findAll();
+        return PlantListResponseDto.builder()
+                .plants(plantList)
+                .build();
     }
 
-    public List<PlantSearchDto> findByPlantTag(PlantTag tag) {
-        return queryRepository.findByPlantTag(tag);
+    public PlantListResponseDto findByPlantName(String keyword) {
+        List<PlantListDto> plantList = queryRepository.findByPlantName(keyword);
+        return PlantListResponseDto.builder()
+                .plants(plantList)
+                .build();
+    }
+
+    public PlantListResponseDto findByPlantTag(PlantTag tag) {
+        List<PlantListDto> plantList = queryRepository.findByPlantTag(tag);
+        return PlantListResponseDto.builder()
+                .plants(plantList)
+                .build();
     }
 }

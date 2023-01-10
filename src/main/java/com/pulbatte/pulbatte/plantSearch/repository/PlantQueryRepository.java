@@ -1,63 +1,67 @@
 package com.pulbatte.pulbatte.plantSearch.repository;
 
 import com.pulbatte.pulbatte.plant.entity.PlantTag;
-import com.pulbatte.pulbatte.plantSearch.dto.PlantSearchDto;
-import com.pulbatte.pulbatte.plantSearch.dto.QPlantSearchDto;
+import com.pulbatte.pulbatte.plantSearch.dto.PlantListDto;
+import com.pulbatte.pulbatte.plantSearch.dto.QPlantListDto;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 
 import java.util.List;
 
 import static com.pulbatte.pulbatte.plant.entity.QPlant.plant;
 
-@RequiredArgsConstructor
+
 @Repository
 public class PlantQueryRepository {
-
     private final JPAQueryFactory queryFactory;
 
-    public List<PlantSearchDto> findAll() {
-        return queryFactory
-                .select(new QPlantSearchDto(
-                        plant.id,
-                        plant.plantName,
-                        plant.plantTag,
-                        plant.image
-                ))
-                .from(plant)
-                .fetch();
+    public PlantQueryRepository(JPAQueryFactory queryFactory) {
+        this.queryFactory = queryFactory;
     }
 
-    // 식물 이름 검색
-    public List<PlantSearchDto> findByPlantName(String plantName) {
+    // 전체 목록 가져오기
+    public List<PlantListDto> findAll() {
         return queryFactory
-                .select(new QPlantSearchDto(
-                        plant.id,
-                        plant.plantName,
-                        plant.plantTag,
-                        plant.image
+                .select(new QPlantListDto(
+                        plant
                 ))
                 .from(plant)
-                .where(plant.plantName.contains(plantName))
                 .orderBy(plant.plantName.asc())
                 .fetch();
     }
 
-    public List<PlantSearchDto> findByPlantTag(PlantTag tag) {
+    // 식물 이름 검색
+    public List<PlantListDto> findByPlantName(@Param("plantName") String plantName) {
         return queryFactory
-                .select(new QPlantSearchDto(
-                        plant.id,
-                        plant.plantName,
-                        plant.plantTag,
-                        plant.image
+                .select(new QPlantListDto(
+                        plant
+                ))
+                .from(plant)
+                .where(eqPlantName(plantName))
+                .orderBy(plant.plantName.asc())
+                .fetch();
+    }
+
+    // 태그 필터링
+    public List<PlantListDto> findByPlantTag(PlantTag tag) {
+        return queryFactory
+                .select(new QPlantListDto(
+                        plant
                 ))
                 .from(plant)
                 .where(eqPlantTag(tag))
+                .orderBy(plant.plantName.asc())
                 .fetch();
+    }
+
+    private BooleanExpression eqPlantName(String plantName) {
+        if(ObjectUtils.isEmpty(plantName)) {
+            return null;
+        }
+        return plant.plantName.contains(plantName);
     }
 
     private BooleanExpression eqPlantTag(PlantTag tag) {
