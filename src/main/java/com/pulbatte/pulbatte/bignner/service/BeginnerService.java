@@ -21,8 +21,18 @@ public class BeginnerService {
 
     private final BeginnerRepository beginnerRepository;
 
-    public BeginnerResponseDto getBeginnerPlant(Long beginnerId,User user) {
-        Beginner beginner = beginnerRepository.findById(beginnerId).orElseThrow(
+    public List<BeginnerResponseDto> getBeginnerSelect(User user){
+        List<Beginner> beginnerList = beginnerRepository.findAll();
+        List<BeginnerResponseDto> beginnerResponseDtoList = new ArrayList<>();
+
+        for (Beginner beginner : beginnerList){
+            beginnerResponseDtoList.add(new BeginnerResponseDto(beginner));
+        }
+        return beginnerResponseDtoList;
+    }
+
+    public BeginnerResponseDto getBeginnerPlant(String beginnerName, User user) {
+        Beginner beginner = beginnerRepository.findByBeginnerPlantName(beginnerName).orElseThrow(
                 () -> new CustomException(ErrorCode.NO_BOARD_FOUND)
         );
 
