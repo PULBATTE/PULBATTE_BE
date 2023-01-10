@@ -3,12 +3,11 @@ package com.pulbatte.pulbatte.alarm.service;
 import com.pulbatte.pulbatte.alarm.entity.Alarm;
 import com.pulbatte.pulbatte.alarm.entity.AlarmType;
 import com.pulbatte.pulbatte.alarm.repository.AlarmRepository;
-import com.pulbatte.pulbatte.alarm.repository.EmitterRepository;
-import com.pulbatte.pulbatte.plant.repository.PlantRepository;
+import com.pulbatte.pulbatte.alarm.repository.EmitterRepositoryImpl;
 import com.pulbatte.pulbatte.user.entity.User;
+import com.pulbatte.pulbatte.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -19,8 +18,8 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class AlarmService {
-    private final PlantRepository plantRepository;
-    private final EmitterRepository emitterRepository;
+    private final UserRepository userRepository;
+    private final EmitterRepositoryImpl emitterRepository;
     private final AlarmRepository alarmRepository;
 
     public SseEmitter reply(Long userId, String lastEventId) {

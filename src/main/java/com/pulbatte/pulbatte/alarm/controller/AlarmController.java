@@ -18,7 +18,8 @@ public class AlarmController {
     @ResponseStatus(HttpStatus.OK)
     public SseEmitter reply(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @RequestHeader(value = "lastEventId", required = false, defaultValue = "") String lastEventId) {
+            @RequestHeader(value = "Last-Event-Id", required = false, defaultValue = "") String lastEventId
+    ) {
         return alarmService.reply(userDetails.getUser().getId(), lastEventId);
     }
 }
