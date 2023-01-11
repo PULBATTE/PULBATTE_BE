@@ -3,9 +3,7 @@ package com.pulbatte.pulbatte.user.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pulbatte.pulbatte.global.exception.SuccessCode;
 import com.pulbatte.pulbatte.global.jwt.JwtUtil;
-import com.pulbatte.pulbatte.user.dto.KakaoResponseDto;
 import com.pulbatte.pulbatte.user.dto.LoginKakaoRequestDto;
 import com.pulbatte.pulbatte.user.entity.User;
 import com.pulbatte.pulbatte.user.entity.UserRoleEnum;
@@ -38,12 +36,12 @@ public class KakaoService {
     private static int signUpType = 1;
 
 
-    public KakaoResponseDto kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
+    public String kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
 //      1. "인가 코드"로 "액세스 토큰" 요청
-        /*String accessToken = getToken(code);
+//        String accessToken = getToken(code);
 //
 ////      2. 토큰으로 카카오 API 호출 : "액세스 토큰"으로 "카카오 사용자 정보" 가져오기
-        LoginKakaoRequestDto kakaoUserInfo = getKakaoUserInfo(accessToken);*/
+//        LoginKakaoRequestDto kakaoUserInfo = getKakaoUserInfo(accessToken);
         LoginKakaoRequestDto kakaoUserInfo = getKakaoUserInfo(code);
 
         // 3. 필요시에 회원가입
@@ -53,7 +51,7 @@ public class KakaoService {
         String createToken = jwtUtil.createToken(kakaoUser.getUserId(), kakaoUser.getRole());
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, createToken);
 
-        return new KakaoResponseDto(SuccessCode.LOG_IN);
+        return createToken;
     }
 
     // 1. "인가 코드"로 "액세스 토큰" 요청
@@ -66,9 +64,12 @@ public class KakaoService {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
         body.add("client_id", "84d4cb0f0b38976fab6edba825421247");
-/*        body.add("redirect_uri", "http://3.38.190.107:8080/api/user/kakao/callback");*/
         body.add("redirect_uri", "http://localhost:3000/api/user/kakao/callback");
         body.add("code", code);
+//        body.add("grant_type", "authorization_code");
+//        body.add("client_id", "41e52178d076650fe657efc8ff7a6a3c");
+//        body.add("redirect_uri", "https://getpostman.com/oauth2/callback");
+//        body.add("code", code);
 
         // HTTP 요청 보내기
         HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest =
@@ -90,7 +91,7 @@ public class KakaoService {
 
     // 2. 토큰으로 카카오 API 호출 : "액세스 토큰"으로 "카카오 사용자 정보" 가져오기
     private LoginKakaoRequestDto getKakaoUserInfo(String accessToken) throws JsonProcessingException {
-        String nickname = RandomStringUtils.random(6, true, true);                         // 닉네임 랜덤 생성
+        String nickname = RandomStringUtils.random(15, true, true);                         // 닉네임 랜덤 생성
         // HTTP Header 생성
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + accessToken);
@@ -118,7 +119,7 @@ public class KakaoService {
 
     // 3. 필요시에 회원가입
     private User registerKakaoUser(LoginKakaoRequestDto kakaoUserInfo) {
-        String nickname = RandomStringUtils.random(6, true, true);
+        String nickname = RandomStringUtils.random(15, true, true);
         String kakaoId = kakaoUserInfo.getUserId();                                                         // DB 에 중복된 Kakao Id 가 있는지 확인
         User kakaoUser = userRepository.findByUserId(kakaoId)
                 .orElse(null);
