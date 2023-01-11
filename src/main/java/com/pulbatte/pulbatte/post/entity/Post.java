@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity(name = "post")
@@ -27,8 +28,13 @@ public class Post extends TimeStamped {
     private int category;
     @Column(nullable = false)
     private String image;
+    @Column
+    private LocalDateTime favLikeTime;
     @OneToMany(mappedBy = "post",cascade = CascadeType.REMOVE)
     private List<Comment> commentList;
+    @OneToMany(mappedBy = "post",cascade = CascadeType.REMOVE)
+    private List<PostLike> postLike;
+
 
     public Post(PostRequestDto postRequestDto , User user, String image){
         this.title = postRequestDto.getTitle();
@@ -45,6 +51,9 @@ public class Post extends TimeStamped {
     }
     public void update(String image){
         this.image = image;
+    }
+    public void updateFaveLikeTime(LocalDateTime favLikeTime){
+        this.favLikeTime = favLikeTime;
     }
 
 }
