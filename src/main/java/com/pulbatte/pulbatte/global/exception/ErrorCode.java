@@ -29,7 +29,15 @@ public enum ErrorCode {
     // CONFLICT
     DUPLICATE_RESOURCE(HttpStatus.CONFLICT, "데이터가 이미 존재합니다"),
     ALREADY_CLICKED_LIKE(HttpStatus.CONFLICT, "이미 좋아요를 눌렀습니다"),
-    ALERADY_CANCEL_LIKE(HttpStatus.CONFLICT, "이미 좋아요 취소를 눌렀습니다")
+    ALERADY_CANCEL_LIKE(HttpStatus.CONFLICT, "이미 좋아요 취소를 눌렀습니다"),
+
+    // D-DAy
+    ALREADY_WATER_CILCK(HttpStatus.CONFLICT, "이미 물 주기 버튼을 클릭 했습니다"),
+    ALREADY_NUTRITION_CILCK(HttpStatus.CONFLICT, "이미 영양 주기 버튼을 클릭 했습니다"),
+    ALREADY_REPOTTING_CILCK(HttpStatus.CONFLICT, "이미 분갈이 버튼을 클릭 했습니다"),
+    NO_WATER_D_DAY(HttpStatus.BAD_REQUEST, "물 주는 날이 아닙니다."),
+    NO_NUTRITION_D_DAY(HttpStatus.BAD_REQUEST, "영양제 주는 날이 아닙니다."),
+    NO_REPOTTING_D_DAY(HttpStatus.BAD_REQUEST, "분갈이 하는 날이 아닙니다.")
     ;
 
     private final HttpStatus httpStatus;
