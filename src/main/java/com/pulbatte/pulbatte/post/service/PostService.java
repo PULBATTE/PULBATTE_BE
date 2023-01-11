@@ -8,6 +8,7 @@ import com.pulbatte.pulbatte.global.S3Uploader;
 import com.pulbatte.pulbatte.global.exception.CustomException;
 import com.pulbatte.pulbatte.global.exception.ErrorCode;
 import com.pulbatte.pulbatte.global.exception.SuccessCode;
+import com.pulbatte.pulbatte.post.dto.PostFavResponseDto;
 import com.pulbatte.pulbatte.post.dto.PostRequestDto;
 import com.pulbatte.pulbatte.post.dto.PostResponseDto;
 import com.pulbatte.pulbatte.post.entity.Post;
@@ -17,6 +18,7 @@ import com.pulbatte.pulbatte.post.repository.PostRepository;
 import com.pulbatte.pulbatte.user.entity.User;
 import com.pulbatte.pulbatte.user.entity.UserRoleEnum;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -25,8 +27,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -48,18 +51,50 @@ public class PostService {
     //게시글 전체 출력 페이징 처리
     @Transactional(readOnly = true)
     public Page<PostResponseDto> getListPosts(Pageable pageable) {
-        Page<Post> boardList = postRepository.findAllByOrderByCreatedAtDesc(pageable);
-        List<PostResponseDto> boardResponseDto = new ArrayList<>();
+        Page<Post> postList = postRepository.findAllByOrderByCreatedAtDesc(pageable);
+        List<PostResponseDto> postResponseDto = new ArrayList<>();
 
-
-        for (Post post : boardList) {
+        for (Post post : postList) {
             Long commentCnt = commentRepository.countByPostId(post.getId());            // 댓글 수
             Long likeCnt = likeRepository.likeCnt(post.getId());                        // 좋아요 수
             String image = post.getImage();                                             // 이미지 url
-            boardResponseDto.add(new PostResponseDto(post,likeCnt,commentCnt,image));
+            postResponseDto.add(new PostResponseDto(post,likeCnt,commentCnt,image));
         }
-        Page<PostResponseDto> page = new PageImpl<>(boardResponseDto);                  // 페이징 처리
-        return page;
+        return new PageImpl<>(postResponseDto);                                         // 페이징 처리
+    }
+    // 인기 게시글 출력
+    public List<PostFavResponseDto> getPopularListPosts(){
+        List<Post> postList = postRepository.findAll();
+        List<PostFavResponseDto> postFavResponseDto = new ArrayList<>();
+        Map<Long,LocalDateTime> likeList = new HashMap<>();                                             // 게시글 id와 인기게시글이 된 시간을 담을 hashMap 리스트
+
+        for(Post post : postList){
+            Long likeCnt = likeRepository.likeCnt(post.getId());                                        // 모든 게시글의 좋아요 수 체크
+            if(likeCnt>3){                                                                              // 좋아요 수가 일정 수 이상이 되면
+                likeList.put(post.getId(),post.getFavLikeTime());                                       // like 리스트에 게시글 id와 인기게시글이 된 시간 저장
+            }
+        }
+        List<Map.Entry<Long,LocalDateTime>> sortLikeList = new LinkedList<>(likeList.entrySet());       // 리스트 정렬을 위해 리스트를 Entry 로 감쌈
+        Collections.sort(sortLikeList, new Comparator<Map.Entry<Long, LocalDateTime>>() {               // 리스트를 인기게시글이 된 시간으로부터 내림차순 정렬 (최근에 인기 게시글이 됐으면 맨 앞)
+            @Override
+            public int compare(Map.Entry<Long, LocalDateTime> o1, Map.Entry<Long, LocalDateTime> o2) {
+                return o2.getValue().compareTo(o1.getValue());
+            }
+        });
+        if(sortLikeList.size()<5){                                                                      // 리스트의 크기가 5보다 작을 때 (인기글의 초대 수 5)
+            for (int i=0; i<sortLikeList.size(); i++) {
+                Long postId = sortLikeList.get(i).getKey();                                             // 좋아요가 일정 수가 넘은 post 의 아이디 저장
+                Post post = postRepository.findById(postId).orElseThrow();                              // 저장한 아이디로 게시글 찾기
+                postFavResponseDto.add(new PostFavResponseDto(post));                                   // 게시글 출력
+            }
+        }else {
+            for (int i = 0; i < 5; i++) {                                                               // 게시글의 사이즈가 5보다 클 때 인기게시글이 된 시간으로 정렬 된 리스트에서 1~5번 째 까지만 출력
+                Long postId = sortLikeList.get(i).getKey();                                             // 좋아요가 일정 수가 넘은 post 의 아이디 저장
+                Post post = postRepository.findById(postId).orElseThrow();                              // 저장한 아이디로 게시글 찾기
+                postFavResponseDto.add(new PostFavResponseDto(post));                                   // 게시글 출력
+            }
+        }
+       return postFavResponseDto;
     }
     //게시글 상세 조회
     @Transactional(readOnly = true)
@@ -108,7 +143,7 @@ public class PostService {
         if (!multipartFile.isEmpty()) {                                                     // 사진이 수정된 경우
             image = (s3Uploader.upload(multipartFile, "static"));                   // 새로들어온 이미지 s3 저장
             Post posts = postRepository.findById(id).orElseThrow();
-            s3Uploader.delete(posts.getImage(), "static");                         // 이전 이미지 파일 삭제
+            s3Uploader.delete(posts.getImage(), "static");                          // 이전 이미지 파일 삭제
             posts.update(image);
 
         }
@@ -135,17 +170,18 @@ public class PostService {
     //게시글 좋아요, 좋아요 취소
     @Transactional
     public MsgResponseDto postLike(Long postId, User user) {
-        Post post = postRepository.findById(postId).orElseThrow(
-                () -> new CustomException(ErrorCode.NO_BOARD_FOUND)
-        );
+        Post post = postRepository.findById(postId).orElseThrow(() -> new CustomException(ErrorCode.NO_BOARD_FOUND));
         if (likeRepository.findByPostIdAndUserId(postId, user.getId()).isEmpty()) { // postLike 에 값이 있는지 확인
             likeRepository.save(new PostLike(post, user));                          // 없으면 저장
+            if(likeRepository.likeCnt(postId)>3){
+                LocalDateTime favLikeTime = LocalDateTime.now();
+                post.updateFaveLikeTime(favLikeTime);
+                System.out.println(favLikeTime);
+            }
             return new MsgResponseDto(SuccessCode.LIKE);
         } else {
             likeRepository.deleteByPostIdAndUserId(post.getId(), user.getId());     // 있으면 삭제
             return new MsgResponseDto(SuccessCode.CANCEL_LIKE);
         }
-
     }
-
 }
