@@ -35,7 +35,7 @@ public class KakaoService {
 
     private final PasswordEncoder passwordEncoder;
 
-    private static int signUpType = 1;
+    private final static int signUpType = 1;
 
 
     public KakaoResponseDto kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
