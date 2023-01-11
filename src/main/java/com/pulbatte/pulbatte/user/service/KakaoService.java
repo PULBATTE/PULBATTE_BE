@@ -124,7 +124,7 @@ public class KakaoService {
                 .orElse(null);
         if (kakaoUser != null) {                                                                            // 카카오 사용자 email 동일한 email 가진 회원이 있는지 확인
             User sameEmailUser = userRepository.findByUserId(kakaoUser.getUserId()).orElse(null);
-            sameEmailUser.update(signUpType);
+            sameEmailUser.updateSignupType(signUpType);
         } else{
             // 신규 회원가입
             // password: random UUID
