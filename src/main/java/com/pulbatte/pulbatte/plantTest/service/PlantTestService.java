@@ -7,8 +7,10 @@ import com.pulbatte.pulbatte.plantTest.dto.PlantTestResponseDto;
 import com.pulbatte.pulbatte.plantTest.entity.PlantTest;
 import com.pulbatte.pulbatte.plantTest.repository.PlantTestRepository;
 import com.pulbatte.pulbatte.user.entity.User;
+import com.pulbatte.pulbatte.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +21,8 @@ public class PlantTestService {
 
     private final BeginnerRepository beginnerRepository;
     private final PlantTestRepository plantTestRepository;
+    private final UserRepository userRepository;
+    @Transactional
     public PlantTestResponseDto getPlantTest(String result, User user){
         long resultCode = 0;
 
@@ -30,10 +34,10 @@ public class PlantTestService {
             case "13", "14", "15" -> resultCode = 5;
             case "16", "17", "18" -> resultCode = 6;
         }
-
         Beginner beginner = beginnerRepository.findById(resultCode).orElseThrow();
         PlantTest plantTest = plantTestRepository.findById(resultCode).orElseThrow();
-
+        User userTestResult =  userRepository.findByUserId(user.getUserId()).orElseThrow();
+        userTestResult.updateTestResult(beginner.getBeginnerPlantName());
         return new PlantTestResponseDto(beginner,plantTest);
     }
 }
