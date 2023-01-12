@@ -3,9 +3,7 @@ package com.pulbatte.pulbatte.user.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pulbatte.pulbatte.global.exception.SuccessCode;
 import com.pulbatte.pulbatte.global.jwt.JwtUtil;
-import com.pulbatte.pulbatte.user.dto.KakaoResponseDto;
 import com.pulbatte.pulbatte.user.dto.LoginKakaoRequestDto;
 import com.pulbatte.pulbatte.user.entity.User;
 import com.pulbatte.pulbatte.user.entity.UserRoleEnum;
@@ -38,12 +36,12 @@ public class KakaoService {
     private final static int signUpType = 1;
 
 
-    public KakaoResponseDto kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
+    public String kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
 //      1. "인가 코드"로 "액세스 토큰" 요청
-        /*String accessToken = getToken(code);
-//
-////      2. 토큰으로 카카오 API 호출 : "액세스 토큰"으로 "카카오 사용자 정보" 가져오기
-        LoginKakaoRequestDto kakaoUserInfo = getKakaoUserInfo(accessToken);*/
+//        String accessToken = getToken(code);
+
+//      2. 토큰으로 카카오 API 호출 : "액세스 토큰"으로 "카카오 사용자 정보" 가져오기
+//        LoginKakaoRequestDto kakaoUserInfo = getKakaoUserInfo(accessToken);
         LoginKakaoRequestDto kakaoUserInfo = getKakaoUserInfo(code);
 
         // 3. 필요시에 회원가입
@@ -53,7 +51,7 @@ public class KakaoService {
         String createToken = jwtUtil.createToken(kakaoUser.getUserId(), kakaoUser.getRole());
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, createToken);
 
-        return new KakaoResponseDto(SuccessCode.LOG_IN);
+        return createToken;
     }
 
     // 1. "인가 코드"로 "액세스 토큰" 요청
@@ -66,9 +64,12 @@ public class KakaoService {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
         body.add("client_id", "84d4cb0f0b38976fab6edba825421247");
-/*        body.add("redirect_uri", "http://3.38.190.107:8080/api/user/kakao/callback");*/
         body.add("redirect_uri", "http://localhost:3000/api/user/kakao/callback");
         body.add("code", code);
+//        body.add("grant_type", "authorization_code");
+//        body.add("client_id", "41e52178d076650fe657efc8ff7a6a3c");
+//        body.add("redirect_uri", "https://kauth.kakao.com/oauth/token");
+//        body.add("code", code);
 
         // HTTP 요청 보내기
         HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest =
