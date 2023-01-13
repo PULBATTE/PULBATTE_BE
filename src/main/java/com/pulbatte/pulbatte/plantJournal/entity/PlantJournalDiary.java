@@ -1,7 +1,7 @@
-package com.pulbatte.pulbatte.plant.entity;
+package com.pulbatte.pulbatte.plantJournal.entity;
 
 import com.pulbatte.pulbatte.global.entity.TimeStamped;
-import com.pulbatte.pulbatte.plant.dto.PlantJournalDiaryRequestDto;
+import com.pulbatte.pulbatte.plantJournal.dto.PlantJournalDiaryRequestDto;
 import com.pulbatte.pulbatte.user.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -15,6 +15,7 @@ public class PlantTest {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Column
+
     private String resultTitle;             // 테스트 결과 제목
     @Column
     private int resultCode;                 // 테스트 결과 코드
@@ -30,6 +31,4 @@ public class PlantTest {
     @ElementCollection
     @CollectionTable
     private List<String> resultPlantString; // 테스트 결과 식물 멘트
-
-
 }

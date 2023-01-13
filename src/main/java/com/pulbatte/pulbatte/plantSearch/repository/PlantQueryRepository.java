@@ -1,6 +1,6 @@
 package com.pulbatte.pulbatte.plantSearch.repository;
 
-import com.pulbatte.pulbatte.plant.entity.PlantTag;
+import com.pulbatte.pulbatte.plantSearch.entity.PlantTag;
 import com.pulbatte.pulbatte.plantSearch.dto.PlantListDto;
 import com.pulbatte.pulbatte.plantSearch.dto.QPlantListDto;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -11,7 +11,7 @@ import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 
-import static com.pulbatte.pulbatte.plant.entity.QPlant.plant;
+import static com.pulbatte.pulbatte.plantSearch.entity.QPlant.plant;
 
 
 @Repository

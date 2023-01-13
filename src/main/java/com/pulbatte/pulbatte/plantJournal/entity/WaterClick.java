@@ -1,4 +1,4 @@
-package com.pulbatte.pulbatte.plant.entity;
+package com.pulbatte.pulbatte.plantJournal.entity;
 
 import com.pulbatte.pulbatte.user.entity.User;
 import lombok.Getter;
@@ -7,10 +7,10 @@ import org.joda.time.LocalDate;
 
 import javax.persistence.*;
 
-@Entity(name = "repottingcilck")
+@Entity(name = "waterClick")
 @Getter
 @NoArgsConstructor
-public class RepottingCilck {
+public class WaterClick {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,7 +22,8 @@ public class RepottingCilck {
     private PlantJournal plantJournal;
     @Column
     private LocalDate localDate;
-    public RepottingCilck(User user, PlantJournal plantJournal){
+
+    public WaterClick(User user, PlantJournal plantJournal){
         this.user = user;
         this.plantJournal = plantJournal;
         this.localDate = LocalDate.now();

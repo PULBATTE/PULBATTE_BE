@@ -1,6 +1,6 @@
 package com.pulbatte.pulbatte.plantSearch.controller;
 
-import com.pulbatte.pulbatte.plant.entity.PlantTag;
+import com.pulbatte.pulbatte.plantSearch.entity.PlantTag;
 import com.pulbatte.pulbatte.plantSearch.dto.PlantListResponseDto;
 import com.pulbatte.pulbatte.plantSearch.service.PlantSearchService;
 import lombok.RequiredArgsConstructor;

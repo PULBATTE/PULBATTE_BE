@@ -1,12 +1,12 @@
-package com.pulbatte.pulbatte.plant.controller;
+package com.pulbatte.pulbatte.plantJournal.controller;
 
 import com.pulbatte.pulbatte.global.MsgResponseDto;
 import com.pulbatte.pulbatte.global.exception.SuccessCode;
 import com.pulbatte.pulbatte.global.security.UserDetailsImpl;
-import com.pulbatte.pulbatte.plant.dto.PlantJournalDiaryRequestDto;
-import com.pulbatte.pulbatte.plant.dto.PlantJournalDiaryResponseDto;
-import com.pulbatte.pulbatte.plant.service.PlantJournalDiaryService;
-import com.pulbatte.pulbatte.plant.service.PlantJournalService;
+import com.pulbatte.pulbatte.plantJournal.dto.PlantJournalDiaryRequestDto;
+import com.pulbatte.pulbatte.plantJournal.dto.PlantJournalDiaryResponseDto;
+import com.pulbatte.pulbatte.plantJournal.service.PlantJournalDiaryService;
+import com.pulbatte.pulbatte.plantJournal.service.PlantJournalService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/plant/plantjournal")
+@RequestMapping("/api/plantjournal")
 @RequiredArgsConstructor
 public class PlantJournalDiaryController {
 

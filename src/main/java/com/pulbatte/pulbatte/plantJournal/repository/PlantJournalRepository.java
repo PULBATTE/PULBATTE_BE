@@ -1,6 +1,6 @@
-package com.pulbatte.pulbatte.plant.repository;
+package com.pulbatte.pulbatte.plantJournal.repository;
 
-import com.pulbatte.pulbatte.plant.entity.PlantJournal;
+import com.pulbatte.pulbatte.plantJournal.entity.PlantJournal;
 import com.pulbatte.pulbatte.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 

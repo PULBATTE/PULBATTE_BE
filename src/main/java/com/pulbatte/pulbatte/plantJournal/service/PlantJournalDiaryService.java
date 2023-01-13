@@ -1,12 +1,13 @@
-package com.pulbatte.pulbatte.plant.service;
+package com.pulbatte.pulbatte.plantJournal.service;
 
 import com.pulbatte.pulbatte.global.exception.CustomException;
 import com.pulbatte.pulbatte.global.exception.ErrorCode;
-import com.pulbatte.pulbatte.plant.dto.PlantJournalDiaryRequestDto;
-import com.pulbatte.pulbatte.plant.dto.PlantJournalDiaryResponseDto;
-import com.pulbatte.pulbatte.plant.entity.PlantJournal;
-import com.pulbatte.pulbatte.plant.entity.PlantJournalDiary;
-import com.pulbatte.pulbatte.plant.repository.*;
+import com.pulbatte.pulbatte.plantJournal.dto.PlantJournalDiaryRequestDto;
+import com.pulbatte.pulbatte.plantJournal.dto.PlantJournalDiaryResponseDto;
+import com.pulbatte.pulbatte.plantJournal.entity.PlantJournal;
+import com.pulbatte.pulbatte.plantJournal.entity.PlantJournalDiary;
+import com.pulbatte.pulbatte.plantJournal.repository.PlantJournalDiaryRepository;
+import com.pulbatte.pulbatte.plantJournal.repository.PlantJournalRepository;
 import com.pulbatte.pulbatte.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
