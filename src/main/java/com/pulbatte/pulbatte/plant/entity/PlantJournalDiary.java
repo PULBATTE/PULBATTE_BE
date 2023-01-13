@@ -29,4 +29,7 @@ public class PlantJournalDiary extends TimeStamped {
         this.user = user;
         this.plantJournal = plantJournal;
     }
+    public void update(String content){
+        this.content = content;
+    }
 }

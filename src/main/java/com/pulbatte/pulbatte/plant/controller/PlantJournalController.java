@@ -1,6 +1,7 @@
 package com.pulbatte.pulbatte.plant.controller;
 
 import com.pulbatte.pulbatte.global.MsgResponseDto;
+import com.pulbatte.pulbatte.global.exception.SuccessCode;
 import com.pulbatte.pulbatte.global.security.UserDetailsImpl;
 import com.pulbatte.pulbatte.plant.dto.*;
 import com.pulbatte.pulbatte.plant.service.PlantJournalService;
@@ -19,12 +20,13 @@ public class PlantJournalController {
     private final PlantJournalService plantJournalService;
 
     @PostMapping("/plantadd")  // 식물 추가
-    public PlantJournalAddResponseDto PlantJournalAdd
+    public MsgResponseDto PlantJournalAdd
             (@AuthenticationPrincipal UserDetailsImpl userDetails,
              @RequestPart PlantJournalAddRequestDto plantJournalAddRequestDto,
              @RequestPart(value = "image", required = false) MultipartFile multipartFile
             ) throws IOException {
-        return plantJournalService.PlantJournalAdd(userDetails.getUser(), plantJournalAddRequestDto, multipartFile);
+        plantJournalService.PlantJournalAdd(userDetails.getUser(), plantJournalAddRequestDto, multipartFile);
+        return new MsgResponseDto(SuccessCode.CREATE_PLANT_JOURNAL);
     }
 
     @GetMapping("/plantjournals")  // 식물 일지 목록 불러오기

@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface PlantJournalDiaryRepository extends JpaRepository<PlantJournalDiary, Long> {
 
-    List<PlantJournalDiary> findAllByPlantJournalId(Long PlantJournalId);
+    List<PlantJournalDiary> findAllByUserId(Long UserId);
     PlantJournalDiary findByUserAndPlantJournalIdAndId(User user, Long plantJournalId, Long plantJournalDirayId);
 }

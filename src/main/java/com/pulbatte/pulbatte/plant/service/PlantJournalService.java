@@ -32,7 +32,7 @@ public class PlantJournalService {
 
     // 식물 일지 식물 등록
     @Transactional
-    public PlantJournalAddResponseDto PlantJournalAdd(User user, PlantJournalAddRequestDto plantJournalAddRequestDto, MultipartFile multipartFile) throws IOException {
+    public void PlantJournalAdd(User user, PlantJournalAddRequestDto plantJournalAddRequestDto, MultipartFile multipartFile) throws IOException {
         String image = null;
         if (!multipartFile.isEmpty()) {                                      // 이미지 파일이 존재 할 경우
             image = s3Uploader.upload(multipartFile, "static");      // s3이미지 업로드
@@ -47,7 +47,7 @@ public class PlantJournalService {
         int repottingDDay = plantJournalAddRequestDto.getRepottingCycle();   // 분갈이 주기 Dday를 분갈이 Cycle로 지정
         PlantJournal plantJournal = new PlantJournal(plantJournalAddRequestDto,user,image,WaterDDay,nutritionDDay,repottingDDay);
         plantJournalRepository.save(plantJournal);
-        return new PlantJournalAddResponseDto(plantJournal);
+//        return new PlantJournalAddResponseDto(plantJournal);
     }
 
     // 식물 일지 전체 조회
