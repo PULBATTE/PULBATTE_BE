@@ -1,7 +1,6 @@
-package com.pulbatte.pulbatte.plant.dto;
+package com.pulbatte.pulbatte.plantJournal.dto;
 
-import com.pulbatte.pulbatte.plant.entity.Plant;
-import com.pulbatte.pulbatte.plant.entity.PlantJournal;
+import com.pulbatte.pulbatte.plantJournal.entity.PlantJournal;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,6 +17,9 @@ public class MyPlantManagementDTO {
     private int waterDDay;                        // 물주기 디데이
     private int nutritionDDay;                    // 영양 디데이
     private int repottingDDay;                    // 분갈이 디데이
+    private int waterCycle;
+    private int nutritionCycle;
+    private int repottingCycle;
     private int totalWaterDDayClick;              // 물 주기 총 가능 횟수
     private int totalNutritionDDayClick ;         // 영양 주기 총 가능 횟수
     private int totalRepottingDDayClick;          // 분갈이 총 가능 횟수
@@ -36,6 +38,9 @@ public class MyPlantManagementDTO {
         this.selectWater = plantJournal.getSelectWater();
         this.selcetSunshine = plantJournal.getSelcetSunshine();
         this.selcetWind = plantJournal.getSelcetWind();
+        this.waterCycle = plantJournal.getWaterCycle();
+        this.nutritionCycle = plantJournal.getNutritionCycle();
+        this.repottingCycle = plantJournal.getRepottingCycle();
         this.waterDDay = plantJournal.getWaterDDay();
         this.nutritionDDay = plantJournal.getNutritionDDay();
         this.repottingDDay = plantJournal.getRepottingDDay();

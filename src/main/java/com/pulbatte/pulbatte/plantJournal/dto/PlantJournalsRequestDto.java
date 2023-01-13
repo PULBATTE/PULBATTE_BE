@@ -1,6 +1,6 @@
-package com.pulbatte.pulbatte.plant.dto;
+package com.pulbatte.pulbatte.plantJournal.dto;
 
-import com.pulbatte.pulbatte.plant.entity.PlantJournal;
+import com.pulbatte.pulbatte.plantJournal.entity.PlantJournal;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

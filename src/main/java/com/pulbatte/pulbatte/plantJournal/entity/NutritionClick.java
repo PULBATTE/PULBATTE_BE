@@ -1,4 +1,4 @@
-package com.pulbatte.pulbatte.plant.entity;
+package com.pulbatte.pulbatte.plantJournal.entity;
 
 import com.pulbatte.pulbatte.user.entity.User;
 import lombok.Getter;

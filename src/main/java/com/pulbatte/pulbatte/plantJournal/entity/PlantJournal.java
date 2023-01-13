@@ -1,13 +1,11 @@
-package com.pulbatte.pulbatte.plant.entity;
+package com.pulbatte.pulbatte.plantJournal.entity;
 
-import com.pulbatte.pulbatte.plant.dto.PlantJournalAddRequestDto;
+import com.pulbatte.pulbatte.plantJournal.dto.PlantJournalAddRequestDto;
 import com.pulbatte.pulbatte.user.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 
 @Entity(name = "plantjournal")
 @Getter
@@ -25,9 +23,6 @@ public class PlantJournal {
     private String plantName;                       // 식물 이름
     @Column
     private String image;                           // 식물 사진
-    @Column
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate LastWateringDay;              // 마지막 물 준 날
     @Column
     private int waterCycle;                         // 물 주기 사이클
     @Column
@@ -61,7 +56,6 @@ public class PlantJournal {
 
     @Column
     private int withPlantDay;                           // 식물과 함께 한 날
-//    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
 
 
     public PlantJournal(PlantJournalAddRequestDto plantJournalAddRequestDto,User user, String image,int waterDDay,int nutritionDDay,int repottingDDay){
@@ -71,7 +65,6 @@ public class PlantJournal {
         this.waterCycle = plantJournalAddRequestDto.getWaterCycle();
         this.nutritionCycle = plantJournalAddRequestDto.getNutritionCycle();
         this.repottingCycle = plantJournalAddRequestDto.getRepottingCycle();
-        this.LastWateringDay = plantJournalAddRequestDto.getLastWateringDay();
         this.waterDDay = waterDDay;
         this.nutritionDDay = nutritionDDay;
         this.repottingDDay = repottingDDay;

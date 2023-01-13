@@ -1,11 +1,8 @@
-package com.pulbatte.pulbatte.plant.dto;
+package com.pulbatte.pulbatte.plantJournal.dto;
 
-import com.pulbatte.pulbatte.plant.entity.PlantJournal;
+import com.pulbatte.pulbatte.plantJournal.entity.PlantJournal;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import java.time.LocalDate;
 
 @Getter
 @NoArgsConstructor
@@ -17,8 +14,7 @@ public class PlantJournalAddResponseDto {
     private int waterCycle; // 물 주기 사이클
     private int nutritionCycle; // 영양 주기 사이클
     private int repottingCycle; // 분갈이 주기 사이클
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate LastWateringDay; // 마지막 물 준 날
+
     private int waterDDay; // 물주기 디데이
     private int nutritionDDay; // 영양 디데이
     private int repottingDDay; // 분갈이 디데이
@@ -33,7 +29,6 @@ public class PlantJournalAddResponseDto {
         this.waterCycle = plantJournal.getWaterCycle();
         this.nutritionCycle = plantJournal.getNutritionCycle();
         this.repottingCycle = plantJournal.getRepottingCycle();
-        this.LastWateringDay = plantJournal.getLastWateringDay();
         this.waterDDay = plantJournal.getWaterDDay();
         this.nutritionDDay = plantJournal.getNutritionDDay();
         this.repottingDDay = plantJournal.getRepottingDDay();

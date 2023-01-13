@@ -36,6 +36,16 @@ public enum SuccessCode {
     WATER_CLICK_OK(HttpStatus.OK, "물 주기 완료!!"),
     NUTRITION_CLICK_OK(HttpStatus.OK, "영양제 주기 완료!!"),
     REPOTTING_CLICK_OK(HttpStatus.OK, "분갈이 완료!!"),
+
+    // 식물 일지
+    CREATE_PLANT_JOURNAL(HttpStatus.OK, "식물 일지를 등록 하였습니다."),
+    UPDATE_PLANT_JOURNAL(HttpStatus.OK, "식물 일지를 수정 하였습니다."),
+    DELETE_PLANT_JOURNAL(HttpStatus.OK, "식물 일지를 삭제 하였습니다."),
+
+    // 식물 일지 다이어리
+    CREATE_PLANT_JOURNAL_DIARY(HttpStatus.OK, "식물 일지 다이어리를 등록 하였습니다."),
+    UPDATE_PLANT_JOURNAL_DIARY(HttpStatus.OK, "식물 일지 다이어리를 수정 하였습니다."),
+    DELETE_PLANT_JOURNAL_DIARY(HttpStatus.OK, "식물 일지 다이어리를 삭제 하였습니다.")
     ;
 
     private final HttpStatus httpStatus;

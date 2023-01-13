@@ -1,6 +1,6 @@
 package com.pulbatte.pulbatte.plantSearch.dto;
 
-import com.pulbatte.pulbatte.plant.entity.PlantTag;
+import com.pulbatte.pulbatte.plantSearch.entity.PlantTag;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

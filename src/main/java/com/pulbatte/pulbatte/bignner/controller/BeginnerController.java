@@ -3,7 +3,6 @@ package com.pulbatte.pulbatte.bignner.controller;
 import com.pulbatte.pulbatte.bignner.dto.BeginnerResponseDto;
 import com.pulbatte.pulbatte.bignner.service.BeginnerService;
 import com.pulbatte.pulbatte.global.security.UserDetailsImpl;
-import com.pulbatte.pulbatte.plant.dto.PlantResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;

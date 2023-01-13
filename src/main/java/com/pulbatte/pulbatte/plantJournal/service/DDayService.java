@@ -1,7 +1,7 @@
-package com.pulbatte.pulbatte.plant.service;
+package com.pulbatte.pulbatte.plantJournal.service;
 
-import com.pulbatte.pulbatte.plant.entity.PlantJournal;
-import com.pulbatte.pulbatte.plant.repository.PlantJournalRepository;
+import com.pulbatte.pulbatte.plantJournal.entity.PlantJournal;
+import com.pulbatte.pulbatte.plantJournal.repository.PlantJournalRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -10,16 +10,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class DDayService {
     private final PlantJournalRepository plantJournalRepository;
 
+
     @Transactional
-    @Scheduled(cron = "0 0 0 * * *")	// 매일 00시 정각
+    @Scheduled(cron = "0 0 0 * * ?")	// 매일 00시 정각
     public void Ddayschedule() {
         List<PlantJournal> plantJournalList = plantJournalRepository.findAll();
+        System.out.println("12시 Schdul 시작");
         log.info("12시 Schedul 시작 ");
         log.info("PlantJournalListCount : " + plantJournalList.size());
         for (PlantJournal plantJournal : plantJournalList){

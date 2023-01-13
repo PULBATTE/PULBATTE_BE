@@ -1,4 +1,4 @@
-package com.pulbatte.pulbatte.plant.entity;
+package com.pulbatte.pulbatte.plantSearch.entity;
 
 import lombok.AccessLevel;
 import lombok.Getter;
