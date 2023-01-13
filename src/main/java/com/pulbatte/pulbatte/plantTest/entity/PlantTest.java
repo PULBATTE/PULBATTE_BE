@@ -15,11 +15,21 @@ public class PlantTest {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Column
+    private String resultTitle;
+    @Column
     private int resultCode;
+    @Column
+    private String resultImage;
+    @Column
+    private String resultPlantImage;
     @Column
     @ElementCollection
     @CollectionTable
     private List<String> resultString;
+    @Column
+    @ElementCollection
+    @CollectionTable
+    private List<String> resultPlantString;
 
 
 }
