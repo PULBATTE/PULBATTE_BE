@@ -28,6 +28,8 @@ public class Post extends TimeStamped {
     private int category;
     @Column(nullable = false)
     private String image;
+    @ManyToOne
+    private User user;
     @Column
     private LocalDateTime favLikeTime;
     @OneToMany(mappedBy = "post",cascade = CascadeType.REMOVE)
@@ -40,6 +42,7 @@ public class Post extends TimeStamped {
         this.title = postRequestDto.getTitle();
         this.content = postRequestDto.getContent();
         this.category = postRequestDto.getCategory();
+        this.user = user;
         this.nickname = user.getNickname();
         this.image = image;
 
