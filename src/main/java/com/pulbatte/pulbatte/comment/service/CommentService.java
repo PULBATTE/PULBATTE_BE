@@ -19,15 +19,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @RequiredArgsConstructor
 public class CommentService {
-
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
 
-
     //댓글 작성
     public MsgResponseDto saveComment(Long id, Long commentId, CommentRequestDto commentRequestDto, User user) {
-        Post post = postRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NO_BOARD_FOUND));
-
+        Post post = postRepository.findById(id).orElseThrow(
+                () -> new CustomException(ErrorCode.NO_POST_FOUND)
+        );
         if (commentId == 0) {                                                                    //댓글 id가 0 일 때 > 부모 댓글(댓글)로 취급
            commentRepository.save(new Comment(commentRequestDto, post, user));                   //부모 댓글로 저장
         } else {                                                                                 //댓글 id가 0이 아닐 때 > 자식 댓글(대댓글)로 취급
@@ -41,13 +40,15 @@ public class CommentService {
         }
         return new MsgResponseDto(SuccessCode.CREATE_COMMENT);
     }
-
     //댓글 수정
     @Transactional
     public MsgResponseDto updateComment(Long id, Long commentId, CommentRequestDto commentRequestDto, User user){
-        postRepository.findById(id).orElseThrow(()-> new CustomException(ErrorCode.NO_BOARD_FOUND));
-
-        Comment comment = commentRepository.findById(commentId).orElseThrow(()-> new CustomException(ErrorCode.NO_EXIST_COMMENT));
+        postRepository.findById(id).orElseThrow(
+                ()-> new CustomException(ErrorCode.NO_POST_FOUND)
+        );
+        Comment comment = commentRepository.findById(commentId).orElseThrow(
+                ()-> new CustomException(ErrorCode.NO_EXIST_COMMENT)
+        );
         if (user.getRole().equals(UserRoleEnum.ADMIN)) {                  // admin 계정일 때
             comment.update(commentRequestDto);                            // 내용 update
         }else {                                                           // 일반 user일 경우 추가 검증
@@ -59,12 +60,12 @@ public class CommentService {
         }
         return new MsgResponseDto(SuccessCode.UPDATE_COMMENT);
     }
-
     //댓글 삭제
     @Transactional
     public MsgResponseDto deleteComment(Long id, Long commentId, User user) {
-        postRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NO_BOARD_FOUND));
-
+        postRepository.findById(id).orElseThrow(
+                () -> new CustomException(ErrorCode.NO_POST_FOUND)
+        );
         Comment comment;
         if (user.getRole().equals(UserRoleEnum.ADMIN)) {                                                // ADMIN 권한일 때
             comment = commentRepository.findById(commentId).orElseThrow(                                // 입력받은 id와 같은 데이터 삭제

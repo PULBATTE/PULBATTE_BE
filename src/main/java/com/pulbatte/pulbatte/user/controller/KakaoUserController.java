@@ -16,9 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
 public class KakaoUserController {
-
     private final KakaoService kakaoService;
-
     /*@PostMapping("/loginKakao") // code: 카카오 서버로부터 받은 인가 코드
     public MsgResponseDto kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
         *//*String createToken = *//*kakaoService.kakaoLogin(code, response);
@@ -29,8 +27,6 @@ public class KakaoUserController {
 
         return new MsgResponseDto(SuccessCode.LOG_IN);
     }*/
-
-
     @GetMapping("/kakao/callback")
     public ResponseEntity<?> kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
         // code: 카카오 서버로부터 받은 인가 코드

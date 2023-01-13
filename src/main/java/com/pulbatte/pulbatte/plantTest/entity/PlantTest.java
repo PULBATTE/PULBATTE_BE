@@ -15,21 +15,20 @@ public class PlantTest {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Column
-    private String resultTitle;
+
+    private String resultTitle;             // 테스트 결과 제목
     @Column
-    private int resultCode;
+    private int resultCode;                 // 테스트 결과 코드
     @Column
-    private String resultImage;
+    private String resultImage;             // 테스트 결과 성격 이미지
     @Column
-    private String resultPlantImage;
+    private String resultPlantImage;        // 테스트 결과 식물 이미지
     @Column
     @ElementCollection
     @CollectionTable
-    private List<String> resultString;
+    private List<String> resultString;      // 테스트 결과 성격 멘트
     @Column
     @ElementCollection
     @CollectionTable
-    private List<String> resultPlantString;
-
-
+    private List<String> resultPlantString; // 테스트 결과 식물 멘트
 }

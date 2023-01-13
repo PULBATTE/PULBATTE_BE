@@ -20,14 +20,15 @@ public class PlantTestResponseDto {
     private String beginnerPlantName;
     private List<String> resultPlantString = new ArrayList<>();
 
+    // 테스트 결과 출력
     public PlantTestResponseDto(Beginner beginner, PlantTest plantTest){
 
-        this.resultTitle = plantTest.getResultTitle();
-        this.resultImage = plantTest.getResultImage();
-        this.resultString = plantTest.getResultString();
-        this.resultPlantImage = plantTest.getResultPlantImage();
-        this.beginnerPlantName = beginner.getBeginnerPlantName();
-        this.resultPlantString = plantTest .getResultPlantString();
+        this.resultTitle = plantTest.getResultTitle();              // 결과 제목
+        this.resultImage = plantTest.getResultImage();              // 테스트 결과 성격 이미지
+        this.resultString = plantTest.getResultString();            // 테스트 결과 멘트
+        this.resultPlantImage = plantTest.getResultPlantImage();    // 테스트 결과 식물 이미지
+        this.beginnerPlantName = beginner.getBeginnerPlantName();   // 테스트 결과 식물 이름
+        this.resultPlantString = plantTest .getResultPlantString(); // 테스트 결과 식물 멘트
 
     }
 }

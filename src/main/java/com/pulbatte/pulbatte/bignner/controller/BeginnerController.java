@@ -23,7 +23,6 @@ public class BeginnerController {
     ){
         return beginnerService.getBeginnerSelect(userDetails.getUser());
     }
-
     //식집사 가이드 페이지 - 식물 키우기 페이지
     @GetMapping("/{beginnerName}")
     public BeginnerResponseDto getBeginnerPlant(

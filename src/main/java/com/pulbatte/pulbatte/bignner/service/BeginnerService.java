@@ -30,7 +30,7 @@ public class BeginnerService {
 
     public BeginnerResponseDto getBeginnerPlant(String beginnerName, User user) {
         Beginner beginner = beginnerRepository.findByBeginnerPlantName(beginnerName).orElseThrow(
-                () -> new CustomException(ErrorCode.NO_BOARD_FOUND)
+                () -> new CustomException(ErrorCode.NO_BEGINNER_PLANT)
         );
 
         return new BeginnerResponseDto(beginner);

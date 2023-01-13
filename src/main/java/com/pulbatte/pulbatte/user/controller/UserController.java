@@ -17,7 +17,6 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
-
     // 회원 가입
     @PostMapping("/signup")
     public MsgResponseDto signup(
@@ -26,7 +25,6 @@ public class UserController {
         userService.signup(signupRequestDto);
         return new MsgResponseDto(SuccessCode.SIGN_UP);
     }
-
     // 로그인
     @PostMapping("/signin")
     public MsgResponseDto login(
@@ -36,7 +34,6 @@ public class UserController {
         userService.login(loginRequestDto, response);
         return new MsgResponseDto(SuccessCode.LOG_IN);
     }
-
     // 아이디 중복 확인
     @GetMapping("/idDupleCheck")
     public ResponseEntity<Boolean> checkUserNameDuplicate (
