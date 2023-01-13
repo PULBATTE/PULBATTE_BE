@@ -22,7 +22,6 @@ public class CommentController {
             @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
         return commentService.saveComment(postId,commentId,commentRequestDto, userDetailsImpl.getUser());
     }
-
     //댓글 수정
     @PutMapping("/{postId}/comments/{commentId}")
     public MsgResponseDto updateComment(
@@ -32,7 +31,6 @@ public class CommentController {
             @AuthenticationPrincipal UserDetailsImpl userDetailsImpl){
         return commentService.updateComment(postId,commentId,commentRequestDto,userDetailsImpl.getUser());
     }
-
     // 댓글 삭제
     @DeleteMapping("/{postId}/comments/{commentId}")
     public MsgResponseDto deleteComment(

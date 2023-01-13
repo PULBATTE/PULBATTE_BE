@@ -56,7 +56,7 @@ public class PostResponseDto {
         this.id = post.getId();                             // 게시글 아이디
         this.title = post.getTitle();                       // 제목
         this.content = post.getContent();                   // 내용
-        this.posterImage = posterImage;// 작성자 프로필 사진 url
+        this.posterImage = posterImage;                     // 작성자 프로필 사진 url
         this.nickname = post.getNickname();                 // 작성자 닉네임
         this.image = image;                                 // 이미지 url
         this.likeCnt = likeCnt;                             // 좋아요 수
@@ -66,6 +66,4 @@ public class PostResponseDto {
         this.modifiedAt = post.getModifiedAt();             // 게시글 수정 시간
         this.commentList = commentList;                     // 댓글 리스트
     }
-
-
 }

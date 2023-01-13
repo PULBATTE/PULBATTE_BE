@@ -27,7 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -84,13 +83,17 @@ public class PostService {
         if(sortLikeList.size()<5){                                                                      // 리스트의 크기가 5보다 작을 때 (인기글의 초대 수 5)
             for (int i=0; i<sortLikeList.size(); i++) {
                 Long postId = sortLikeList.get(i).getKey();                                             // 좋아요가 일정 수가 넘은 post 의 아이디 저장
-                Post post = postRepository.findById(postId).orElseThrow();                              // 저장한 아이디로 게시글 찾기
+                Post post = postRepository.findById(postId).orElseThrow(
+                        () -> new CustomException(ErrorCode.NO_POST_FOUND)
+                );                              // 저장한 아이디로 게시글 찾기
                 postFavResponseDto.add(new PostFavResponseDto(post));                                   // 게시글 출력
             }
         }else {
             for (int i = 0; i < 5; i++) {                                                               // 게시글의 사이즈가 5보다 클 때 인기게시글이 된 시간으로 정렬 된 리스트에서 1~5번 째 까지만 출력
                 Long postId = sortLikeList.get(i).getKey();                                             // 좋아요가 일정 수가 넘은 post 의 아이디 저장
-                Post post = postRepository.findById(postId).orElseThrow();                              // 저장한 아이디로 게시글 찾기
+                Post post = postRepository.findById(postId).orElseThrow(
+                        () -> new CustomException(ErrorCode.NO_POST_FOUND)
+                );                              // 저장한 아이디로 게시글 찾기
                 postFavResponseDto.add(new PostFavResponseDto(post));                                   // 게시글 출력
             }
         }
@@ -100,9 +103,9 @@ public class PostService {
     @Transactional(readOnly = true)
     public PostResponseDto getPost(Long id, User user) {
         Post post = postRepository.findById(id).orElseThrow(
-                () -> new CustomException(ErrorCode.NO_BOARD_FOUND)
+                () -> new CustomException(ErrorCode.NO_POST_FOUND)
         );
-        String posterImage = post.getUser().getProfileImage();
+        String posterImage = post.getUser().getProfileImage();                                   // 게시글 작성자 프로필 사진
         Long commentCnt = commentRepository.countByPostId(post.getId());                         // 댓글 수
         Long likeCnt = likeRepository.likeCnt(post.getId());                                     // 좋아요 수
         String image = post.getImage();                                                          // 이미지 url
@@ -120,18 +123,17 @@ public class PostService {
         }
         return new PostResponseDto(post, commentResponseDtoList, image, likeCnt,commentCnt,posterImage);
     }
-
     //게시글 수정
     @Transactional
     public PostResponseDto updatePost(User user, Long id, PostRequestDto requestDto, MultipartFile multipartFile) throws IOException {
         Post post;
         if (user.getRole().equals(UserRoleEnum.ADMIN)) {                                    // admin 계정일 경우
             post = postRepository.findById(id).orElseThrow(                                 // 입력받은 id와 같은 데이터 수정
-                    () -> new CustomException(ErrorCode.NO_BOARD_FOUND)                     // 없으면 에러 출력
+                    () -> new CustomException(ErrorCode.NO_POST_FOUND)                     // 없으면 에러 출력
             );
         } else {                                                                            // 일반 user 계정일 경우
             post = postRepository.findByIdAndNickname(id, user.getNickname()).orElseThrow(  // 추가 검증
-                    () -> new CustomException(ErrorCode.NO_BOARD_FOUND)
+                    () -> new CustomException(ErrorCode.NO_POST_FOUND)
             );
         }
         post.update(requestDto);
@@ -143,35 +145,39 @@ public class PostService {
         String image = null;
         if (!multipartFile.isEmpty()) {                                                     // 사진이 수정된 경우
             image = (s3Uploader.upload(multipartFile, "static"));                   // 새로들어온 이미지 s3 저장
-            Post posts = postRepository.findById(id).orElseThrow();
+            Post posts = postRepository.findById(id).orElseThrow(
+                    () -> new CustomException(ErrorCode.NO_POST_FOUND)
+            );
             s3Uploader.delete(posts.getImage(), "static");                          // 이전 이미지 파일 삭제
             posts.update(image);
-
         }
         return new PostResponseDto(post, commentList, image);
     }
-
     //게시글 삭제
     @Transactional
     public void deletePost(Long id, User user) {
         Post post;
         if (user.getRole().equals(UserRoleEnum.ADMIN)) {                                    // admin 계정일 경우
             post = postRepository.findById(id).orElseThrow(                                 // 입력받은 id와 같은 데이터 삭제
-                    () -> new CustomException(ErrorCode.NO_BOARD_FOUND)                     // 없으면 에러 출력
+                    () -> new CustomException(ErrorCode.NO_POST_FOUND)                     // 없으면 에러 출력
             );
         } else {                                                                            // 일반 user 계정일 경우
             post = postRepository.findByIdAndNickname(id, user.getNickname()).orElseThrow(  // 추가 검증
-                    () -> new CustomException(ErrorCode.NO_BOARD_FOUND)
+                    () -> new CustomException(ErrorCode.NO_POST_FOUND)
             );
         }
-        Post posts = postRepository.findById(id).orElseThrow();
+        Post posts = postRepository.findById(id).orElseThrow(
+                () -> new CustomException(ErrorCode.NO_POST_FOUND)
+        );
         s3Uploader.delete(posts.getImage(), "static");                              // 입력받은 아이디와 같은 이미지 삭제
         postRepository.delete(post);
     }
     //게시글 좋아요, 좋아요 취소
     @Transactional
     public MsgResponseDto postLike(Long postId, User user) {
-        Post post = postRepository.findById(postId).orElseThrow(() -> new CustomException(ErrorCode.NO_BOARD_FOUND));
+        Post post = postRepository.findById(postId).orElseThrow(
+                () -> new CustomException(ErrorCode.NO_POST_FOUND)
+        );
         if (likeRepository.findByPostIdAndUserId(postId, user.getId()).isEmpty()) { // postLike 에 값이 있는지 확인
             likeRepository.save(new PostLike(post, user));                          // 없으면 저장
             if(likeRepository.likeCnt(postId)>3){

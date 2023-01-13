@@ -5,9 +5,6 @@ import com.pulbatte.pulbatte.bignner.entity.Beginner;
 import com.pulbatte.pulbatte.bignner.repository.BeginnerRepository;
 import com.pulbatte.pulbatte.global.exception.CustomException;
 import com.pulbatte.pulbatte.global.exception.ErrorCode;
-import com.pulbatte.pulbatte.plant.dto.PlantResponseDto;
-import com.pulbatte.pulbatte.plant.entity.Plant;
-import com.pulbatte.pulbatte.post.entity.Post;
 import com.pulbatte.pulbatte.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,7 +30,7 @@ public class BeginnerService {
 
     public BeginnerResponseDto getBeginnerPlant(String beginnerName, User user) {
         Beginner beginner = beginnerRepository.findByBeginnerPlantName(beginnerName).orElseThrow(
-                () -> new CustomException(ErrorCode.NO_BOARD_FOUND)
+                () -> new CustomException(ErrorCode.NO_BEGINNER_PLANT)
         );
 
         return new BeginnerResponseDto(beginner);

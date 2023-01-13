@@ -3,7 +3,6 @@ package com.pulbatte.pulbatte.post.dto;
 import com.pulbatte.pulbatte.post.entity.Post;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.joda.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor

@@ -23,7 +23,7 @@ public class User {
     @Column(nullable = false)
     private int signUpType;                                 // 회원가입 타입 (카카오 Or 이메일 로그인)
     @Column(nullable = true)
-    private String testResult;
+    private String testResult;                              // 식집사 테스트 결과
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
@@ -33,22 +33,23 @@ public class User {
         this.userId = userId;               // id(email 형식)
         this.password = password;           // 비밀번호
         this.nickname = nickname;           // 닉네임 (난수)
-        this.signUpType = signUpType;
+        this.signUpType = signUpType;       // 회원가입 타입
         this.role = role;                   // 권한
     }
 
     // 프로필 사진 업데이트
     public void updateProfile(String profileImage){
-        this.profileImage = profileImage;   // 프로필 이미지 변경
-    }
+        this.profileImage = profileImage;
+}
     // 닉네임 업데이트
-    public void updateNickname(String nickname){
-        this.nickname = nickname;           // 닉네임 변경
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
     }
     // 로그인 타입 지정
     public void updateSignupType(int signUpType) {
         this.signUpType = signUpType;
     }
+    // 식집사 테스트 결과 업데이트
     public void updateTestResult(String testResult){
         this.testResult = testResult;
     }
