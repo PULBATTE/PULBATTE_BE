@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Beginner {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
     private String beginnerPlantName;                       //초보자용 식물

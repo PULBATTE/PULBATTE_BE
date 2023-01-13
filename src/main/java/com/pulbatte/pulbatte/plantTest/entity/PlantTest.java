@@ -12,7 +12,7 @@ import java.util.List;
 public class PlantTest {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
     private String resultTitle;             // 테스트 결과 제목

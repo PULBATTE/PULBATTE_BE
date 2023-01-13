@@ -1,5 +1,6 @@
 package com.pulbatte.pulbatte.user.entity;
 
+import com.pulbatte.pulbatte.bignner.entity.BeginnerGraph;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,7 +11,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
     private String userId;                                  // 사용자 Id
@@ -26,7 +27,8 @@ public class User {
     private String testResult;                              // 식집사 테스트 결과
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
-    private UserRoleEnum role;
+    private UserRoleEnum role;                              // 유저 권한(일반, 관리자)
+
 
     // 일반 User용 생성자
     public User(String userId, String password, String nickname,int signUpType, UserRoleEnum role) {
