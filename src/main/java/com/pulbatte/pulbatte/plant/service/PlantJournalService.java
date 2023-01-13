@@ -22,7 +22,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class PlantService {
+public class PlantJournalService {
     private final PlantJournalRepository plantJournalRepository;
     private final S3Uploader s3Uploader;
     private final WaterClickRepository waterClickRepository;
@@ -113,29 +113,5 @@ public class PlantService {
         }
     }
 
-    // 식물 일지 일기 추가
-    public PlantJournalDiaryResponseDto CreatePlantJournalDiary(User user, PlantJournalDiaryRequestDto plantJournalDiaryRequestDto, Long plantJournalId) {
-        PlantJournal plantJournal = plantJournalRepository.findById(plantJournalId).orElseThrow(
-                () -> new CustomException(ErrorCode.NO_PLANT_JOURNAL_FOUND)
-        );
-        PlantJournalDiary plantJournalDiary = plantJournalDiaryRepository.save(new PlantJournalDiary(plantJournalDiaryRequestDto,user,plantJournal));
-        return new PlantJournalDiaryResponseDto(plantJournalDiary,plantJournalId,user.getId());
-    }
 
-    // 식물 일지 다이어리 상세 조회
-    public PlantJournalDiaryResponseDto GetPlantJournalDiary(User user, Long plantJournalId, Long plantjournaldiaryid) {
-        PlantJournalDiary plantJournalDiary = plantJournalDiaryRepository.findByUserAndPlantJournalIdAndId(user,plantJournalId,plantjournaldiaryid);
-
-        return new PlantJournalDiaryResponseDto(plantJournalDiary,plantJournalId, user.getId());
-    }
-
-    // 식물 일지 다이어리 리스트
-    public List<PlantJournalDiaryResponseDto> GetPlantJournalDiaryList(User user, Long plantJournalId) {
-        List<PlantJournalDiary> plantJournalDiaryList = plantJournalDiaryRepository.findAllByPlantJournalId(plantJournalId);
-        List<PlantJournalDiaryResponseDto> plantJournalDiaryResponseDtoList = new ArrayList<>();
-        for(PlantJournalDiary plantJournalDiary : plantJournalDiaryList){
-            plantJournalDiaryResponseDtoList.add(new PlantJournalDiaryResponseDto(plantJournalDiary,plantJournalId,user.getId()));
-        }
-        return plantJournalDiaryResponseDtoList;
-    }
 }
