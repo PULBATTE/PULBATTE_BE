@@ -21,22 +21,21 @@ public class Comment extends TimeStamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
-    private String userId;
+    private String userId;          // 작성자 아이디
     @Column(nullable = false)
-    private String content;
+    private String content;         // 댓글 내용
     @Column(nullable = false)
-    private String nickname;
+    private String nickname;        // 작성자 닉네임
     @ManyToOne
     @JoinColumn(name = "Post_Id", nullable = false)
-    private Post post;
+    private Post post;              // 작성한 게시글
     @ManyToOne
     @JoinColumn(name = "USERS_ID")
-    private User user;
+    private User user;              // 작성한 유저
     @ManyToOne
     @JsonIgnore
-    @JoinColumn(name = "parentid")
+    @JoinColumn(name = "parentid")  // 부모 댓글
     private Comment parent;
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "parent", orphanRemoval = true)
     private List<Comment> children = new ArrayList<>();  // 대댓글 리스트
 

@@ -1,7 +1,6 @@
 package com.pulbatte.pulbatte.user.entity;
 
 public enum  UserRoleEnum {
-
     USER(Authority.USER),
     ADMIN(Authority.ADMIN);
 

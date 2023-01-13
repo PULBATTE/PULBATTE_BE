@@ -13,19 +13,21 @@ public enum ErrorCode {
     DISMATCH_PASSWORD(HttpStatus.BAD_REQUEST,"비밀번호가 일치하지 않습니다."),
 
     // NOT_FOUND
-    NO_BOARD_FOUND(HttpStatus.NOT_FOUND, "게시글이 존재하지 않습니다."),
+    NO_POST_FOUND(HttpStatus.NOT_FOUND, "게시글이 존재하지 않습니다."),
     NO_PLANT_JOURNAL_FOUND(HttpStatus.NOT_FOUND,"식물 일지가 존재하지 않습니다"),
     NO_PLANT_JOURNAL_DIARY_FOUND(HttpStatus.NOT_FOUND,"식물 일지 다이어리가 존재하지 않습니다."),
     NO_EXIST_USER(HttpStatus.NOT_FOUND, "등록된 사용자가 없습니다."),
+    NO_BEGINNER_PLANT(HttpStatus.NOT_FOUND,"일치하는 초보자용 식물이 없습니다."),
+    NO_TEST_RESULT(HttpStatus.NOT_FOUND,"일치하는 테스트 결과가 없습니다."),
 
     NO_LOCAL_USER(HttpStatus.NOT_FOUND, "허용된 로그인 방식이 아닙니다."),
     NO_EXIST_COMMENT(HttpStatus.NOT_FOUND, "댓글이 존재하지 않습니다."),
     NO_EXIST_LOCAL(HttpStatus.NOT_FOUND,"카테고리를 찾을 수 없습니다."),
 
     // UNAUTHORIZED
-    NO_MODIFY_BOARD(HttpStatus.UNAUTHORIZED,"게시글 수정 권한이 없습니다."),
+    NO_MODIFY_POST(HttpStatus.UNAUTHORIZED,"게시글 수정 권한이 없습니다."),
     NO_MODIFY_COMMENT(HttpStatus.UNAUTHORIZED,"댓글 수정 권한이 없습니다."),
-    NO_DELETE_BOARD(HttpStatus.UNAUTHORIZED,"게시글 삭제 권한이 없습니다."),
+    NO_DELETE_POST(HttpStatus.UNAUTHORIZED,"게시글 삭제 권한이 없습니다."),
     NO_DELETE_COMMENT(HttpStatus.UNAUTHORIZED,"댓글 삭제 권한이 없습니다."),
 
     // CONFLICT
@@ -39,8 +41,7 @@ public enum ErrorCode {
     ALREADY_REPOTTING_CILCK(HttpStatus.CONFLICT, "이미 분갈이 버튼을 클릭 했습니다"),
     NO_WATER_D_DAY(HttpStatus.BAD_REQUEST, "물 주는 날이 아닙니다."),
     NO_NUTRITION_D_DAY(HttpStatus.BAD_REQUEST, "영양제 주는 날이 아닙니다."),
-    NO_REPOTTING_D_DAY(HttpStatus.BAD_REQUEST, "분갈이 하는 날이 아닙니다.")
-    ;
+    NO_REPOTTING_D_DAY(HttpStatus.BAD_REQUEST, "분갈이 하는 날이 아닙니다.");
 
     private final HttpStatus httpStatus;
     private final String message;

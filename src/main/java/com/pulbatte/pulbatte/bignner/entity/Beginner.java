@@ -1,6 +1,5 @@
 package com.pulbatte.pulbatte.bignner.entity;
 
-import com.pulbatte.pulbatte.user.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

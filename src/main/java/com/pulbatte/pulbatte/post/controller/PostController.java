@@ -23,7 +23,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/posts")
 public class PostController {
-
     private final PostService postService;
 
     // 게시글 생성
@@ -78,5 +77,4 @@ public class PostController {
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return postService.postLike(postId, userDetails.getUser());
     }
-
 }

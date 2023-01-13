@@ -4,7 +4,6 @@ import com.pulbatte.pulbatte.bignner.entity.Beginner;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
 import java.util.List;
 
 @Getter

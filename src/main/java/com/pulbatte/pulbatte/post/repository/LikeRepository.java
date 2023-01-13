@@ -13,5 +13,4 @@ public interface LikeRepository extends JpaRepository<PostLike, Long> {
     //nativeQuery 를 사용하여 좋아요 개수 count
     @Query(value = "select count(1) from post_like inner join post on post_like.post_id = post.id where post_like.post_id = :postId", nativeQuery = true)
     Long likeCnt(@PathVariable("id") Long postId);
-    Optional<PostLike> findByPostId(Long postId);
 }
