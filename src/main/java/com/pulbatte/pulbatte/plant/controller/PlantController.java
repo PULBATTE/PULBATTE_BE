@@ -3,6 +3,7 @@ package com.pulbatte.pulbatte.plant.controller;
 import com.pulbatte.pulbatte.global.MsgResponseDto;
 import com.pulbatte.pulbatte.global.security.UserDetailsImpl;
 import com.pulbatte.pulbatte.plant.dto.*;
+import com.pulbatte.pulbatte.plant.entity.Plant;
 import com.pulbatte.pulbatte.plant.service.PlantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -34,7 +35,7 @@ public class PlantController {
         return plantService.PlantJournalsAll(userDetails.getUser());
     }
 
-    @GetMapping("/plantjournal/{PlantJournalId}")  // 내 식물 관리 (식물 상세 보기)
+    @GetMapping("/plantjournal/{plantjournalid}")  // 내 식물 관리 (식물 상세 보기)
     public MyPlantManagementDTO MyPlantManageMent(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @PathVariable Long PlantJournalId
@@ -42,7 +43,33 @@ public class PlantController {
         return plantService.MyPlantManageMent(userDetails.getUser(), PlantJournalId);
     }
 
-    @PostMapping("/plantjournal/{PlantJournalId}/clickwater") // D-day 물 주기
+    @PostMapping("/plantjournal/diary/{plantjournalid}") // 식물 일지 다이어리 작성
+    public PlantJournalDiaryResponseDto CreatePlantJournalDiary(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestBody PlantJournalDiaryRequestDto plantJournalDiaryRequestDto,
+            @PathVariable Long plantJournalId
+    ){
+        return plantService.CreatePlantJournalDiary(userDetails.getUser(),plantJournalDiaryRequestDto,plantJournalId);
+    }
+
+    @GetMapping("/plantjournal/diary/{plantjournalid}/{plantjournaldiaryid}") // 식물 일지 다이어리 상세보기
+    public PlantJournalDiaryResponseDto GetPlantJournalDiary(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable Long plantJournalId,
+            @PathVariable Long plantjournaldiaryid
+    ){
+        return plantService.GetPlantJournalDiary(userDetails.getUser(),plantJournalId,plantjournaldiaryid);
+    }
+
+    @GetMapping("plantjournal/diarys")  // 식물 일지 다이어리 리스트 조회
+    public List<PlantJournalDiaryResponseDto> GetPlantJournalDiaryList(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable Long plantJournalId
+    ){
+        return plantService.GetPlantJournalDiaryList(userDetails.getUser(),plantJournalId);
+    }
+
+    @PostMapping("/plantjournal/{plantJournalId}/clickwater") // D-day 물 주기
     public MsgResponseDto ClickPlantWater(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @PathVariable Long PlantJournalId
@@ -50,7 +77,7 @@ public class PlantController {
         return  plantService.PlantWaterClick(userDetails.getUser(), PlantJournalId);
     }
 
-    @PostMapping("/plantjournal/{PlantJournalId}/clicknutrition") // D-day 영양제 주기
+    @PostMapping("/plantjournal/{plantJournalId}/clicknutrition") // D-day 영양제 주기
     public MsgResponseDto ClickPlantNutrition(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @PathVariable Long PlantJournalId
@@ -58,7 +85,7 @@ public class PlantController {
         return  plantService.ClickPlantNutrition(userDetails.getUser(), PlantJournalId);
     }
 
-    @PostMapping("/plantjournal/{PlantJournalId}/clickrepotting") // D-day 분갈이 하기
+    @PostMapping("/plantjournal/{plantJournalId}/clickrepotting") // D-day 분갈이 하기
     public MsgResponseDto ClickPlantRepotting(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @PathVariable Long PlantJournalId

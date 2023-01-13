@@ -6,14 +6,8 @@ import com.pulbatte.pulbatte.global.S3Uploader;
 import com.pulbatte.pulbatte.global.exception.CustomException;
 import com.pulbatte.pulbatte.global.exception.ErrorCode;
 import com.pulbatte.pulbatte.global.exception.SuccessCode;
-import com.pulbatte.pulbatte.plant.dto.MyPlantManagementDTO;
-import com.pulbatte.pulbatte.plant.dto.PlantJournalAddRequestDto;
-import com.pulbatte.pulbatte.plant.dto.PlantJournalAddResponseDto;
-import com.pulbatte.pulbatte.plant.dto.PlantJournalsRequestDto;
-import com.pulbatte.pulbatte.plant.entity.NutritionClick;
-import com.pulbatte.pulbatte.plant.entity.PlantJournal;
-import com.pulbatte.pulbatte.plant.entity.RepottingCilck;
-import com.pulbatte.pulbatte.plant.entity.WaterClick;
+import com.pulbatte.pulbatte.plant.dto.*;
+import com.pulbatte.pulbatte.plant.entity.*;
 import com.pulbatte.pulbatte.plant.repository.*;
 import com.pulbatte.pulbatte.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +28,7 @@ public class PlantService {
     private final WaterClickRepository waterClickRepository;
     private final RepottingCilckRepository repottingCilckRepository;
     private final NutritionClickRepository nutritionClickRepository;
+    private final PlantJournalDiaryRepository plantJournalDiaryRepository;
 
     // 식물 일지 식물 등록
     @Transactional
@@ -116,5 +111,31 @@ public class PlantService {
         }else{
             throw new CustomException(ErrorCode.ALREADY_REPOTTING_CILCK);
         }
+    }
+
+    // 식물 일지 일기 추가
+    public PlantJournalDiaryResponseDto CreatePlantJournalDiary(User user, PlantJournalDiaryRequestDto plantJournalDiaryRequestDto, Long plantJournalId) {
+        PlantJournal plantJournal = plantJournalRepository.findById(plantJournalId).orElseThrow(
+                () -> new CustomException(ErrorCode.NO_PLANT_JOURNAL_FOUND)
+        );
+        PlantJournalDiary plantJournalDiary = plantJournalDiaryRepository.save(new PlantJournalDiary(plantJournalDiaryRequestDto,user,plantJournal));
+        return new PlantJournalDiaryResponseDto(plantJournalDiary,plantJournalId,user.getId());
+    }
+
+    // 식물 일지 다이어리 상세 조회
+    public PlantJournalDiaryResponseDto GetPlantJournalDiary(User user, Long plantJournalId, Long plantjournaldiaryid) {
+        PlantJournalDiary plantJournalDiary = plantJournalDiaryRepository.findByUserAndPlantJournalIdAndId(user,plantJournalId,plantjournaldiaryid);
+
+        return new PlantJournalDiaryResponseDto(plantJournalDiary,plantJournalId, user.getId());
+    }
+
+    // 식물 일지 다이어리 리스트
+    public List<PlantJournalDiaryResponseDto> GetPlantJournalDiaryList(User user, Long plantJournalId) {
+        List<PlantJournalDiary> plantJournalDiaryList = plantJournalDiaryRepository.findAllByPlantJournalId(plantJournalId);
+        List<PlantJournalDiaryResponseDto> plantJournalDiaryResponseDtoList = new ArrayList<>();
+        for(PlantJournalDiary plantJournalDiary : plantJournalDiaryList){
+            plantJournalDiaryResponseDtoList.add(new PlantJournalDiaryResponseDto(plantJournalDiary,plantJournalId,user.getId()));
+        }
+        return plantJournalDiaryResponseDtoList;
     }
 }
