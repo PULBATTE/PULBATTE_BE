@@ -25,6 +25,14 @@ public class BeginnerController {
     ){
         return beginnerService.getBeginnerSelect(userDetails.getUser());
     }
+    @PostMapping("/{beginnerName}")
+    public MsgResponseDto postBeginnerPlant(
+            @PathVariable String beginnerName,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ){
+        return beginnerService.postBeginnerPlant(beginnerName,userDetails.getUser());
+    }
+    // 식집사 가이드 페이지 - 식물 키우기 페이지 그래프 입력
     @PostMapping
     public MsgResponseDto postBeginnerGraph(
             @RequestBody BeginnerRequestDto beginnerRequestDto,
@@ -33,11 +41,10 @@ public class BeginnerController {
         return beginnerService.postBeginnerGraph(beginnerRequestDto,userDetails.getUser());
     }
     //식집사 가이드 페이지 - 식물 키우기 페이지
-    @GetMapping("/{beginnerName}")
+    @GetMapping("/my")
     public BeginnerResponseDto getBeginnerPlant(
-            @PathVariable String beginnerName,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ){
-        return beginnerService.getBeginnerPlant(beginnerName,userDetails.getUser());
+        return beginnerService.getBeginnerPlant(userDetails.getUser());
     }
 }
