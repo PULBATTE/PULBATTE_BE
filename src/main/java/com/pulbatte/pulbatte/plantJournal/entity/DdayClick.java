@@ -7,25 +7,28 @@ import org.joda.time.LocalDate;
 
 import javax.persistence.*;
 
-@Entity(name = "nutriticonclick")
+@Entity(name = "ddayClick")
 @Getter
 @NoArgsConstructor
-public class NutritionClick {
+public class DdayClick {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column
+    private LocalDate localDate;
+    @Column
+    private String clickTag;
     @ManyToOne
     @JoinColumn(name = "USERS_ID")
     private User user;
     @ManyToOne
     @JoinColumn(name = "PlantJournal_ID")
     private PlantJournal plantJournal;
-    @Column
-    private LocalDate localDate;
 
-    public NutritionClick(User user, PlantJournal plantJournal){
+    public DdayClick(User user, PlantJournal plantJournal, String clickTag){
         this.user = user;
         this.plantJournal = plantJournal;
+        this.clickTag = clickTag;
         this.localDate = LocalDate.now();
     }
 }
