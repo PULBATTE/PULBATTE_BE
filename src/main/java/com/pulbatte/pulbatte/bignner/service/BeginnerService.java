@@ -15,11 +15,8 @@ import com.pulbatte.pulbatte.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -54,11 +51,9 @@ public class BeginnerService {
                 () -> new CustomException(ErrorCode.NO_EXIST_USER)
         );
         List<BeginnerGraphResponseDto> beginnerGraphResponseDtoList = new ArrayList<>();
-        for (BeginnerGraph beginnerGraphValue :beginner.getBeginnerGraphs()){
+        for (BeginnerGraph beginnerGraphValue : beginner.getBeginnerGraphs()){
             beginnerGraphResponseDtoList.add(new BeginnerGraphResponseDto(beginnerGraphValue));
         }
-
-
 
         return new BeginnerResponseDto(beginner,beginnerGraphResponseDtoList);
     }

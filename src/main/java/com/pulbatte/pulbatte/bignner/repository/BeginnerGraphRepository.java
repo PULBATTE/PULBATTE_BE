@@ -1,6 +1,5 @@
 package com.pulbatte.pulbatte.bignner.repository;
 
-import com.pulbatte.pulbatte.bignner.entity.Beginner;
 import com.pulbatte.pulbatte.bignner.entity.BeginnerGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 

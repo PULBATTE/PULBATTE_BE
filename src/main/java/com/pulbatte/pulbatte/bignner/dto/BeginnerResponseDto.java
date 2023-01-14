@@ -1,15 +1,11 @@
 package com.pulbatte.pulbatte.bignner.dto;
 
 import com.pulbatte.pulbatte.bignner.entity.Beginner;
-import com.pulbatte.pulbatte.bignner.entity.BeginnerGraph;
-import com.pulbatte.pulbatte.user.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Getter
 @NoArgsConstructor

@@ -31,5 +31,4 @@ public class Beginner {
     @OneToMany
     private List<BeginnerGraph>beginnerGraphs = new ArrayList<>();
 
-
 }
