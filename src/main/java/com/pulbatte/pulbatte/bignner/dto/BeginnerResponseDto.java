@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 public class BeginnerResponseDto {
     private String beginnerPlantName;           // 초보자용 식물
-    private String tip;               // 식물 성장 팁
+    private String tip;                         // 식물 성장 팁
     private String image;                       // 이미지
     private int water;                          // 물양
     private int sunshine;                       // 일조량

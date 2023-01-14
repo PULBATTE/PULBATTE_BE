@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,10 +56,12 @@ public class BeginnerService {
         BeginnerUser beginnerUser = beginnerUserRepository.findByUserId(user.getId()).orElseThrow(
                 () -> new CustomException(ErrorCode.NO_EXIST_USER)
         );
-        if(beginnerUser.getStartDate().plusDays(30).isAfter(beginnerRequestDto.getLocalDate())){
-            if(beginnerGraphRepository.findByLocalDateAndUserId(beginnerRequestDto.getLocalDate(), user.getId()).isEmpty()){ // 중복 확인
-                beginnerGraphRepository.save(new BeginnerGraph(beginnerRequestDto,beginnerUser,user));
-                return new MsgResponseDto(SuccessCode.CREATE_COMMENT);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate localDate = LocalDate.parse(beginnerRequestDto.getLocalDate(),formatter);
+        if(beginnerUser.getStartDate().plusDays(30).isAfter(localDate)){
+            if(beginnerGraphRepository.findByLocalDateAndUserId(localDate, user.getId()).isEmpty()){ // 중복 확인
+                beginnerGraphRepository.save(new BeginnerGraph(beginnerRequestDto,beginnerUser,user,localDate));
+                return new MsgResponseDto(SuccessCode.CREATE_BEGINNER_GRAPH);
             }else {
                 return new MsgResponseDto(new CustomException(ErrorCode.ALREADY_EXIST_DATE));
             }
