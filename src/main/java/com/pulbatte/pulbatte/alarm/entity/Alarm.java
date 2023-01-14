@@ -6,10 +6,11 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
 
 import javax.persistence.*;
 
-@Entity(name = "events")
+@Entity(name = "alarms")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Alarm extends TimeStamped {
@@ -19,11 +20,11 @@ public class Alarm extends TimeStamped {
     private Long id;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private AlarmType alarmType;
+    private AlarmType alarmType;            // 알림 타입 (댓글/일지)
     @Column(nullable = false)
-    private String content;
+    private String content;         // 알림 내용
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @Builder

@@ -2,10 +2,8 @@ package com.pulbatte.pulbatte.alarm.service;
 
 import com.pulbatte.pulbatte.alarm.entity.Alarm;
 import com.pulbatte.pulbatte.alarm.entity.AlarmType;
-import com.pulbatte.pulbatte.alarm.repository.AlarmRepository;
 import com.pulbatte.pulbatte.alarm.repository.EmitterRepositoryImpl;
 import com.pulbatte.pulbatte.user.entity.User;
-import com.pulbatte.pulbatte.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,11 +16,9 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class AlarmService {
-    private final UserRepository userRepository;
     private final EmitterRepositoryImpl emitterRepository;
-    private final AlarmRepository alarmRepository;
 
-    public SseEmitter reply(Long userId, String lastEventId) {
+    public SseEmitter subscribe(Long userId, String lastEventId) {
         Long timeout = 60 * 1000L * 60L;
         String emitterId = makeTimeIncludeId(userId);           // emitter 아이디 생성
         SseEmitter emitter = emitterRepository.save(emitterId, new SseEmitter(timeout));            // emitter 생성
@@ -66,9 +62,9 @@ public class AlarmService {
     }
 
     public void send(AlarmType alarmType, String content, User user) {
-        Alarm alarm = alarmRepository.save(createAlarm(alarmType, content, user));
-
+        Alarm alarm = createAlarm(alarmType, content, user);
         String receiveId = String.valueOf(user.getUserId());
+
         String eventId = receiveId + "_" + System.currentTimeMillis();
         Map<String, SseEmitter> emitters = emitterRepository.findAllEmitterStartWithByUserId(receiveId);
         emitters.forEach(
