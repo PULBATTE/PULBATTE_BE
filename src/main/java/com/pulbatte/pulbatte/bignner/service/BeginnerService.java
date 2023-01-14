@@ -1,5 +1,6 @@
 package com.pulbatte.pulbatte.bignner.service;
 
+import com.pulbatte.pulbatte.bignner.dto.BeginnerGraphResponseDto;
 import com.pulbatte.pulbatte.bignner.dto.BeginnerRequestDto;
 import com.pulbatte.pulbatte.bignner.dto.BeginnerResponseDto;
 import com.pulbatte.pulbatte.bignner.entity.Beginner;
@@ -37,10 +38,10 @@ public class BeginnerService {
         return beginnerResponseDtoList;
     }
     public MsgResponseDto postBeginnerGraph(BeginnerRequestDto beginnerRequestDto,User user){
-        Map<LocalDate,Integer> graphValue = new HashMap<>();
+        /*Map<LocalDate,Integer> graphValue = new HashMap<>();
 
-        graphValue.put(beginnerRequestDto.getLocalDate(),beginnerRequestDto.getValue());
-        beginnerGraphRepository.save(new BeginnerGraph(graphValue,user));
+        graphValue.put(beginnerRequestDto.getLocalDate(),beginnerRequestDto.getValue());*/
+        beginnerGraphRepository.save(new BeginnerGraph(beginnerRequestDto,user));
 
         return new MsgResponseDto(SuccessCode.CREATE_COMMENT);
     }
@@ -49,8 +50,17 @@ public class BeginnerService {
         Beginner beginner = beginnerRepository.findByBeginnerPlantName(beginnerName).orElseThrow(
                 () -> new CustomException(ErrorCode.NO_BEGINNER_PLANT)
         );
+        BeginnerGraph beginnerGraph = beginnerGraphRepository.findByUserId(user.getId()).orElseThrow(
+                () -> new CustomException(ErrorCode.NO_EXIST_USER)
+        );
+        List<BeginnerGraphResponseDto> beginnerGraphResponseDtoList = new ArrayList<>();
+        for (BeginnerGraph beginnerGraphValue :beginner.getBeginnerGraphs()){
+            beginnerGraphResponseDtoList.add(new BeginnerGraphResponseDto(beginnerGraphValue));
+        }
 
-        return new BeginnerResponseDto(beginner,user);
+
+
+        return new BeginnerResponseDto(beginner,beginnerGraphResponseDtoList);
     }
 
 }

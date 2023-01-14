@@ -28,6 +28,8 @@ public class Beginner {
     private int sunshine;                                   //일조량
     @Column
     private int ventilation;                                //온도
+    @OneToMany
+    private List<BeginnerGraph>beginnerGraphs = new ArrayList<>();
 
 
 }
