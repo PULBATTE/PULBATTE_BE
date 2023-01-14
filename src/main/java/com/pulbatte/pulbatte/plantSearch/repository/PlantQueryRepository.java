@@ -1,5 +1,7 @@
 package com.pulbatte.pulbatte.plantSearch.repository;
 
+import com.pulbatte.pulbatte.plantSearch.dto.PlantDetailDto;
+import com.pulbatte.pulbatte.plantSearch.dto.QPlantDetailDto;
 import com.pulbatte.pulbatte.plantSearch.entity.PlantTag;
 import com.pulbatte.pulbatte.plantSearch.dto.PlantListDto;
 import com.pulbatte.pulbatte.plantSearch.dto.QPlantListDto;
@@ -31,6 +33,17 @@ public class PlantQueryRepository {
                 .from(plant)
                 .orderBy(plant.plantName.asc())
                 .fetch();
+    }
+
+    // 단건 조회
+    public PlantDetailDto findOne(Long plantId) {
+        return queryFactory
+                .select(new QPlantDetailDto(
+                        plant
+                ))
+                .from(plant)
+                .where(eqPlantId(plantId))
+                .fetchOne();
     }
 
     // 식물 이름 검색
@@ -69,6 +82,13 @@ public class PlantQueryRepository {
             return null;
         }
         return plant.plantTag.eq(tag);
+    }
+
+    private BooleanExpression eqPlantId(Long plantId) {
+        if(ObjectUtils.isEmpty(plantId)) {
+            return null;
+        }
+        return plant.id.eq(plantId);
     }
 
 }

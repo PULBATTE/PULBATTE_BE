@@ -1,5 +1,6 @@
 package com.pulbatte.pulbatte.plantSearch.controller;
 
+import com.pulbatte.pulbatte.plantSearch.dto.PlantDetailDto;
 import com.pulbatte.pulbatte.plantSearch.entity.PlantTag;
 import com.pulbatte.pulbatte.plantSearch.dto.PlantListResponseDto;
 import com.pulbatte.pulbatte.plantSearch.service.PlantSearchService;
@@ -29,5 +30,11 @@ public class PlantSearchController {
     @GetMapping(value = "/categories/{tag}", produces = "application/json; charset=utf8")
     public PlantListResponseDto findByPlantTag(@PathVariable PlantTag tag) {
         return searchService.findByPlantTag(tag);
+    }
+
+    // 식물 상세 조회
+    @GetMapping(value = "/detail/{plantId}")
+    public ResponseEntity<PlantDetailDto> findPlant(@PathVariable Long plantId) {
+        return ResponseEntity.ok(searchService.getPlant(plantId));
     }
 }

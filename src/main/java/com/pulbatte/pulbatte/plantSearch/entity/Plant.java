@@ -33,27 +33,27 @@ public class Plant {
     private String image;                   //이미지
 
     @Column
-    private String waterType;
+    private String waterType;           //물 주기
 
     @Column
-    private String water;                   //물양
+    private String water;                   //물 주기 상세 내용
 
     @Column
-    private String sunshineType;
+    private String sunshineType;            // 햇빛 조건
 
     @Column
-    private String sunshine;                //일조량
+    private String sunshine;                // 햇빛 조건 상세 내용
 
 
     @Column
-    private String humidityType;
+    private String humidityType;            // 습도 조건
 
     @Column
-    private String humidity;                //습도
+    private String humidity;                // 습도 조건 상세 내용
 
     @Column
-    private String tempType;
+    private String tempType;            // 온도 조건
 
     @Column
-    private String temp;                    //온도
+    private String temp;                    // 온도 조건 상세 내용
 }
