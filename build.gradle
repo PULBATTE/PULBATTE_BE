@@ -77,6 +77,8 @@ dependencies {
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
     implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
 
+    // WebFlux
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
 }
 
 querydsl {

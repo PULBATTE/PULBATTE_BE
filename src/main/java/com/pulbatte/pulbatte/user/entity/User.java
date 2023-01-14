@@ -37,6 +37,11 @@ public class User {
         this.role = role;                   // 권한
     }
 
+    // 알림 기능 테스트용
+    public User(Long id) {
+        this.id = id;
+    }
+
     // 프로필 사진 업데이트
     public void updateProfile(String profileImage){
         this.profileImage = profileImage;

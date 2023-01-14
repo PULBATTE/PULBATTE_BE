@@ -1,5 +1,7 @@
 package com.pulbatte.pulbatte.comment.service;
 
+import com.pulbatte.pulbatte.alarm.entity.AlarmType;
+import com.pulbatte.pulbatte.alarm.service.AlarmService;
 import com.pulbatte.pulbatte.comment.dto.CommentRequestDto;
 import com.pulbatte.pulbatte.comment.entity.Comment;
 import com.pulbatte.pulbatte.comment.repository.CommentRepository;
@@ -21,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class CommentService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
+    private final AlarmService alarmService;
 
     //댓글 작성
     public MsgResponseDto saveComment(Long id, Long commentId, CommentRequestDto commentRequestDto, User user) {
@@ -38,6 +41,7 @@ public class CommentService {
             }
             commentRepository.save(new Comment(commentRequestDto, post, user, childComment));    //자식 댓글로 저장
         }
+        alarmService.send(AlarmType.comment, "success", user);
         return new MsgResponseDto(SuccessCode.CREATE_COMMENT);
     }
     //댓글 수정
