@@ -14,6 +14,7 @@ public enum ErrorCode {
 
     // NOT_FOUND
     NO_POST_FOUND(HttpStatus.NOT_FOUND, "게시글이 존재하지 않습니다."),
+    NO_PLANT_FOUND(HttpStatus.NOT_FOUND, "식물이 존재하지 않습니다."),
     NO_PLANT_JOURNAL_FOUND(HttpStatus.NOT_FOUND,"식물 일지가 존재하지 않습니다"),
     NO_PLANT_JOURNAL_DIARY_FOUND(HttpStatus.NOT_FOUND,"식물 일지 다이어리가 존재하지 않습니다."),
     NO_EXIST_USER(HttpStatus.NOT_FOUND, "등록된 사용자가 없습니다."),
