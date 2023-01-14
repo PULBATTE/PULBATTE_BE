@@ -9,10 +9,7 @@ import com.pulbatte.pulbatte.global.exception.SuccessCode;
 import com.pulbatte.pulbatte.plantJournal.dto.MyPlantManagementDTO;
 import com.pulbatte.pulbatte.plantJournal.dto.PlantJournalAddRequestDto;
 import com.pulbatte.pulbatte.plantJournal.dto.PlantJournalsRequestDto;
-import com.pulbatte.pulbatte.plantJournal.entity.NutritionClick;
-import com.pulbatte.pulbatte.plantJournal.entity.PlantJournal;
-import com.pulbatte.pulbatte.plantJournal.entity.RepottingCilck;
-import com.pulbatte.pulbatte.plantJournal.entity.WaterClick;
+import com.pulbatte.pulbatte.plantJournal.entity.*;
 import com.pulbatte.pulbatte.plantJournal.repository.*;
 import com.pulbatte.pulbatte.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -29,9 +26,8 @@ import java.util.List;
 public class PlantJournalService {
     private final PlantJournalRepository plantJournalRepository;
     private final S3Uploader s3Uploader;
-    private final WaterClickRepository waterClickRepository;
-    private final RepottingCilckRepository repottingCilckRepository;
-    private final NutritionClickRepository nutritionClickRepository;
+    private final DdayClickRepository ddayClickRepository;
+
 
     // 식물 일지 식물 등록
     @Transactional
@@ -63,53 +59,26 @@ public class PlantJournalService {
         return new MyPlantManagementDTO(plantJournalRepository.findByUserAndId(user, plantJournalId));
     }
 
-    // D-day 물 주기 버튼
+    // Dday 카테고리 클릭
     @Transactional
-    public MsgResponseDto PlantWaterClick(User user, Long plantJournalId) {
+    public MsgResponseDto ClickDday(User user, Long plantJournalId, String clicktag) {
         PlantJournal plantJournal = plantJournalRepository.findByUserAndId(user,plantJournalId);
-        if(plantJournal.getWaterDDay() != 0){                                                                           // DDay가 아닐시, 예외처리
-            throw new CustomException(ErrorCode.NO_WATER_D_DAY);
+        if(plantJournal.getWaterDDay() != 0 || plantJournal.getNutritionDDay() != 0 || plantJournal.getRepottingDDay() != 0){
+            throw new CustomException(ErrorCode.NO_DDAY);
         }
-        if(waterClickRepository.findByLocalDateAndUserAndPlantJournal(LocalDate.now(),user,plantJournal).isEmpty()){    // DB 안에 오늘 식물에 대해 클릭을 했는지 여부
-            waterClickRepository.save(new WaterClick(user, plantJournal));                                              // DB에 오늘 클릭 정보 저장
-            plantJournal.WaterClick(waterClickRepository.countAllByUserAndPlantJournal(user, plantJournal));            // 해당 식물 DB에 카운트 횟수 저장
-            return new MsgResponseDto(SuccessCode.WATER_CLICK_OK);
+        if(ddayClickRepository.findByLocalDateAndUserAndPlantJournalAndClickTag(LocalDate.now(), user, plantJournal, clicktag).isPresent()){
+            throw new CustomException(ErrorCode.ALREADY_DDAY_CLICK);
+        }
+        if(clicktag.equals("water")){
+            plantJournal.WaterClick(ddayClickRepository.countAllByUserAndPlantJournalAndClickTag(user, plantJournal, clicktag));            // 해당 식물 DB에 카운트 횟수 저장
+        }else if(clicktag.equals("nutrition")){
+            plantJournal.NutritionClick(ddayClickRepository.countAllByUserAndPlantJournalAndClickTag(user, plantJournal, clicktag));
+        }else if(clicktag.equals("repotting")){
+            plantJournal.RepottingClick(ddayClickRepository.countAllByUserAndPlantJournalAndClickTag(user, plantJournal, clicktag));
         }else{
-            throw new CustomException(ErrorCode.ALREADY_WATER_CILCK);
+            throw new CustomException(ErrorCode.NO_EXIST_CLICKTAG);
         }
+        ddayClickRepository.save(new DdayClick(user, plantJournal, clicktag));
+        return new MsgResponseDto(SuccessCode.DDAY_CLICK_OK);
     }
-
-    // D-day 영양제 주기 버튼
-    @Transactional
-    public MsgResponseDto ClickPlantNutrition(User user, Long plantJournalId) {
-        PlantJournal plantJournal = plantJournalRepository.findByUserAndId(user,plantJournalId);
-        if(plantJournal.getNutritionDDay() != 0){
-            throw new CustomException(ErrorCode.NO_NUTRITION_D_DAY);
-        }
-        if(nutritionClickRepository.findByLocalDateAndUserAndPlantJournal(LocalDate.now(), user, plantJournal).isEmpty()){
-            nutritionClickRepository.save(new NutritionClick(user, plantJournal));
-            plantJournal.NutritionClick(waterClickRepository.countAllByUserAndPlantJournal(user, plantJournal));
-            return new MsgResponseDto(SuccessCode.NUTRITION_CLICK_OK);
-        }else{
-            throw new CustomException(ErrorCode.ALREADY_NUTRITION_CILCK);
-        }
-    }
-
-    // D-day 분갈이 버튼
-    @Transactional
-    public   MsgResponseDto ClickPlantRepotting(User user, Long plantJournalId) {
-        PlantJournal plantJournal = plantJournalRepository.findByUserAndId(user,plantJournalId);
-        if(plantJournal.getRepottingDDay() != 0){
-            throw new CustomException(ErrorCode.NO_REPOTTING_D_DAY);
-        }
-        if(repottingCilckRepository.findByLocalDateAndUserAndPlantJournal(LocalDate.now(), user, plantJournal).isEmpty()){
-            repottingCilckRepository.save(new RepottingCilck(user, plantJournal));
-            plantJournal.RepottingClick(waterClickRepository.countAllByUserAndPlantJournal(user, plantJournal));
-            return new MsgResponseDto(SuccessCode.REPOTTING_CLICK_OK);
-        }else{
-            throw new CustomException(ErrorCode.ALREADY_REPOTTING_CILCK);
-        }
-    }
-
-
 }

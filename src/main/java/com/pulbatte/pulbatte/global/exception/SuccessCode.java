@@ -33,6 +33,7 @@ public enum SuccessCode {
     DELETE_COMMENT(HttpStatus.OK, "댓글을 삭제하였습니다"),
 
     // D-Day 클릭
+    DDAY_CLICK_OK(HttpStatus.OK, "Dday 클릭 완료!!"),
     WATER_CLICK_OK(HttpStatus.OK, "물 주기 완료!!"),
     NUTRITION_CLICK_OK(HttpStatus.OK, "영양제 주기 완료!!"),
     REPOTTING_CLICK_OK(HttpStatus.OK, "분갈이 완료!!"),

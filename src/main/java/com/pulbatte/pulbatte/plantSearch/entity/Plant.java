@@ -19,6 +19,8 @@ public class Plant {
 
     @Column
     private int beginner;
+    @Column
+    private String holder;
 
     @Column
     private String content;                 //식물 설명

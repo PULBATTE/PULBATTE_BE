@@ -46,27 +46,12 @@ public class PlantJournalController {
         return plantJournalService.GetPlantJournal(userDetails.getUser(), plantjournalid);
     }
 
-    @PostMapping("/plantjournal/{plantjournalid}/water") // D-day 물 주기
-    public MsgResponseDto ClickPlantWater(
+    @PostMapping("/plantjorunal/{plantjournalid}/click/{clicktag}") // D-Day 클릭
+    public MsgResponseDto ClickDday(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @PathVariable Long plantjournalid
-    ) {
-        return  plantJournalService.PlantWaterClick(userDetails.getUser(), plantjournalid);
-    }
-
-    @PostMapping("/plantjournal/{plantjournalid}/nutrition") // D-day 영양제 주기
-    public MsgResponseDto ClickPlantNutrition(
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @PathVariable Long plantjournalid
-    ) {
-        return  plantJournalService.ClickPlantNutrition(userDetails.getUser(), plantjournalid);
-    }
-
-    @PostMapping("/plantjournal/{plantjournalid}/repotting") // D-day 분갈이 하기
-    public MsgResponseDto ClickPlantRepotting(
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @PathVariable Long plantjournalid
-    ) {
-        return  plantJournalService.ClickPlantRepotting(userDetails.getUser(), plantjournalid);
+            @PathVariable Long plantjournalid,
+            @PathVariable String clicktag
+    ){
+        return plantJournalService.ClickDday(userDetails.getUser(),plantjournalid,clicktag);
     }
 }

@@ -22,7 +22,7 @@ public enum ErrorCode {
 
     NO_LOCAL_USER(HttpStatus.NOT_FOUND, "허용된 로그인 방식이 아닙니다."),
     NO_EXIST_COMMENT(HttpStatus.NOT_FOUND, "댓글이 존재하지 않습니다."),
-    NO_EXIST_LOCAL(HttpStatus.NOT_FOUND,"카테고리를 찾을 수 없습니다."),
+    NO_EXIST_CLICKTAG(HttpStatus.NOT_FOUND,"카테고리를 찾을 수 없습니다."),
 
     // UNAUTHORIZED
     NO_MODIFY_POST(HttpStatus.UNAUTHORIZED,"게시글 수정 권한이 없습니다."),
@@ -39,6 +39,8 @@ public enum ErrorCode {
     ALREADY_WATER_CILCK(HttpStatus.CONFLICT, "이미 물 주기 버튼을 클릭 했습니다"),
     ALREADY_NUTRITION_CILCK(HttpStatus.CONFLICT, "이미 영양 주기 버튼을 클릭 했습니다"),
     ALREADY_REPOTTING_CILCK(HttpStatus.CONFLICT, "이미 분갈이 버튼을 클릭 했습니다"),
+    ALREADY_DDAY_CLICK(HttpStatus.CONFLICT, "이미 디데이 버튼을 클릭 했습니다"),
+    NO_DDAY(HttpStatus.BAD_REQUEST, "DDay가 아닙니다"),
     NO_WATER_D_DAY(HttpStatus.BAD_REQUEST, "물 주는 날이 아닙니다."),
     NO_NUTRITION_D_DAY(HttpStatus.BAD_REQUEST, "영양제 주는 날이 아닙니다."),
     NO_REPOTTING_D_DAY(HttpStatus.BAD_REQUEST, "분갈이 하는 날이 아닙니다."),
