@@ -41,7 +41,10 @@ public enum ErrorCode {
     ALREADY_REPOTTING_CILCK(HttpStatus.CONFLICT, "이미 분갈이 버튼을 클릭 했습니다"),
     NO_WATER_D_DAY(HttpStatus.BAD_REQUEST, "물 주는 날이 아닙니다."),
     NO_NUTRITION_D_DAY(HttpStatus.BAD_REQUEST, "영양제 주는 날이 아닙니다."),
-    NO_REPOTTING_D_DAY(HttpStatus.BAD_REQUEST, "분갈이 하는 날이 아닙니다.");
+    NO_REPOTTING_D_DAY(HttpStatus.BAD_REQUEST, "분갈이 하는 날이 아닙니다."),
+
+    ALREADY_EXIST_DATE(HttpStatus.BAD_REQUEST,"중복된 데이터입니다"),
+    END_GUIDE(HttpStatus.BAD_REQUEST,"가이드가 종료되었습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;

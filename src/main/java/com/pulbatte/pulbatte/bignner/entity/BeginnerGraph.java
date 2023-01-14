@@ -1,0 +1,35 @@
+package com.pulbatte.pulbatte.bignner.entity;
+
+import com.pulbatte.pulbatte.bignner.dto.BeginnerRequestDto;
+import com.pulbatte.pulbatte.user.entity.User;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import java.time.LocalDate;
+
+@Entity(name = "beginnerGraph")
+@Getter
+@NoArgsConstructor
+public class BeginnerGraph {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column
+    private LocalDate localDate;
+    @Column
+    private int graphValue;
+    @OneToOne
+    private User user;
+    @ManyToOne
+    private BeginnerUser beginnerUser;
+
+    public BeginnerGraph(BeginnerRequestDto beginnerRequestDto,BeginnerUser beginnerUser , User user){
+        this.user = user;
+        this.beginnerUser = beginnerUser;
+        this.localDate = beginnerRequestDto.getLocalDate();
+        this.graphValue = beginnerRequestDto.getValue();
+    }
+
+
+}

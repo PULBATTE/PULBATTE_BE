@@ -45,8 +45,11 @@ public enum SuccessCode {
     // 식물 일지 다이어리
     CREATE_PLANT_JOURNAL_DIARY(HttpStatus.OK, "식물 일지 다이어리를 등록 하였습니다."),
     UPDATE_PLANT_JOURNAL_DIARY(HttpStatus.OK, "식물 일지 다이어리를 수정 하였습니다."),
-    DELETE_PLANT_JOURNAL_DIARY(HttpStatus.OK, "식물 일지 다이어리를 삭제 하였습니다.")
-    ;
+    DELETE_PLANT_JOURNAL_DIARY(HttpStatus.OK, "식물 일지 다이어리를 삭제 하였습니다."),
+
+    // 식집사 가이드
+    CREATE_BEGINNER_GRAPH(HttpStatus.OK,"그래프를 등록 하였습니다."),
+    CREATE_BEGINNER_Plant(HttpStatus.OK,"가이드 식물을 등록 하였습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;
