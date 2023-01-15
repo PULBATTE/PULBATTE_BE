@@ -65,8 +65,8 @@ public class KakaoService {
         // HTTP Body 생성
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
-        body.add("client_id", "41e52178d076650fe657efc8ff7a6a3c");
-        body.add("redirect_uri", "https://pulbatte.com/oauth");
+        body.add("client_id", "84d4cb0f0b38976fab6edba825421247");
+        body.add("redirect_uri", "http://localhost:3000/api/user/kakao/callback");
         body.add("code", code);
 
         // HTTP 요청 보내기
