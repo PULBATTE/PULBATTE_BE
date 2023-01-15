@@ -38,8 +38,14 @@ public class PostController {
     @GetMapping
     public Page<PostResponseDto> getListPosts(
             @PageableDefault(size = 20) Pageable pageable) {
-
         return postService.getListPosts(pageable);
+    }
+    // 게시글 태그별 조회
+    @GetMapping("/category/{tag}")
+    public Page<PostResponseDto> getTagListPosts(
+            @PathVariable String tag,
+            @PageableDefault(size = 20) Pageable pageable){
+        return postService.getTagListPosts(tag,pageable);
     }
     // 인기 게시글 조회
     @GetMapping("/popular")
@@ -51,7 +57,7 @@ public class PostController {
     public PostResponseDto getPost(
             @PathVariable Long postId,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return postService.getPost(postId, userDetails.getUser());
+        return postService.getPost(postId);
     }
     // 게시글 수정
     @PutMapping("/{postId}")

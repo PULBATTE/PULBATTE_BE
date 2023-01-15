@@ -25,7 +25,7 @@ public class Post extends TimeStamped {
     @Column(nullable = false)
     private String nickname;                // 작성자 닉네임
     @Column(nullable = false)
-    private int category;                   // 게시글 카테고리
+    private String tag;                   // 게시글 카테고리
     @Column(nullable = false)
     private String image;                   // 게시글 이미지
     @ManyToOne
@@ -37,11 +37,10 @@ public class Post extends TimeStamped {
     @OneToMany(mappedBy = "post",cascade = CascadeType.REMOVE)
     private List<PostLike> postLike;        // 게시글 좋아요
 
-
     public Post(PostRequestDto postRequestDto , User user, String image){
         this.title = postRequestDto.getTitle();
         this.content = postRequestDto.getContent();
-        this.category = postRequestDto.getCategory();
+        this.tag = postRequestDto.getTag();
         this.user = user;
         this.nickname = user.getNickname();
         this.image = image;
@@ -50,7 +49,7 @@ public class Post extends TimeStamped {
     public void update(PostRequestDto requestDto){
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
-        this.category = requestDto.getCategory();
+        this.tag = requestDto.getTag();
     }
     public void update(String image){
         this.image = image;

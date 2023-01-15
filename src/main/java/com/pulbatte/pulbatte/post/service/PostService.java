@@ -61,12 +61,23 @@ public class PostService {
         }
         return new PageImpl<>(postResponseDto);                                         // 페이징 처리
     }
+    // 게시글 태그별 출력 페이징 처리
+    public  Page<PostResponseDto> getTagListPosts(String tag , Pageable pageable){
+        Page<Post> postPage = postRepository.findAllByTagOrderByCreatedAtDesc(tag,pageable);
+        List<PostResponseDto> postResponseDto = new ArrayList<>();
+        for (Post post : postPage) {
+            Long commentCnt = commentRepository.countByPostId(post.getId());            // 댓글 수
+            Long likeCnt = likeRepository.likeCnt(post.getId());                        // 좋아요 수
+            String image = post.getImage();                                             // 이미지 url
+            postResponseDto.add(new PostResponseDto(post,likeCnt,commentCnt,image));
+        }
+        return new PageImpl<>(postResponseDto);
+    }
     // 인기 게시글 출력
     public List<PostFavResponseDto> getPopularListPosts(){
         List<Post> postList = postRepository.findAll();
         List<PostFavResponseDto> postFavResponseDto = new ArrayList<>();
         Map<Long,LocalDateTime> likeList = new HashMap<>();                                             // 게시글 id와 인기게시글이 된 시간을 담을 hashMap 리스트
-
         for(Post post : postList){
             Long likeCnt = likeRepository.likeCnt(post.getId());                                        // 모든 게시글의 좋아요 수 체크
             if(likeCnt>3){                                                                              // 좋아요 수가 일정 수 이상이 되면
@@ -101,7 +112,7 @@ public class PostService {
     }
     //게시글 상세 조회
     @Transactional(readOnly = true)
-    public PostResponseDto getPost(Long id, User user) {
+    public PostResponseDto getPost(Long id) {
         Post post = postRepository.findById(id).orElseThrow(
                 () -> new CustomException(ErrorCode.NO_POST_FOUND)
         );
