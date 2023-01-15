@@ -27,12 +27,11 @@ public class PostController {
 
     // 게시글 생성
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public MsgResponseDto createPost(
+    public PostResponseDto createPost(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestPart PostRequestDto request,
             @RequestPart("image") MultipartFile multipartFile) throws IOException {
-        postService.createPost(request, userDetails.getUser(), multipartFile);
-        return new MsgResponseDto(SuccessCode.CREATE_BOARD);
+        return postService.createPost(request, userDetails.getUser(), multipartFile);
     }
     // 게시글 전체 조회
     @GetMapping

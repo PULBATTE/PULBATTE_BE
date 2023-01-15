@@ -44,7 +44,7 @@ public class UserController {
         return ResponseEntity.ok(userService.checkUserIdDuplicate(userId));
     }
     // 유저 정보
-    @PostMapping("/info")
+    @GetMapping("/info")
     public UserResponseDto postUserInfo(
             @AuthenticationPrincipal UserDetailsImpl userDetails){
         return userService.postUserInfo(userDetails.getUser());
