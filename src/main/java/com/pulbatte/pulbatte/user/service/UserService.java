@@ -7,6 +7,7 @@ import com.pulbatte.pulbatte.global.exception.SuccessCode;
 import com.pulbatte.pulbatte.global.jwt.JwtUtil;
 import com.pulbatte.pulbatte.user.dto.UserRequestDto;
 import com.pulbatte.pulbatte.user.dto.SignupRequestDto;
+import com.pulbatte.pulbatte.user.dto.UserResponseDto;
 import com.pulbatte.pulbatte.user.entity.User;
 import com.pulbatte.pulbatte.user.entity.UserRoleEnum;
 import com.pulbatte.pulbatte.user.repository.UserRepository;
@@ -53,7 +54,6 @@ public class  UserService {
         userRepository.save(user);
         return new MsgResponseDto(SuccessCode.SIGN_UP);
     }
-
     // 로그인
     @Transactional(readOnly = true)
     public MsgResponseDto login(UserRequestDto loginRequestDto, HttpServletResponse response) {
@@ -73,7 +73,6 @@ public class  UserService {
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUserId(), user.getRole()));    // 헤더에 토큰 발급
         return new MsgResponseDto(SuccessCode.LOG_IN);
     }
-
     // 중복 아이디 체크
     public boolean checkUserIdDuplicate(String userId){
         boolean duplicateId = userRepository.existsByUserId(userId);
@@ -82,5 +81,12 @@ public class  UserService {
         } else {
             return true;
         }
+    }
+    // 유저 정보
+    public UserResponseDto postUserInfo (User user){
+        User userInfo = userRepository.findById(user.getId()).orElseThrow(
+                () -> new CustomException(ErrorCode.NO_EXIST_USER)
+        );
+        return new UserResponseDto(userInfo);
     }
 }

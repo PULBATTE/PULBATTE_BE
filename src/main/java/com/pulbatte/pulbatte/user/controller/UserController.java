@@ -2,11 +2,14 @@ package com.pulbatte.pulbatte.user.controller;
 
 import com.pulbatte.pulbatte.global.MsgResponseDto;
 import com.pulbatte.pulbatte.global.exception.SuccessCode;
+import com.pulbatte.pulbatte.global.security.UserDetailsImpl;
 import com.pulbatte.pulbatte.user.dto.UserRequestDto;
 import com.pulbatte.pulbatte.user.dto.SignupRequestDto;
+import com.pulbatte.pulbatte.user.dto.UserResponseDto;
 import com.pulbatte.pulbatte.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -39,5 +42,11 @@ public class UserController {
     public ResponseEntity<Boolean> checkUserNameDuplicate (
             @RequestParam String userId){
         return ResponseEntity.ok(userService.checkUserIdDuplicate(userId));
+    }
+    // 유저 정보
+    @PostMapping("/info")
+    public UserResponseDto postUserInfo(
+            @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return userService.postUserInfo(userDetails.getUser());
     }
 }
