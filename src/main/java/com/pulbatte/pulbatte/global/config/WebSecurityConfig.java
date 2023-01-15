@@ -49,7 +49,8 @@ public class WebSecurityConfig {
         // 기본 설정인 Session 방식은 사용하지 않고 JWT 방식을 사용하기 위한 설정
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        http.authorizeRequests().antMatchers("/api/auth/**").permitAll()
+        http.authorizeRequests()
+                .antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/api/user/**").permitAll()
                 .antMatchers("/api/plants/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/**").permitAll()
@@ -70,13 +71,11 @@ public class WebSecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.addAllowedOrigin("http://localhost:3000");
         config.addAllowedOrigin("http://localhost:5173");
-        config.addAllowedOrigin("https://miniprojectmeme.s3.ap-northeast-2.amazonaws.com");
-        config.addAllowedOrigin("https://devsokdak.shop");
-        config.addAllowedOrigin("https://52.79.239.176");
-        config.addAllowedOrigin("https://52.79.239.176:8080");
-        config.addAllowedOrigin("http://localhost:8080");               // 허용할 URl (백엔드 테스트 URL)
-        config.addAllowedOrigin("http://3.38.190.107:8080/");               // 허용할 URl (AWS EC2 IP)
-        config.addAllowedOrigin("http://3.38.190.107/");
+        config.addAllowedOrigin("http://localhost:8080");                   // 허용할 URl (백엔드 테스트 URL)
+        config.addAllowedOrigin("https://3.34.198.99/");
+        config.addAllowedOrigin("http://3.34.198.99/");
+        config.addAllowedOrigin("https://pulbatte.com");
+        config.addAllowedOrigin("http://pulbatte.com");
         config.addExposedHeader(JwtUtil.AUTHORIZATION_HEADER);
         config.addAllowedMethod("*");
         config.addAllowedHeader("*");
