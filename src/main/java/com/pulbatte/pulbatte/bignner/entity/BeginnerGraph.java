@@ -4,7 +4,6 @@ import com.pulbatte.pulbatte.bignner.dto.BeginnerRequestDto;
 import com.pulbatte.pulbatte.user.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;

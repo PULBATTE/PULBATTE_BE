@@ -16,7 +16,6 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class Comment extends TimeStamped {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

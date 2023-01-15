@@ -24,7 +24,6 @@ public class PlantTestService {
     @Transactional
     public PlantTestResponseDto getPlantTest(String result, User user){
         long resultCode = 0;
-
         switch (result) {
             case "1", "2", "3" -> resultCode = 1;
             case "4", "5", "6" -> resultCode = 2;
