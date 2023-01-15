@@ -7,6 +7,7 @@ import com.pulbatte.pulbatte.global.exception.SuccessCode;
 import com.pulbatte.pulbatte.global.jwt.JwtUtil;
 import com.pulbatte.pulbatte.user.dto.UserRequestDto;
 import com.pulbatte.pulbatte.user.dto.SignupRequestDto;
+import com.pulbatte.pulbatte.user.dto.UserResponseDto;
 import com.pulbatte.pulbatte.user.entity.User;
 import com.pulbatte.pulbatte.user.entity.UserRoleEnum;
 import com.pulbatte.pulbatte.user.repository.UserRepository;
@@ -35,7 +36,6 @@ public class  UserService {
         String nickname = RandomStringUtils.random(6, true, true);      // 닉네임 난수 처리                    // 닉네임 랜덤 생성
         String userId = signupRequestDto.getUserId();                                       // 입력받은 id(email 형식)
         String password = passwordEncoder.encode(signupRequestDto.getPassword());           // jwt를 이용한 비밀번호 암호화
-
         Optional<User> found = userRepository.findByUserId(userId);
         if (found.isPresent()) {                                                            // 중복 닉네임이 있는 경우
             throw new CustomException(ErrorCode.ALREADY_EXIST_USERNAME);                    // 에러 출력
@@ -48,32 +48,26 @@ public class  UserService {
             }
             role = UserRoleEnum.ADMIN;                                                      // 맞으면 admin으로 회원가입
         }
-
         User user = new User(userId, password, nickname,signUpType, role);
         userRepository.save(user);
         return new MsgResponseDto(SuccessCode.SIGN_UP);
     }
-
     // 로그인
     @Transactional(readOnly = true)
     public MsgResponseDto login(UserRequestDto loginRequestDto, HttpServletResponse response) {
         String userId = loginRequestDto.getUserId();
         String password = loginRequestDto.getPassword();
-
         User user = userRepository.findByUserId(userId).orElseThrow(                                                // 아이디 확인
                 () -> new CustomException(ErrorCode.NO_EXIST_USER));
-
         if(user.getSignUpType() != signUpType){                                                                     // signUpType 확인
             throw new CustomException(ErrorCode.NO_LOCAL_USER);
         }
-
         if(!passwordEncoder.matches(password, user.getPassword())){                                                 // 복호화 한뒤 비밀번호 확인
             throw new CustomException(ErrorCode.DISMATCH_PASSWORD);
         }
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUserId(), user.getRole()));    // 헤더에 토큰 발급
         return new MsgResponseDto(SuccessCode.LOG_IN);
     }
-
     // 중복 아이디 체크
     public boolean checkUserIdDuplicate(String userId){
         boolean duplicateId = userRepository.existsByUserId(userId);
@@ -82,5 +76,12 @@ public class  UserService {
         } else {
             return true;
         }
+    }
+    // 유저 정보
+    public UserResponseDto postUserInfo (User user){
+        User userInfo = userRepository.findById(user.getId()).orElseThrow(
+                () -> new CustomException(ErrorCode.NO_EXIST_USER)
+        );
+        return new UserResponseDto(userInfo);
     }
 }

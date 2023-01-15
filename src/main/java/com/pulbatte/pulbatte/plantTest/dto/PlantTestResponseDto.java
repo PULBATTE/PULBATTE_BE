@@ -14,11 +14,11 @@ public class PlantTestResponseDto {
     //테스트 결과 성격
     private String resultTitle;
     private String resultImage;
-    private List<String> resultString = new ArrayList<>();
+    private String resultString;
     //테스트 결과 식물
     private String resultPlantImage;
     private String beginnerPlantName;
-    private List<String> resultPlantString = new ArrayList<>();
+    private String resultPlantString;
 
     // 테스트 결과 출력
     public PlantTestResponseDto(Beginner beginner, PlantTest plantTest){

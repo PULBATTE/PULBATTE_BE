@@ -10,5 +10,6 @@ import java.util.Optional;
 public interface PostRepository extends JpaRepository<Post ,Long> {
     Optional<Post> findByIdAndNickname(Long id, String nickname);
     Page<Post> findAllByOrderByCreatedAtDesc(Pageable pageable);
+    Page<Post> findAllByTagOrderByCreatedAtDesc(String tag,Pageable pageable);
 
 }
