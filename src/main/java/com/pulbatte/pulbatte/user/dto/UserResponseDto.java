@@ -9,11 +9,11 @@ import lombok.NoArgsConstructor;
 public class UserResponseDto {
     private Long userId;
     private String profileImage;
-    private String nickNmae;
+    private String nickName;
 
     public UserResponseDto(User user){
         this.userId = user.getId();
         this.profileImage = user.getProfileImage();
-        this.nickNmae = user.getNickname();
+        this.nickName = user.getNickname();
     }
 }

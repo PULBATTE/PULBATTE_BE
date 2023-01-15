@@ -40,12 +40,13 @@ public class PostService {
     private final S3Uploader s3Uploader;
 
     //게시글 생성
-    public void createPost(PostRequestDto requestDto, User user, MultipartFile multipartFile) throws IOException {
+    public PostResponseDto createPost(PostRequestDto requestDto, User user, MultipartFile multipartFile) throws IOException {
         String image = null;
         if (!multipartFile.isEmpty()) {                                     // 이미지 파일이 존재 할 경우
             image = s3Uploader.upload(multipartFile, "static");     // s3이미지 업로드
         }
-        postRepository.save(new Post(requestDto, user, image));
+        Post post = postRepository.save(new Post(requestDto, user, image));
+        return new PostResponseDto(post);
     }
     //게시글 전체 출력 페이징 처리
     @Transactional(readOnly = true)
