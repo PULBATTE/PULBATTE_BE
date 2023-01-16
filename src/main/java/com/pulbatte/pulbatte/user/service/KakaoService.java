@@ -3,7 +3,10 @@ package com.pulbatte.pulbatte.user.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pulbatte.pulbatte.global.entity.RefreshToken;
 import com.pulbatte.pulbatte.global.jwt.JwtUtil;
+import com.pulbatte.pulbatte.global.jwt.TokenDto;
+import com.pulbatte.pulbatte.global.repository.RefreshTokenRepository;
 import com.pulbatte.pulbatte.post.dto.KakaoUserInfoDto;
 import com.pulbatte.pulbatte.user.entity.User;
 import com.pulbatte.pulbatte.user.entity.UserRoleEnum;
@@ -22,6 +25,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -30,11 +34,12 @@ import java.util.UUID;
 public class KakaoService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
     private final JwtUtil jwtUtil;
 
 
     // kakao 로그인해 사용자 정보 가져오기
-    public String kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
+    public KakaoUserInfoDto kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
         // 1. 인가 코드에서 액세스 토큰 얻기
         String accessToken = getToken(code);
 
@@ -44,11 +49,23 @@ public class KakaoService {
         // 3. 필요시에 회원가입
         User kakaoUser = registerKakaoUserIfNeeded(kakaoUserInfo);
 
+        TokenDto tokenDto = jwtUtil.createAllToken(kakaoUserInfo.getId().toString());
+        Optional<RefreshToken> refreshToken = refreshTokenRepository.findByAccountUserId(kakaoUser.getUserId());
+
+        if(refreshToken.isPresent()){
+            refreshTokenRepository.save(refreshToken.get().updateToken(tokenDto.getRefreshToken()));
+        }else {
+            RefreshToken newToken = new RefreshToken(tokenDto.getRefreshToken(),kakaoUserInfo.getId().toString());
+            refreshTokenRepository.save(newToken);
+        }
+        setHeader(response,tokenDto);
+
+        return kakaoUserInfo;
         // 4. JWT 토큰 헤더로 반환
 //        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(kakaoUser.getUserId(), kakaoUser.getRole()));
-        String createToken = jwtUtil.createToken(kakaoUser.getUserId(), kakaoUser.getRole());
+       /* String createToken = jwtUtil.createToken(kakaoUser.getUserId(), kakaoUser.getRole());
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, createToken);
-        return createToken;
+        return createToken;*/
     }
 
     // "인가 코드"로 "액세스 토큰" 요청
@@ -146,5 +163,10 @@ public class KakaoService {
             userRepository.save(kakaoUser);
         }
         return kakaoUser;
+    }
+    private void setHeader(HttpServletResponse response, TokenDto tokenDto) {
+        response.addHeader(JwtUtil.ACCESS_TOKEN, tokenDto.getAccessToken());
+        response.addHeader(JwtUtil.REFRESH_TOKEN, tokenDto.getRefreshToken());
+
     }
 }

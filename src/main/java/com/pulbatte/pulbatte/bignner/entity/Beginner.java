@@ -4,6 +4,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -14,7 +17,9 @@ public class Beginner {
     @Column
     private String beginnerPlantName;                       //초보자용 식물
     @Column
-    private String tip;                                     //팁 리스트
+    @ElementCollection
+    @CollectionTable
+    private List<String> tipList = new ArrayList<>();                                     //팁 리스트
     @Column
     private String image;                                   //이미지
     @Column

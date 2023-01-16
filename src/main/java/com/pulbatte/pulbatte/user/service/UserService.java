@@ -1,10 +1,13 @@
 package com.pulbatte.pulbatte.user.service;
 
 import com.pulbatte.pulbatte.global.MsgResponseDto;
+import com.pulbatte.pulbatte.global.entity.RefreshToken;
 import com.pulbatte.pulbatte.global.exception.CustomException;
 import com.pulbatte.pulbatte.global.exception.ErrorCode;
 import com.pulbatte.pulbatte.global.exception.SuccessCode;
 import com.pulbatte.pulbatte.global.jwt.JwtUtil;
+import com.pulbatte.pulbatte.global.jwt.TokenDto;
+import com.pulbatte.pulbatte.global.repository.RefreshTokenRepository;
 import com.pulbatte.pulbatte.user.dto.UserRequestDto;
 import com.pulbatte.pulbatte.user.dto.SignupRequestDto;
 import com.pulbatte.pulbatte.user.dto.UserResponseDto;
@@ -17,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
@@ -25,6 +29,7 @@ import java.util.Optional;
 public class  UserService {
 
     private final UserRepository userRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
     private static final String ADMIN_TOKEN = "HangHae99NoHangHae130Yes";
@@ -53,7 +58,7 @@ public class  UserService {
         return new MsgResponseDto(SuccessCode.SIGN_UP);
     }
     // 로그인
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = false)
     public MsgResponseDto login(UserRequestDto loginRequestDto, HttpServletResponse response) {
         String userId = loginRequestDto.getUserId();
         String password = loginRequestDto.getPassword();
@@ -65,8 +70,22 @@ public class  UserService {
         if(!passwordEncoder.matches(password, user.getPassword())){                                                 // 복호화 한뒤 비밀번호 확인
             throw new CustomException(ErrorCode.DISMATCH_PASSWORD);
         }
-        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUserId(), user.getRole()));    // 헤더에 토큰 발급
+        TokenDto tokenDto = jwtUtil.createAllToken(loginRequestDto.getUserId());
+        Optional<RefreshToken> refreshToken = refreshTokenRepository.findByAccountUserId(loginRequestDto.getUserId());
+
+        if(refreshToken.isPresent()){
+            refreshTokenRepository.save(refreshToken.get().updateToken(tokenDto.getRefreshToken()));
+        }else {
+            RefreshToken newToken =new RefreshToken(tokenDto.getRefreshToken(),loginRequestDto.getUserId());
+            refreshTokenRepository.save(newToken);
+        }
+        setHeader(response,tokenDto);
         return new MsgResponseDto(SuccessCode.LOG_IN);
+    }
+    // 토큰 재발행
+    public MsgResponseDto reFreshToken(String userId, HttpServletResponse response){
+        response.addHeader(JwtUtil.ACCESS_TOKEN, jwtUtil.createToken(userId, "Access"));
+        return new MsgResponseDto(SuccessCode.SUCCESS_REFRESH_TOKEN);
     }
     // 중복 아이디 체크
     public boolean checkUserIdDuplicate(String userId){
@@ -83,5 +102,9 @@ public class  UserService {
                 () -> new CustomException(ErrorCode.NO_EXIST_USER)
         );
         return new UserResponseDto(userInfo);
+    }
+    private void setHeader(HttpServletResponse response, TokenDto tokenDto){
+        response.addHeader(JwtUtil.ACCESS_TOKEN,tokenDto.getAccessToken());
+        response.addHeader(JwtUtil.REFRESH_TOKEN,tokenDto.getRefreshToken());
     }
 }

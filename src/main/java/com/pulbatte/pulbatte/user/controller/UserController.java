@@ -37,6 +37,11 @@ public class UserController {
         userService.login(loginRequestDto, response);
         return new MsgResponseDto(SuccessCode.LOG_IN);
     }
+    // 토큰 재발행
+    @GetMapping("/issue/token")
+    public MsgResponseDto reFreshToken(@AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletResponse response){
+        return userService.reFreshToken(userDetails.getUser().getUserId(), response);
+    }
     // 아이디 중복 확인
     @GetMapping("/idDupleCheck")
     public ResponseEntity<Boolean> checkUserNameDuplicate (
