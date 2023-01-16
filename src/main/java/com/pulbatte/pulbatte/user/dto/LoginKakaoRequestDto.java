@@ -7,9 +7,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LoginKakaoRequestDto {
     private String userId;
+    private String email;
     private String nickname;
 
-    public LoginKakaoRequestDto(String userId, String nickname){
+    public LoginKakaoRequestDto(String userId, String nickname,String email){
         this.userId = userId;
         this.nickname = nickname;
     }
