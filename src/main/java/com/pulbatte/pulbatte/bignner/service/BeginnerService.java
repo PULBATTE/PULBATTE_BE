@@ -46,9 +46,12 @@ public class BeginnerService {
         Beginner beginner = beginnerRepository.findByBeginnerPlantName(beginnerName).orElseThrow(
                 () -> new CustomException(ErrorCode.NO_BEGINNER_PLANT)
         );
-        LocalDate localDate = LocalDate.now();
-        beginnerUserRepository.save(new BeginnerUser(beginner,localDate,user));
-
+        if(beginnerUserRepository.findByUserId(user.getId()).isEmpty()){
+            LocalDate localDate = LocalDate.now();
+            beginnerUserRepository.save(new BeginnerUser(beginner,localDate,user));
+        }else {
+            return new MsgResponseDto(new CustomException(ErrorCode.ALREADY_EXIST_DATE));
+        }
         return new MsgResponseDto(SuccessCode.CREATE_BEGINNER_Plant);
     }
     // 가이드 그래프 등록
@@ -74,11 +77,14 @@ public class BeginnerService {
         BeginnerUser beginnerUser = beginnerUserRepository.findByUserId(user.getId()).orElseThrow(
                 () -> new CustomException(ErrorCode.NO_EXIST_USER)
         );
+        Beginner beginner = beginnerRepository.findById(beginnerUser.getBeginner().getId()).orElseThrow(
+                ()-> new CustomException(ErrorCode.NO_BEGINNER_PLANT)
+        );
         List<BeginnerGraphResponseDto> beginnerGraphResponseDtoList = new ArrayList<>();
         for (BeginnerGraph beginnerGraphValue : beginnerUser.getBeginnerGraphs()){
             beginnerGraphResponseDtoList.add(new BeginnerGraphResponseDto(beginnerGraphValue));
         }
-        return new BeginnerResponseDto(beginnerUser,beginnerGraphResponseDtoList);
+        return new BeginnerResponseDto(beginner, beginnerGraphResponseDtoList);
     }
 
 }
