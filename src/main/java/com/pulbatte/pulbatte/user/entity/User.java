@@ -16,6 +16,8 @@ public class User {
     private String userId;                                  // 사용자 Id
     @Column(nullable = false)
     private String password;                                // 사용자 Password
+    @Column
+    private Long kakaoId;
     @Column(nullable = true)
     private String nickname;                                // 사용자 닉네임 (랜덤 난수로 닉네임 생성하여 저장)
     @Column(nullable = true)
@@ -36,6 +38,13 @@ public class User {
         this.signUpType = signUpType;       // 회원가입 타입
         this.role = role;                   // 권한
     }
+    public User(String username, Long kakaoId, String password, String email, UserRoleEnum role) {
+        this.nickname = username;
+        this.kakaoId = kakaoId;
+        this.password = password;
+        this.userId = email;
+        this.role = role;
+    }
 
     // 알림 기능 테스트용
     public User(Long id) {
@@ -49,6 +58,11 @@ public class User {
     // 닉네임 업데이트
     public void updateNickname(String nickname) {
         this.nickname = nickname;
+    }
+    //카카오 아이디 업데이트
+    public User kakaoIdUpdate(Long kakaoId){
+        this.kakaoId = kakaoId;
+        return this;
     }
     // 로그인 타입 지정
     public void updateSignupType(int signUpType) {
