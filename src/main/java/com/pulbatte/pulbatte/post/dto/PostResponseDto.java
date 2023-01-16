@@ -14,7 +14,7 @@ public class PostResponseDto {
     private Long id;
     private String title;
     private String content;
-    private String posterImage;
+    private String profileImage;
     private String nickname;
     private String tag;
     private Long likeCnt;
@@ -54,11 +54,11 @@ public class PostResponseDto {
         this.commentList = commentList;             // 댓글 리스트
     }
     // 게시글 상세 조회
-    public PostResponseDto(Post post ,List<CommentResponseDto> commentList, String image,Long likeCnt,Long commentCnt,String posterImage){
+    public PostResponseDto(Post post ,List<CommentResponseDto> commentList, String image,Long likeCnt,Long commentCnt,String profileImage){
         this.id = post.getId();                             // 게시글 아이디
         this.title = post.getTitle();                       // 제목
         this.content = post.getContent();                   // 내용
-        this.posterImage = posterImage;                     // 작성자 프로필 사진 url
+        this.profileImage = profileImage;                     // 작성자 프로필 사진 url
         this.nickname = post.getNickname();                 // 작성자 닉네임
         this.image = image;                                 // 이미지 url
         this.likeCnt = likeCnt;                             // 좋아요 수

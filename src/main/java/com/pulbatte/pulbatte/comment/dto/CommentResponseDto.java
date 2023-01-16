@@ -13,7 +13,7 @@ import java.util.List;
 public class CommentResponseDto {
     private Long commentId;
     private Long postId;
-    private String posterImage;
+    private String profileImage;
     private String nickname;
     private String comment;
     private LocalDateTime modifiedAt;
@@ -25,7 +25,7 @@ public class CommentResponseDto {
     public CommentResponseDto(Comment comment) {
         this.commentId = comment.getId();                       // 댓글 id
         this.postId = comment.getPost().getId();                // 게시글 id
-        this.posterImage = comment.getUser().getProfileImage(); // 작성자 프로필 사진
+        this.profileImage = comment.getUser().getProfileImage(); // 작성자 프로필 사진
         this.nickname = comment.getUser().getNickname();        // 작성자 닉네임
         this.comment = comment.getContent();                    // 댓글 작성 내용
         this.parentId = comment.getParent().getId();            // 부모 댓글 id
@@ -36,7 +36,7 @@ public class CommentResponseDto {
     public CommentResponseDto(Comment comment, List<CommentResponseDto> commentResponseDtoList){
         this.commentId = comment.getId();                       // 댓글 id
         this.postId = comment.getPost().getId();                // 게시글 id
-        this.posterImage = comment.getUser().getProfileImage(); // 작성자 프로필 사진
+        this.profileImage = comment.getUser().getProfileImage(); // 작성자 프로필 사진
         this.nickname = comment.getUser().getNickname();        // 작성자 닉네임
         this.comment = comment.getContent();                    // 댓글 작성 내용
         this.createdAt = comment.getCreatedAt();                // 작성 시간
