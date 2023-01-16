@@ -42,15 +42,14 @@ public class KakaoService {
     public KakaoUserInfoDto kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
         // 1. 인가 코드에서 액세스 토큰 얻기
         String accessToken = getToken(code);
-
         // 2. 토큰으로 카카오 API 호출 : "액세스 토큰"으로 "카카오 사용자 정보" 가져오기
         KakaoUserInfoDto kakaoUserInfo = getKakaoUserInfo(accessToken);
-//        KakaoUserInfoDto kakaoUserInfo = getKakaoUserInfo(code);
+        /*KakaoUserInfoDto kakaoUserInfo = getKakaoUserInfo(code);*/
         // 3. 필요시에 회원가입
         User kakaoUser = registerKakaoUserIfNeeded(kakaoUserInfo);
 
-        TokenDto tokenDto = jwtUtil.createAllToken(kakaoUserInfo.getId().toString());
-        Optional<RefreshToken> refreshToken = refreshTokenRepository.findByAccountUserId(kakaoUser.getUserId());
+        TokenDto tokenDto = jwtUtil.createAllToken(kakaoUserInfo.getEmail());
+        Optional<RefreshToken> refreshToken = refreshTokenRepository.findByAccountUserId(kakaoUser.getId().toString());
 
         if(refreshToken.isPresent()){
             refreshTokenRepository.save(refreshToken.get().updateToken(tokenDto.getRefreshToken()));

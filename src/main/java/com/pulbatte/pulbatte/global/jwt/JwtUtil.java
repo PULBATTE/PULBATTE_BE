@@ -63,13 +63,13 @@ public class JwtUtil {
     public TokenDto createAllToken(String userId){
         return new TokenDto(createToken(userId,"Access"),createToken(userId,"Refresh"));
     }
-    public String createToken(String username, String type) {
+    public String createToken(String userId, String type) {
         Date date = new Date();
         long time = type.equals("Access") ? TOKEN_TIME : REFRESH_TOKEN_TIME;
 
         return BEARER_PREFIX +
                 Jwts.builder()
-                        .setSubject(username)
+                        .setSubject(userId)
                         .setExpiration(new Date(date.getTime() + time))
                         .setIssuedAt(date)
                         .signWith(key, signatureAlgorithm)
@@ -108,6 +108,9 @@ public class JwtUtil {
     // 인증 객체 생성
     public Authentication createAuthentication(String username) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+    }
+    public String getUserIdFromToken(String token) {
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getSubject();
     }
 }

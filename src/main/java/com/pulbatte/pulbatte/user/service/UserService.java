@@ -71,7 +71,7 @@ public class  UserService {
             throw new CustomException(ErrorCode.DISMATCH_PASSWORD);
         }
         TokenDto tokenDto = jwtUtil.createAllToken(loginRequestDto.getUserId());
-        Optional<RefreshToken> refreshToken = refreshTokenRepository.findByAccountUserId(loginRequestDto.getUserId());
+        Optional<RefreshToken> refreshToken = refreshTokenRepository.findByAccountUserId(loginRequestDto.getUserId().toString());
 
         if(refreshToken.isPresent()){
             refreshTokenRepository.save(refreshToken.get().updateToken(tokenDto.getRefreshToken()));
