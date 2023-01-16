@@ -116,7 +116,7 @@ public class PostService {
         Post post = postRepository.findById(id).orElseThrow(
                 () -> new CustomException(ErrorCode.NO_POST_FOUND)
         );
-        String posterImage = post.getUser().getProfileImage();                                   // 게시글 작성자 프로필 사진
+        String profileImage = post.getUser().getProfileImage();                                   // 게시글 작성자 프로필 사진
         Long commentCnt = commentRepository.countByPostId(post.getId());                         // 댓글 수
         Long likeCnt = likeRepository.likeCnt(post.getId());                                     // 좋아요 수
         String image = post.getImage();                                                          // 이미지 url
@@ -132,7 +132,7 @@ public class PostService {
                 commentResponseDtoList.add(new CommentResponseDto(comment,childCommentList));
             }
         }
-        return new PostResponseDto(post, commentResponseDtoList, image, likeCnt,commentCnt,posterImage);
+        return new PostResponseDto(post, commentResponseDtoList, image, likeCnt,commentCnt,profileImage);
     }
     //게시글 수정
     @Transactional
