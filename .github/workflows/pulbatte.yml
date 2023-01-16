@@ -47,7 +47,7 @@ jobs:
       run: cp ./scripts/*.sh ./deploy
 
     - name: Make zip file
-      run: zip -r ./coinTalk.zip ./deploy
+      run: zip -r ./pulbatte.zip ./deploy
       shell: bash
 
     - name: Configure AWS credentials
@@ -58,7 +58,7 @@ jobs:
         aws-region: ap-northeast-2
 
     - name: Upload to S3
-      run: aws s3 cp --region ap-northeast-2 ./coinTalk.zip s3://$S3_BUCKET_NAME/
+      run: aws s3 cp --region ap-northeast-2 ./pulbatte.zip s3://$S3_BUCKET_NAME/
 
     # Deploy
     - name: Deploy
