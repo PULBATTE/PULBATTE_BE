@@ -34,7 +34,7 @@ public class JwtUtil {
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String AUTHORIZATION_KEY = "auth";
     private static final String BEARER_PREFIX = "Bearer ";
-    public static final String ACCESS_TOKEN = "Access_Token";
+    public static final String ACCESS_TOKEN = "Authorization";
     public static final String REFRESH_TOKEN = "Refresh_Token";
     private static final long TOKEN_TIME = 60 * 60 * 1000L;
     private static final long REFRESH_TOKEN_TIME = 60 * 60 * 1000L;

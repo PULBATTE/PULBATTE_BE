@@ -35,9 +35,14 @@ public class BeginnerService {
     public List<BeginnerResponseDto> getBeginnerSelect(User user){
         List<Beginner> beginnerList = beginnerRepository.findAll();
         List<BeginnerResponseDto> beginnerResponseDtoList = new ArrayList<>();
-
+        boolean like ;
         for (Beginner beginner : beginnerList){
-            beginnerResponseDtoList.add(new BeginnerResponseDto(beginner));
+            if(user.getTestResult().equals(beginner.getBeginnerPlantName())){
+                like = true;
+            }else {
+                like = false;
+            }
+            beginnerResponseDtoList.add(new BeginnerResponseDto(beginner,like));
         }
         return beginnerResponseDtoList;
     }
