@@ -17,15 +17,17 @@ public class BeginnerResponseDto {
     private int water;                          // 물양
     private int sunshine;                       // 일조량
     private int ventilation;                    // 통풍
+    private Boolean like;
     private List<BeginnerGraphResponseDto> beginnerGraph = new ArrayList<>();
 
-    public BeginnerResponseDto(Beginner beginner){
+    public BeginnerResponseDto(Beginner beginner, Boolean like){
         this.beginnerPlantName = beginner.getBeginnerPlantName();
         this.tipList = beginner.getTipList();
         this.image = beginner.getImage();
         this.water = beginner.getWater();
         this.sunshine = beginner.getSunshine();
         this.ventilation = beginner.getVentilation();
+        this.like = like;
     }
     public BeginnerResponseDto(Beginner beginner, List<BeginnerGraphResponseDto> beginnerGraphRepositoryList){
         this.beginnerPlantName = beginner.getBeginnerPlantName();
