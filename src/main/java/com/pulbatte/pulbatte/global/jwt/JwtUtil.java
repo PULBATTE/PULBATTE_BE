@@ -1,5 +1,7 @@
 package com.pulbatte.pulbatte.global.jwt;
 
+import com.pulbatte.pulbatte.global.entity.RefreshToken;
+import com.pulbatte.pulbatte.global.repository.RefreshTokenRepository;
 import com.pulbatte.pulbatte.global.security.UserDetailsServiceImpl;
 import com.pulbatte.pulbatte.user.entity.UserRoleEnum;
 import io.jsonwebtoken.*;
@@ -10,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -19,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
+import java.util.Optional;
 
 @Slf4j
 @Component
@@ -26,10 +30,14 @@ import java.util.Date;
 public class JwtUtil {
 
     private final UserDetailsServiceImpl userDetailsService;
+    private final RefreshTokenRepository refreshTokenRepository;
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String AUTHORIZATION_KEY = "auth";
     private static final String BEARER_PREFIX = "Bearer ";
+    public static final String ACCESS_TOKEN = "Access_Token";
+    public static final String REFRESH_TOKEN = "Refresh_Token";
     private static final long TOKEN_TIME = 60 * 60 * 1000L;
+    private static final long REFRESH_TOKEN_TIME = 60 * 60 * 1000L;
     @Value("${jwt.secret.key}")
     private String secretKey;
     private Key key;
@@ -40,6 +48,10 @@ public class JwtUtil {
         byte[] bytes = Base64.getDecoder().decode(secretKey);
         key = Keys.hmacShaKeyFor(bytes);
     }
+    public String getHeaderToken(HttpServletRequest request,String type){
+        return type.equals("Access") ? request.getHeader(ACCESS_TOKEN):request.getHeader(REFRESH_TOKEN);
+    }
+
     // 토큰 검증
     public String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
@@ -48,13 +60,17 @@ public class JwtUtil {
         }
         return null;
     }
-    public String createToken(String username, UserRoleEnum role) {
+    public TokenDto createAllToken(String userId){
+        return new TokenDto(createToken(userId,"Access"),createToken(userId,"Refresh"));
+    }
+    public String createToken(String username, String type) {
         Date date = new Date();
+        long time = type.equals("Access") ? TOKEN_TIME : REFRESH_TOKEN_TIME;
+
         return BEARER_PREFIX +
                 Jwts.builder()
                         .setSubject(username)
-                        .claim(AUTHORIZATION_KEY, role)
-                        .setExpiration(new Date(date.getTime() + TOKEN_TIME))
+                        .setExpiration(new Date(date.getTime() + time))
                         .setIssuedAt(date)
                         .signWith(key, signatureAlgorithm)
                         .compact();
@@ -74,6 +90,15 @@ public class JwtUtil {
         }
         return false;
     }
+    //refreshToken 검증
+    public Boolean refreshTokenValidation(String token){
+        if(!validateToken(token)){
+            return false;
+        }
+        Optional<RefreshToken> refreshToken = refreshTokenRepository.findByAccountUserId(token);
+        return refreshToken.isPresent() && token.equals(refreshToken.get().getRefreshToken());
+    }
+
     // 토큰에서 사용자 정보 가져오기
     // 위의 검증식과 일치하나 마지막에 getBody 를 통해서 안에 들어있는 값을 가져온다.
     // 앞의 validateToken 부분에서 이미 검증을 거쳤기 때문에 따로 검증을 거치지 않고 바로 넣어준다.
@@ -81,7 +106,7 @@ public class JwtUtil {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
     // 인증 객체 생성
-    public UsernamePasswordAuthenticationToken createAuthentication(String username) {
+    public Authentication createAuthentication(String username) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
