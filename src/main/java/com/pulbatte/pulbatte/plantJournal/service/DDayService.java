@@ -1,13 +1,17 @@
 package com.pulbatte.pulbatte.plantJournal.service;
 
+import com.pulbatte.pulbatte.alarm.entity.AlarmType;
+import com.pulbatte.pulbatte.alarm.service.AlarmService;
 import com.pulbatte.pulbatte.plantJournal.entity.PlantJournal;
 import com.pulbatte.pulbatte.plantJournal.repository.PlantJournalRepository;
+import com.pulbatte.pulbatte.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -16,7 +20,7 @@ import java.util.List;
 @Slf4j
 public class DDayService {
     private final PlantJournalRepository plantJournalRepository;
-
+    private final AlarmService alarmService;
 
     @Transactional
     @Scheduled(cron = "0 0 0 * * ?")	// 매일 00시 정각
@@ -45,5 +49,28 @@ public class DDayService {
             plantJournal.Ddaymiuns(water, nutrition,repotting,withplantDay,totalWaterDdayClick,totalNutritionDdayClick,totalRepottingDdayClick);
         }
 
+    }
+
+    @Transactional
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void createDdayAlarm(User user) {
+        List<PlantJournal> plantJournalList = plantJournalRepository.findAllByUser(user);
+        List<User> targets = new ArrayList<>();
+
+        for(PlantJournal journal : plantJournalList) {
+            targets.add(journal.getUser());
+
+            for(User target : targets) {
+                if(journal.getWaterDDay()==0) {
+                    alarmService.send(AlarmType.Dday, "물주기 Dday", target);
+                }
+                else if(journal.getNutritionDDay()==0) {
+                    alarmService.send(AlarmType.Dday, "영양 주기 Dday", target);
+                }
+                else if(journal.getRepottingDDay()==0) {
+                    alarmService.send(AlarmType.Dday, "분갈이 Dday", target);
+                }
+            }
+        }
     }
 }
