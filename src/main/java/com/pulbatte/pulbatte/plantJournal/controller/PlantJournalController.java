@@ -54,4 +54,8 @@ public class PlantJournalController {
     ){
         return plantJournalService.ClickDday(userDetails.getUser(),plantjournalid,clicktag);
     }
+    @GetMapping("/test")
+    public MsgResponseDto Test(){
+        return new MsgResponseDto(SuccessCode.LOG_IN);
+    }
 }
