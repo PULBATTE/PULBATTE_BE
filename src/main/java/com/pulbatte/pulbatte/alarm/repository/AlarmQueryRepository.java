@@ -2,6 +2,7 @@ package com.pulbatte.pulbatte.alarm.repository;
 
 import com.pulbatte.pulbatte.alarm.dto.AlarmResponseDto;
 import com.pulbatte.pulbatte.alarm.dto.QAlarmResponseDto;
+import com.pulbatte.pulbatte.user.entity.User;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 
@@ -17,7 +18,7 @@ public class AlarmQueryRepository {
         this.queryFactory = queryFactory;
     }
 
-    public List<AlarmResponseDto> findByUser() {
+    public List<AlarmResponseDto> findAll() {
         return queryFactory
                 .select(new QAlarmResponseDto(
                         alarm

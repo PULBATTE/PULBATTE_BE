@@ -1,7 +1,11 @@
 package com.pulbatte.pulbatte.alarm.service;
 
+import com.pulbatte.pulbatte.alarm.dto.AlarmListResponseDto;
+import com.pulbatte.pulbatte.alarm.dto.AlarmResponseDto;
 import com.pulbatte.pulbatte.alarm.entity.Alarm;
 import com.pulbatte.pulbatte.alarm.entity.AlarmType;
+import com.pulbatte.pulbatte.alarm.repository.AlarmQueryRepository;
+import com.pulbatte.pulbatte.alarm.repository.AlarmRepository;
 import com.pulbatte.pulbatte.alarm.repository.EmitterRepositoryImpl;
 import com.pulbatte.pulbatte.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -17,6 +22,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AlarmService {
     private final EmitterRepositoryImpl emitterRepository;
+    private final AlarmRepository alarmRepository;
+    private final AlarmQueryRepository queryRepository;
 
     public SseEmitter subscribe(Long userId, String lastEventId) {
         Long timeout = 60 * 1000L * 60L;
@@ -63,6 +70,7 @@ public class AlarmService {
 
     public void send(AlarmType alarmType, String content, User user) {
         Alarm alarm = createAlarm(alarmType, content, user);
+        alarmRepository.save(alarm);
         String receiveId = String.valueOf(user.getUserId());
 
         String eventId = receiveId + "_" + System.currentTimeMillis();
@@ -81,6 +89,13 @@ public class AlarmService {
                 .content(content)
                 .user(user)
                 .isRead(false)
+                .build();
+    }
+
+    public AlarmListResponseDto getAlarmList() {
+        List<AlarmResponseDto> alarmList = queryRepository.findAll();
+        return AlarmListResponseDto.builder()
+                .alarms(alarmList)
                 .build();
     }
 }
