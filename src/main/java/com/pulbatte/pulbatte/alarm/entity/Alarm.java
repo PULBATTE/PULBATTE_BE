@@ -6,7 +6,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
 
 import javax.persistence.*;
 
@@ -23,14 +22,17 @@ public class Alarm extends TimeStamped {
     private AlarmType alarmType;            // 알림 타입 (댓글/일지)
     @Column(nullable = false)
     private String content;         // 알림 내용
+    @Column(nullable = false)
+    private Boolean isRead;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @Builder
-    public Alarm(AlarmType alarmType, String content, User user) {
+    public Alarm(AlarmType alarmType, String content, Boolean isRead, User user) {
         this.alarmType = alarmType;
         this.content = content;
+        this.isRead = isRead;
         this.user = user;
     }
 }

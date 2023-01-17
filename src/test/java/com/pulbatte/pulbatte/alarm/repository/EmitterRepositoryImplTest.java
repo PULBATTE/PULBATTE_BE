@@ -32,7 +32,7 @@ class EmitterRepositoryImplTest {
     void saveEventCache() throws Exception{
         Long userId = 1L;
         String eventCacheId = userId + "_" + System.currentTimeMillis();
-        Alarm alarm = new Alarm(AlarmType.comment, "내 게시글에 댓글이 등록되었습니다.", new User(1L));
+        Alarm alarm = new Alarm(AlarmType.comment, "내 게시글에 댓글이 등록되었습니다.", false, new User(1L));
 
         Assertions.assertDoesNotThrow(() -> emitterRepository.saveEventCache(eventCacheId, alarm));
     }
@@ -62,17 +62,17 @@ class EmitterRepositoryImplTest {
     void findAllEventCacheStartWithByUserId() throws Exception{
         Long userId = 1L;
         String eventCacheId1 = userId + "_" + System.currentTimeMillis();
-        Alarm alarm1 = new Alarm(AlarmType.comment, "내 게시글에 댓글이 등록되었습니다.", new User(1L));
+        Alarm alarm1 = new Alarm(AlarmType.comment, "내 게시글에 댓글이 등록되었습니다.", false, new User(1L));
         emitterRepository.saveEventCache(eventCacheId1, alarm1);
 
         Thread.sleep(100);
         String eventCacheId2 = userId + "_" + System.currentTimeMillis();
-        Alarm alarm2 = new Alarm(AlarmType.comment, "내 게시글에 댓글이 등록되었습니다.", new User(1L));
+        Alarm alarm2 = new Alarm(AlarmType.comment, "내 게시글에 댓글이 등록되었습니다.", false, new User(1L));
         emitterRepository.saveEventCache(eventCacheId2, alarm2);
 
         Thread.sleep(100);
         String eventCacheId3 = userId + "_" + System.currentTimeMillis();
-        Alarm alarm3 = new Alarm(AlarmType.comment, "내 게시글에 댓글이 등록되었습니다.", new User(1L));
+        Alarm alarm3 = new Alarm(AlarmType.comment, "내 게시글에 댓글이 등록되었습니다.", false, new User(1L));
         emitterRepository.saveEventCache(eventCacheId3, alarm3);
 
         Map<String, Object> ActualResult = emitterRepository.findAllEventCacheStartWithByUserId(String.valueOf(userId));
@@ -114,12 +114,12 @@ class EmitterRepositoryImplTest {
     void deleteAllEventCacheStartWithId() throws Exception{
         Long userId = 1L;
         String eventCacheId1 = userId + "_" + System.currentTimeMillis();
-        Alarm alarm1 = new Alarm(AlarmType.comment, "내 게시글에 댓글이 등록되었습니다.", new User(1L));
+        Alarm alarm1 = new Alarm(AlarmType.comment, "내 게시글에 댓글이 등록되었습니다.", false, new User(1L));
         emitterRepository.saveEventCache(eventCacheId1, alarm1);
 
         Thread.sleep(100);
         String eventCacheId2 = userId + "_" + System.currentTimeMillis();
-        Alarm alarm2 = new Alarm(AlarmType.comment, "내 게시글에 댓글이 등록되었습니다.", new User(1L));
+        Alarm alarm2 = new Alarm(AlarmType.comment, "내 게시글에 댓글이 등록되었습니다.", false, new User(1L));
         emitterRepository.saveEventCache(eventCacheId2, alarm2);
 
         emitterRepository.deleteAllEventCacheStartWithId(String.valueOf(userId));

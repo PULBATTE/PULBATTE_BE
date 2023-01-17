@@ -16,9 +16,9 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 public class AlarmController {
     private final AlarmService alarmService;
 
-    @GetMapping(value = "/alarm", produces = "text/event-stream")
+    @GetMapping(value = "/subscribe", produces = "text/event-stream")
     @ResponseStatus(HttpStatus.OK)
-    public SseEmitter connect(
+    public SseEmitter subscribe(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestHeader(value = "Last-Event-Id", required = false, defaultValue = "") String lastEventId
     ) {

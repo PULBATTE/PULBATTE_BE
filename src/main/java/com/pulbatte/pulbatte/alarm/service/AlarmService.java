@@ -80,6 +80,7 @@ public class AlarmService {
                 .alarmType(alarmType)
                 .content(content)
                 .user(user)
+                .isRead(false)
                 .build();
     }
 }
