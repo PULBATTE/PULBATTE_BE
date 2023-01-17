@@ -58,4 +58,9 @@ public class PlantJournalController {
     public MsgResponseDto Test(){
         return new MsgResponseDto(SuccessCode.LOG_IN);
     }
+    @GetMapping("/test2")
+    public MsgResponseDto Test2(){
+        return new MsgResponseDto(SuccessCode.CREATE_BOARD);
+    }
+
 }
