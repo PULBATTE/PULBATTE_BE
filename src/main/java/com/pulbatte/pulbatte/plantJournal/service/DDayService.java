@@ -53,8 +53,8 @@ public class DDayService {
 
     @Transactional
     @Scheduled(cron = "0 0 0 * * ?")
-    public void createDdayAlarm(User user) {
-        List<PlantJournal> plantJournalList = plantJournalRepository.findAllByUser(user);
+    public void createDdayAlarm() {
+        List<PlantJournal> plantJournalList = plantJournalRepository.findAll();
         List<User> targets = new ArrayList<>();
 
         for(PlantJournal journal : plantJournalList) {
