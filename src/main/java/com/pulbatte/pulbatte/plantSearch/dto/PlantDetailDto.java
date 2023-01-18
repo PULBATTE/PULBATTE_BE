@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PlantDetailDto {
     private String plantName;           // 식물 이름
+    private int beginner;
     private String content;         // 식물 설명
     private PlantTag plantTag;          // 식물 태그
     private String image;           // 이미지 url
@@ -27,6 +28,7 @@ public class PlantDetailDto {
     @Builder
     public PlantDetailDto(Plant plant) {
         this.plantName = plant.getPlantName();
+        this.beginner = plant.getBeginner();
         this.content = plant.getContent();
         this.plantTag = plant.getPlantTag();
         this.image = plant.getImage();
