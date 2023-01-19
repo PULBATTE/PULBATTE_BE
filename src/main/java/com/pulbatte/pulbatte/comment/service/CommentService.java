@@ -46,10 +46,7 @@ public class CommentService {
     }
     //댓글 수정
     @Transactional
-    public MsgResponseDto updateComment(Long id, Long commentId, CommentRequestDto commentRequestDto, User user){
-        postRepository.findById(id).orElseThrow(
-                ()-> new CustomException(ErrorCode.NO_POST_FOUND)
-        );
+    public MsgResponseDto updateComment(Long commentId, CommentRequestDto commentRequestDto, User user){
         Comment comment = commentRepository.findById(commentId).orElseThrow(
                 ()-> new CustomException(ErrorCode.NO_EXIST_COMMENT)
         );
@@ -66,10 +63,7 @@ public class CommentService {
     }
     //댓글 삭제
     @Transactional
-    public MsgResponseDto deleteComment(Long id, Long commentId, User user) {
-        postRepository.findById(id).orElseThrow(
-                () -> new CustomException(ErrorCode.NO_POST_FOUND)
-        );
+    public MsgResponseDto deleteComment(Long commentId, User user) {
         Comment comment;
         if (user.getRole().equals(UserRoleEnum.ADMIN)) {                                                // ADMIN 권한일 때
             comment = commentRepository.findById(commentId).orElseThrow(                                // 입력받은 id와 같은 데이터 삭제

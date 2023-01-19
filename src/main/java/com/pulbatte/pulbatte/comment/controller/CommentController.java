@@ -23,20 +23,18 @@ public class CommentController {
         return commentService.saveComment(postId,commentId,commentRequestDto, userDetailsImpl.getUser());
     }
     //댓글 수정
-    @PutMapping("/{postId}/comments/{commentId}")
+    @PutMapping("/comments/{commentId}")
     public MsgResponseDto updateComment(
-            @PathVariable Long postId,
             @PathVariable Long commentId,
             @RequestBody CommentRequestDto commentRequestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetailsImpl){
-        return commentService.updateComment(postId,commentId,commentRequestDto,userDetailsImpl.getUser());
+        return commentService.updateComment(commentId,commentRequestDto,userDetailsImpl.getUser());
     }
     // 댓글 삭제
-    @DeleteMapping("/{postId}/comments/{commentId}")
+    @DeleteMapping("/comments/{commentId}")
     public MsgResponseDto deleteComment(
-            @PathVariable Long postId,
             @PathVariable Long commentId,
             @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
-        return commentService.deleteComment(postId, commentId, userDetailsImpl.getUser());
+        return commentService.deleteComment(commentId, userDetailsImpl.getUser());
     }
 }
