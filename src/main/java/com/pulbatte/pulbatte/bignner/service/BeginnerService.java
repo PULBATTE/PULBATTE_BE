@@ -38,6 +38,7 @@ public class BeginnerService {
         boolean overlap;
         boolean like ;
         for (Beginner beginner : beginnerList){
+            if(beginner.getId()>6) break;
             if(user.getTestResult().equals(beginner.getBeginnerPlantName())){
                 like = true;
             }else {
