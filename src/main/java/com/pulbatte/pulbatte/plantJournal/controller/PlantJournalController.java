@@ -27,7 +27,7 @@ public class PlantJournalController {
              @RequestPart PlantJournalAddRequestDto request,
              @RequestPart(value = "image", required = false) MultipartFile multipartFile
             ) throws IOException {
-        plantJournalService.CreatePlantJournal(userDetails.getUser(), request, multipartFile);
+        plantJournalService.CreatePlantJournal(userDetails.getUser(), request, multipartFile); //
         return new MsgResponseDto(SuccessCode.CREATE_PLANT_JOURNAL);
     }
 
