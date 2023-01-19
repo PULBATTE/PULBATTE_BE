@@ -29,6 +29,9 @@ public class MyPlantManagementDTO {
     private int waterPercentage;                  // 물 주기 횟수 / 물 주기 총 가능 횟수 * 100
     private int nutritionPercentage;              // 영양제 주기 횟수 / 영양제 주기 총 가능 횟수 * 100
     private int repottingPercentage;              // 분갈이 횟수 / 분갈이 총 가능 횟수 * 100
+    private int waterCheak;                       // 물 주기 여부 확인
+    private int repottingCheak;                   // 분갈이 주기 여부 확인
+    private int nutrituinCheak;                   // 영양 주기 여부 확인
 
     public MyPlantManagementDTO(PlantJournal plantJournal){
         this.id = plantJournal.getId();
@@ -50,6 +53,9 @@ public class MyPlantManagementDTO {
         this.currentWaterDdayClick = plantJournal.getCurrentWaterDdayClick();
         this.currentNutritionDDayClick = plantJournal.getCurrentNutritionDDayClick();
         this.currentRepottingDDayClick = plantJournal.getCurrentRepottingDDayClick();
+        this.waterCheak = plantJournal.getWaterCheak();
+        this.repottingCheak = plantJournal.getRepottingCheak();
+        this.nutrituinCheak = plantJournal.getNutritionCheak();
         this.waterPercentage =(int) ((double) currentWaterDdayClick/totalWaterDDayClick*100);
         this.nutritionPercentage = (int)((double)currentNutritionDDayClick/totalNutritionDDayClick*100);
         this.repottingPercentage = (int)((double)currentRepottingDDayClick/totalRepottingDDayClick*100);

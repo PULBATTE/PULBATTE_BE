@@ -53,9 +53,14 @@ public class PlantJournal {
     private int selcetSunshine;                     // 사용자 선택 일조량
     @Column
     private int selcetWind;                         // 사용자 선택 통풍
-
     @Column
-    private int withPlantDay;                           // 식물과 함께 한 날
+    private int withPlantDay;                       // 식물과 함께 한 날
+    @Column
+    private int waterCheak;                         // 물 Dday 눌렀는지 체크
+    @Column
+    private int nutritionCheak;                     // 영양 Dday 눌렀는지 체크
+    @Column
+    private int repottingCheak;                     // 분갈이 Dday 눌렀는지 체크
 
 
     public PlantJournal(PlantJournalAddRequestDto plantJournalAddRequestDto,User user, String image,int waterDDay,int nutritionDDay,int repottingDDay){
@@ -78,6 +83,9 @@ public class PlantJournal {
         this.currentNutritionDDayClick = 0;
         this.currentRepottingDDayClick = 0;
         this.withPlantDay = 0;
+        this.waterCheak = 0;
+        this.repottingCheak = 0;
+        this.nutritionCheak = 0;
     }
 
     public void Ddaymiuns(
@@ -90,14 +98,20 @@ public class PlantJournal {
         this.totalNutritionDDayClick = totalNutritionDdayClick;
         this.totalWaterDDayClick = totalWaterDdayClick;
         this.totalRepottingDDayClick = totalRepottingDdayClick;
+        this.waterCheak = 0;
+        this.repottingCheak = 0;
+        this.nutritionCheak = 0;
     }
     public void WaterClick (int currentWaterDdayClick){
         this.currentWaterDdayClick = currentWaterDdayClick;
+        this.waterCheak = 1;
     }
     public void NutritionClick (int currentNutritionDDayClick){
         this.currentNutritionDDayClick = currentNutritionDDayClick;
+        this.nutritionCheak = 1;
     }
     public void RepottingClick (int currentRepottingDDayClick){
         this.currentRepottingDDayClick = currentRepottingDDayClick;
+        this.repottingCheak = 1;
     }
 }
