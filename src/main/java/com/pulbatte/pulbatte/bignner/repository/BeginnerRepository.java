@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface BeginnerRepository extends JpaRepository<Beginner, Long> {
     Optional<Beginner> findByBeginnerPlantName(String name);
+    Optional<Beginner> findByResultPlantCode(String resultPlantCode);
 }

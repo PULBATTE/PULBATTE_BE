@@ -35,6 +35,7 @@ public class BeginnerService {
     public List<BeginnerResponseDto> getBeginnerSelect(User user){
         List<Beginner> beginnerList = beginnerRepository.findAll();
         List<BeginnerResponseDto> beginnerResponseDtoList = new ArrayList<>();
+        boolean overlap;
         boolean like ;
         for (Beginner beginner : beginnerList){
             if(user.getTestResult().equals(beginner.getBeginnerPlantName())){
@@ -42,7 +43,12 @@ public class BeginnerService {
             }else {
                 like = false;
             }
-            beginnerResponseDtoList.add(new BeginnerResponseDto(beginner,like));
+            if(beginnerUserRepository.findByUserIdAndBeginnerBeginnerPlantName(user.getId(),beginner.getBeginnerPlantName()).isPresent()){
+                overlap = true;
+            }else {
+                overlap = false;
+            }
+            beginnerResponseDtoList.add(new BeginnerResponseDto(beginner,like,overlap));
         }
         return beginnerResponseDtoList;
     }

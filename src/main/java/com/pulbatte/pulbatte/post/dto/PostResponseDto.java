@@ -20,6 +20,7 @@ public class PostResponseDto {
     private Long likeCnt;
     private Long commentCnt;
     private String image;
+    private Boolean likeStatus;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private List<CommentResponseDto> commentList = new ArrayList<>();
@@ -53,7 +54,7 @@ public class PostResponseDto {
         this.modifiedAt = post.getModifiedAt();     // 게시글 수정 시간
         this.commentList = commentList;             // 댓글 리스트
     }
-    // 게시글 상세 조회
+    // 게시글 상세 조회(guest)
     public PostResponseDto(Post post ,List<CommentResponseDto> commentList, String image,Long likeCnt,Long commentCnt,String profileImage){
         this.id = post.getId();                             // 게시글 아이디
         this.title = post.getTitle();                       // 제목
@@ -67,5 +68,21 @@ public class PostResponseDto {
         this.createdAt = post.getCreatedAt();               // 게시글 작성 시간
         this.modifiedAt = post.getModifiedAt();             // 게시글 수정 시간
         this.commentList = commentList;                     // 댓글 리스트
+    }
+    // 게시글 상세 조회(user)
+    public PostResponseDto(Post post ,List<CommentResponseDto> commentList, String image,Long likeCnt,Long commentCnt,String profileImage,Boolean likeStatus){
+        this.id = post.getId();                             // 게시글 아이디
+        this.title = post.getTitle();                       // 제목
+        this.content = post.getContent();                   // 내용
+        this.profileImage = profileImage;                     // 작성자 프로필 사진 url
+        this.nickname = post.getNickname();                 // 작성자 닉네임
+        this.image = image;                                 // 이미지 url
+        this.likeCnt = likeCnt;                             // 좋아요 수
+        this.commentCnt = commentCnt;                       // 댓글 수
+        this.tag = post.getTag();                           // 게시글 카테고리
+        this.createdAt = post.getCreatedAt();               // 게시글 작성 시간
+        this.modifiedAt = post.getModifiedAt();             // 게시글 수정 시간
+        this.commentList = commentList;                     // 댓글 리스트
+        this.likeStatus = likeStatus;                       // 좋아요 여부
     }
 }

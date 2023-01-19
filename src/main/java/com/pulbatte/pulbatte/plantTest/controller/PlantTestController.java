@@ -1,5 +1,7 @@
 package com.pulbatte.pulbatte.plantTest.controller;
 
+import com.pulbatte.pulbatte.global.MsgResponseDto;
+import com.pulbatte.pulbatte.global.exception.SuccessCode;
 import com.pulbatte.pulbatte.global.security.UserDetailsImpl;
 import com.pulbatte.pulbatte.plantTest.dto.PlantTestResponseDto;
 import com.pulbatte.pulbatte.plantTest.service.PlantTestService;
@@ -13,10 +15,16 @@ import org.springframework.web.bind.annotation.*;
 public class PlantTestController {
     private final PlantTestService plantTestService;
 
-    @GetMapping
-    public PlantTestResponseDto getPlantTest(
-            @RequestParam("result") String result,
+    @GetMapping("/{result}")
+    public MsgResponseDto postPlantTest(
+            @PathVariable("result") String result,
             @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return plantTestService.getPlantTest(result,userDetails.getUser());
+        plantTestService.postPlantTest(result,userDetails.getUser());
+        return new MsgResponseDto(SuccessCode.DELETE_BOARD);
+    }
+    @PostMapping
+    public PlantTestResponseDto PlantTestResponseDto(
+            @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return plantTestService.getPlantTest(userDetails.getUser());
     }
 }
