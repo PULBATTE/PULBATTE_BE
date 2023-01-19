@@ -8,6 +8,7 @@ import com.pulbatte.pulbatte.global.S3Uploader;
 import com.pulbatte.pulbatte.global.exception.CustomException;
 import com.pulbatte.pulbatte.global.exception.ErrorCode;
 import com.pulbatte.pulbatte.global.exception.SuccessCode;
+import com.pulbatte.pulbatte.global.security.UserDetailsImpl;
 import com.pulbatte.pulbatte.post.dto.PostFavResponseDto;
 import com.pulbatte.pulbatte.post.dto.PostRequestDto;
 import com.pulbatte.pulbatte.post.dto.PostResponseDto;
@@ -44,6 +45,8 @@ public class PostService {
         String image = null;
         if (!multipartFile.isEmpty()) {                                     // 이미지 파일이 존재 할 경우
             image = s3Uploader.upload(multipartFile, "static");     // s3이미지 업로드
+        }else{
+            image = "";
         }
         Post post = postRepository.save(new Post(requestDto, user, image));
         return new PostResponseDto(post);
@@ -110,13 +113,41 @@ public class PostService {
         }
        return postFavResponseDto;
     }
-    //게시글 상세 조회
-    @Transactional(readOnly = true)
-    public PostResponseDto getPost(Long id) {
+    //게시글 상세 조회(User용)
+    @Transactional
+    public PostResponseDto getPostUser(Long id,User user) {
         Post post = postRepository.findById(id).orElseThrow(
                 () -> new CustomException(ErrorCode.NO_POST_FOUND)
         );
-        String profileImage = post.getUser().getProfileImage();                                   // 게시글 작성자 프로필 사진
+        String profileImage = post.getUser().getProfileImage();                                  // 게시글 작성자 프로필 사진
+        Long commentCnt = commentRepository.countByPostId(post.getId());                         // 댓글 수
+        Long likeCnt = likeRepository.likeCnt(post.getId());                                     // 좋아요 수
+        String image = post.getImage();                                                          // 이미지 url
+        List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();                     // 댓글 리스트
+        for (Comment comment : post.getCommentList()) {
+            List<CommentResponseDto> childCommentList = new ArrayList<>();
+            if(comment.getParent()==null){                                                       //부모 댓글이 없을 경우
+                for (Comment childComment : comment.getChildren()){                              //자식 댓글 리스트의 데이터를 childComment에 저장
+                    if (id.equals(childComment.getPost().getId())) {                             //childComment의 id와 받아온 id가 일치할 경우(선택 게시글 저장)
+                        childCommentList.add(new CommentResponseDto(childComment));              //저장된 자식댓글을 리스트에 저장
+                    }
+                }
+                commentResponseDtoList.add(new CommentResponseDto(comment,childCommentList));
+            }
+        }
+        Boolean likeStatus = false;
+        if(likeRepository.findByPostIdAndUserId(post.getId(),user.getId()).isPresent()){
+            likeStatus = true;
+        }
+        return new PostResponseDto(post, commentResponseDtoList, image, likeCnt,commentCnt,profileImage,likeStatus);
+    }
+    //게시글 상세 조회
+    @Transactional(readOnly = true)
+    public PostResponseDto getPostGuest(Long id) {
+        Post post = postRepository.findById(id).orElseThrow(
+                () -> new CustomException(ErrorCode.NO_POST_FOUND)
+        );
+        String profileImage = post.getUser().getProfileImage();                                  // 게시글 작성자 프로필 사진
         Long commentCnt = commentRepository.countByPostId(post.getId());                         // 댓글 수
         Long likeCnt = likeRepository.likeCnt(post.getId());                                     // 좋아요 수
         String image = post.getImage();                                                          // 이미지 url

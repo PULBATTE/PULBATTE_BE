@@ -51,12 +51,18 @@ public class PostController {
     public List<PostFavResponseDto> getPopularListPosts(){
         return postService.getPopularListPosts();
     }
-    // 게시글 상세 조회
-    @GetMapping("/{postId}")
-    public PostResponseDto getPost(
+    // 게시글 상세 조회(user 전용)
+    @GetMapping("/user/{postId}")
+    public PostResponseDto getPostUser(
             @PathVariable Long postId,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return postService.getPost(postId);
+        return postService.getPostUser(postId,userDetails.getUser());
+    }
+    // 게시글 상세 조회(guest 전용)
+    @GetMapping("/guest/{postId}")
+    public PostResponseDto getPostGuest(
+            @PathVariable Long postId) {
+        return postService.getPostGuest(postId);
     }
     // 게시글 수정
     @PutMapping("/{postId}")
