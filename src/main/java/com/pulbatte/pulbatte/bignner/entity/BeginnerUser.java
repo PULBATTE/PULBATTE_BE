@@ -30,6 +30,7 @@ public class BeginnerUser {
     public BeginnerUser(Beginner beginner, LocalDate startDate,User user){
         this.beginner = beginner;
         this.startDate = startDate;
+        this.endDate = startDate.plusDays(30);
         this.user = user;
     }
 

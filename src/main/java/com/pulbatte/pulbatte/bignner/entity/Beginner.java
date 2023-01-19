@@ -19,7 +19,7 @@ public class Beginner {
     @Column
     @ElementCollection
     @CollectionTable
-    private List<String> tipList = new ArrayList<>();                                     //팁 리스트
+    private List<String> tipList = new ArrayList<>();       //팁 리스트
     @Column
     private String image;                                   //이미지
     @Column
@@ -28,4 +28,8 @@ public class Beginner {
     private int sunshine;                                   //일조량
     @Column
     private int ventilation;                                //온도
+    @Column
+    private String resultPlantCode;                         // 테스트 결과 코드
+    @Column
+    private String resultPlantString;                       // 테스트 결과 식물 문장
 }
