@@ -15,14 +15,14 @@ import org.springframework.web.bind.annotation.*;
 public class PlantTestController {
     private final PlantTestService plantTestService;
 
-    @GetMapping("/{result}")
+    @PostMapping("/{result}")
     public MsgResponseDto postPlantTest(
             @PathVariable("result") String result,
             @AuthenticationPrincipal UserDetailsImpl userDetails){
         plantTestService.postPlantTest(result,userDetails.getUser());
         return new MsgResponseDto(SuccessCode.DELETE_BOARD);
     }
-    @PostMapping
+    @GetMapping
     public PlantTestResponseDto PlantTestResponseDto(
             @AuthenticationPrincipal UserDetailsImpl userDetails){
         return plantTestService.getPlantTest(userDetails.getUser());
