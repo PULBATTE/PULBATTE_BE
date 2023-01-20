@@ -7,7 +7,7 @@ on:
     branches: [ dev ]
 
 env:
-  S3_BUCKET_NAME: pulbatte-s3
+  S3_BUCKET_NAME: tests2212
 
 jobs:
   build:
@@ -58,8 +58,8 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: |
         aws deploy create-deployment \
-        --application-name pulbatte  \
-        --deployment-group-name pulbatte-group \
+        --application-name Pulbatte  \
+        --deployment-group-name Pulbatte-group \
         --file-exists-behavior OVERWRITE  \
-        --s3-location bucket=pulbatte-s3,bundleType=zip,key=pulbatte.zip \
+        --s3-location bucket=tests2212,bundleType=zip,key=pulbatte.zip \
         --region ap-northeast-2
