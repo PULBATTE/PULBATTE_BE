@@ -39,8 +39,8 @@ public class MyPlantManagementDTO {
         this.image = plantJournal.getImage();
         this.withPlantDay = plantJournal.getWithPlantDay();
         this.selectWater = plantJournal.getSelectWater();
-        this.selectSunshine = plantJournal.getSelcetSunshine();
-        this.selectWind = plantJournal.getSelcetWind();
+        this.selectSunshine = plantJournal.getSelectSunshine();
+        this.selectWind = plantJournal.getSelectWind();
         this.waterCycle = plantJournal.getWaterCycle();
         this.nutritionCycle = plantJournal.getNutritionCycle();
         this.repottingCycle = plantJournal.getRepottingCycle();
