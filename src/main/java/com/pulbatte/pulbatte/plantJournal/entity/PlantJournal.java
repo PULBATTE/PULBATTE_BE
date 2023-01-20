@@ -56,11 +56,11 @@ public class PlantJournal {
     @Column
     private int withPlantDay;                       // 식물과 함께 한 날
     @Column
-    private int waterCheak;                         // 물 Dday 눌렀는지 체크
+    private int waterCheck;                         // 물 Dday 눌렀는지 체크
     @Column
-    private int nutritionCheak;                     // 영양 Dday 눌렀는지 체크
+    private int nutritionCheck;                     // 영양 Dday 눌렀는지 체크
     @Column
-    private int repottingCheak;                     // 분갈이 Dday 눌렀는지 체크
+    private int repottingCheck;                     // 분갈이 Dday 눌렀는지 체크
 
 
     public PlantJournal(PlantJournalAddRequestDto plantJournalAddRequestDto,User user, String image,int waterDDay,int nutritionDDay,int repottingDDay){
@@ -74,8 +74,8 @@ public class PlantJournal {
         this.nutritionDDay = nutritionDDay;
         this.repottingDDay = repottingDDay;
         this.selectWater = plantJournalAddRequestDto.getSelectWater();
-        this.selcetSunshine = plantJournalAddRequestDto.getSelcetSunshine();
-        this.selcetWind = plantJournalAddRequestDto.getSelcetWind();
+        this.selcetSunshine = plantJournalAddRequestDto.getSelectSunshine();
+        this.selcetWind = plantJournalAddRequestDto.getSelectWind();
         this.totalWaterDDayClick = 0;
         this.totalNutritionDDayClick = 0;
         this.totalRepottingDDayClick = 0;
@@ -83,9 +83,9 @@ public class PlantJournal {
         this.currentNutritionDDayClick = 0;
         this.currentRepottingDDayClick = 0;
         this.withPlantDay = 0;
-        this.waterCheak = 0;
-        this.repottingCheak = 0;
-        this.nutritionCheak = 0;
+        this.waterCheck = 0;
+        this.repottingCheck = 0;
+        this.nutritionCheck = 0;
     }
 
     public void Ddaymiuns(
@@ -98,20 +98,20 @@ public class PlantJournal {
         this.totalNutritionDDayClick = totalNutritionDdayClick;
         this.totalWaterDDayClick = totalWaterDdayClick;
         this.totalRepottingDDayClick = totalRepottingDdayClick;
-        this.waterCheak = 0;
-        this.repottingCheak = 0;
-        this.nutritionCheak = 0;
+        this.waterCheck = 0;
+        this.repottingCheck = 0;
+        this.nutritionCheck = 0;
     }
     public void WaterClick (int currentWaterDdayClick){
         this.currentWaterDdayClick = currentWaterDdayClick;
-        this.waterCheak = 1;
+        this.waterCheck = 1;
     }
     public void NutritionClick (int currentNutritionDDayClick){
         this.currentNutritionDDayClick = currentNutritionDDayClick;
-        this.nutritionCheak = 1;
+        this.nutritionCheck = 1;
     }
     public void RepottingClick (int currentRepottingDDayClick){
         this.currentRepottingDDayClick = currentRepottingDDayClick;
-        this.repottingCheak = 1;
+        this.repottingCheck = 1;
     }
 }

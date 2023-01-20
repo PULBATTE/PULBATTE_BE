@@ -16,6 +16,6 @@ public class PlantJournalAddRequestDto {
     private int nutritionCycle; // 영양 주기 사이클
     private int repottingCycle; // 분갈이 주기 사이클
     private int selectWater; // 사용자 선택 물량
-    private int selcetSunshine; // 사용자 선택 일조량
-    private int selcetWind; // 사용자 선택 통풍
+    private int selectSunshine; // 사용자 선택 일조량
+    private int selectWind; // 사용자 선택 통풍
 }
