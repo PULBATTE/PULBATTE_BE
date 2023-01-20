@@ -57,9 +57,9 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: |
-        aws deploy create-deployment 
-        --application-name pulbatte
-        --deployment-group-name pulbatte-group
-        --file-exists-behavior OVERWRITE 
-        --s3-location bucket=pulbatte-s3,bundleType=zip,key=pulbatte.zip
+        aws deploy create-deployment \
+        --application-name pulbatte  \
+        --deployment-group-name pulbatte-group \
+        --file-exists-behavior OVERWRITE  \
+        --s3-location bucket=pulbatte-s3,bundleType=zip,key=pulbatte.zip \
         --region ap-northeast-2
