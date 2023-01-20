@@ -19,8 +19,8 @@ public class PlantJournalAddResponseDto {
     private int nutritionDDay; // 영양 디데이
     private int repottingDDay; // 분갈이 디데이
     private int selectWater; // 사용자 선택 물량
-    private int selcetSunshine; // 사용자 선택 일조량
-    private int selcetWind; // 사용자 선택 통풍
+    private int selectSunshine; // 사용자 선택 일조량
+    private int selectWind; // 사용자 선택 통풍
 
     public PlantJournalAddResponseDto(PlantJournal plantJournal){
         this.id = plantJournal.getId();
@@ -33,7 +33,7 @@ public class PlantJournalAddResponseDto {
         this.nutritionDDay = plantJournal.getNutritionDDay();
         this.repottingDDay = plantJournal.getRepottingDDay();
         this.selectWater = plantJournal.getSelectWater();
-        this.selcetSunshine = plantJournal.getSelcetSunshine();
-        this.selcetWind = plantJournal.getSelcetWind();
+        this.selectSunshine = plantJournal.getSelcetSunshine();
+        this.selectWind = plantJournal.getSelcetWind();
     }
 }
