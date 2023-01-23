@@ -50,9 +50,9 @@ public class PlantJournal {
     @Column
     private int selectWater;                        // 사용자 선택 물량
     @Column
-    private int selcetSunshine;                     // 사용자 선택 일조량
+    private int selectSunshine;                     // 사용자 선택 일조량
     @Column
-    private int selcetWind;                         // 사용자 선택 통풍
+    private int selectWind;                         // 사용자 선택 통풍
     @Column
     private int withPlantDay;                       // 식물과 함께 한 날
     @Column
@@ -74,8 +74,8 @@ public class PlantJournal {
         this.nutritionDDay = nutritionDDay;
         this.repottingDDay = repottingDDay;
         this.selectWater = plantJournalAddRequestDto.getSelectWater();
-        this.selcetSunshine = plantJournalAddRequestDto.getSelectSunshine();
-        this.selcetWind = plantJournalAddRequestDto.getSelectWind();
+        this.selectSunshine = plantJournalAddRequestDto.getSelectSunshine();
+        this.selectWind = plantJournalAddRequestDto.getSelectWind();
         this.totalWaterDDayClick = 0;
         this.totalNutritionDDayClick = 0;
         this.totalRepottingDDayClick = 0;

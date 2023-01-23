@@ -33,7 +33,7 @@ public class PlantJournalAddResponseDto {
         this.nutritionDDay = plantJournal.getNutritionDDay();
         this.repottingDDay = plantJournal.getRepottingDDay();
         this.selectWater = plantJournal.getSelectWater();
-        this.selectSunshine = plantJournal.getSelcetSunshine();
-        this.selectWind = plantJournal.getSelcetWind();
+        this.selectSunshine = plantJournal.getSelectSunshine();
+        this.selectWind = plantJournal.getSelectWind();
     }
 }
