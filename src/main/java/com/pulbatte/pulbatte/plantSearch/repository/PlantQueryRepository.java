@@ -2,11 +2,13 @@ package com.pulbatte.pulbatte.plantSearch.repository;
 
 import com.pulbatte.pulbatte.plantSearch.dto.*;
 import com.pulbatte.pulbatte.plantSearch.entity.PlantTag;
-import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberTemplate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ObjectUtils;
@@ -24,14 +26,27 @@ public class PlantQueryRepository {
     }
 
     // 전체 목록 가져오기
-    public List<PlantListDto> findAll() {
-        return queryFactory
+//    public List<PlantListDto> findAll() {
+//        return queryFactory
+//                .select(new QPlantListDto(
+//                        plant
+//                ))
+//                .from(plant)
+//                .orderBy(plant.plantName.asc())
+//                .fetch();
+//    }
+
+    // 전체 목록 무한 스크롤
+    public Slice<PlantListDto> findAllBySlice(Pageable pageable) {
+        List<PlantListDto> results = queryFactory
                 .select(new QPlantListDto(
                         plant
                 ))
                 .from(plant)
                 .orderBy(plant.plantName.asc())
+                .limit(pageable.getPageSize()+1)            // 다음 페이지가 있는지 판단
                 .fetch();
+        return checkLastPage(pageable, results);
     }
 
     // 단건 조회
@@ -108,6 +123,17 @@ public class PlantQueryRepository {
             return null;
         }
         return plant.id.eq(plantId);
+    }
+
+    // 무한 스크롤 처리
+    private Slice<PlantListDto> checkLastPage(Pageable pageable, List<PlantListDto> results) {
+        boolean hasNext = false;            // 다음 페이지가 있는지 여부
+
+        if(results.size() > pageable.getPageSize()) {
+            hasNext = true;
+            results.remove(pageable.getPageSize());
+        }
+        return new SliceImpl<>(results, pageable, hasNext);
     }
 
 }

@@ -1,10 +1,13 @@
 package com.pulbatte.pulbatte.plantSearch.controller;
 
 import com.pulbatte.pulbatte.plantSearch.dto.PlantDetailDto;
+import com.pulbatte.pulbatte.plantSearch.dto.PlantListDto;
 import com.pulbatte.pulbatte.plantSearch.entity.PlantTag;
 import com.pulbatte.pulbatte.plantSearch.dto.PlantListResponseDto;
 import com.pulbatte.pulbatte.plantSearch.service.PlantSearchService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +19,8 @@ public class PlantSearchController {
     private final PlantSearchService searchService;
 
     @GetMapping
-    public PlantListResponseDto getAllPlants() {
-        return searchService.getAllPlants();
+    public ResponseEntity<Slice<PlantListDto>> getAllPlants(Pageable pageable) {
+        return ResponseEntity.ok(searchService.getAllBySlice(pageable));
     }
 
     // 식물 이름 검색
