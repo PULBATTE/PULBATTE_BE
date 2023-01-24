@@ -1,34 +1,59 @@
-# run_new_was.sh
+#!/usr/bin/env bash
 
-#!/bin/bash
 
-PROJECT_ROOT="/home/ubuntu" # 프로젝트 루트
-JAR_FILE=$(ls $BASE_PATH/app/*.jar) # JAR_FILE (어쩌구저쩌구.jar)
+BASE_PATH=/home/ubuntu/
+BUILD_PATH=$(ls $BASE_PATH/app/*.jar)
+JAR_NAME=$(basename $BUILD_PATH)
+echo "> build 파일명: $JAR_NAME"
 
-# service_url.inc 에서 현재 서비스를 하고 있는 WAS의 포트 번호 가져오기
-CURRENT_PORT=$(cat /etc/nginx/conf.d/service_url.inc | grep -Po '[0-9]+' | tail -1)
-TARGET_PORT=0
 
-echo "> Current port of running WAS is ${CURRENT_PORT}."
+echo "> build 파일 복사"
+DEPLOY_PATH=/home/ubuntu/temp/
+cp $BUILD_PATH $DEPLOY_PATH
 
-if [ ${CURRENT_PORT} -eq 8081 ]; then
-  TARGET_PORT=8082 # 현재포트가 8081이면 8082로 배포
-elif [ ${CURRENT_PORT} -eq 8082 ]; then
-  TARGET_PORT=8081 # 현재포트가 8082라면 8081로 배포
+echo "> 현재 구동중인 Set 확인"
+CURRENT_PROFILE=$(curl -s http://localhost/profile)
+echo "> $CURRENT_PROFILE"
+
+# 쉬고 있는 dev 찾기: dev이 사용중이면 dev2가 쉬고 있고, 반대면 dev이 쉬고 있음
+if [ $CURRENT_PROFILE == dev ]
+then
+  IDLE_PROFILE=dev1
+  IDLE_PORT=8082
+elif [ $CURRENT_PROFILE == dev ]
+then
+  IDLE_PROFILE=dev
+ IDLE_PORT=8081
 else
-  echo "> Not connected to nginx" # nginx가 실행되고 있지 않다면 에러 코드
+  echo "> 일치하는 Profile이 없습니다. Profile: $CURRENT_PROFILE"
+  echo "> dev 할당합니다. IDLE_PROFILE: dev"
+  IDLE_PROFILE=dev
+  IDLE_PORT=8081
 fi
 
-# 현재 포트의 PID를 불러온다
-TARGET_PID=$(lsof -Fp -i TCP:${TARGET_PORT} | grep -Po 'p[0-9]+' | grep -Po '[0-9]+')
+echo "> application.jar 교체"
+IDLE_APPLICATION=$IDLE_PROFILE-demo.jar
+IDLE_APPLICATION_PATH=$DEPLOY_PATH$IDLE_APPLICATION
 
-# PID를 이용해 해당 포트 서버 Kill
-if [ ! -z ${TARGET_PID} ]; then
-  echo "> Kill ${TARGET_PORT}."
-  sudo kill ${TARGET_PID}
+# 미연결된 Jar로 신규 Jar 심볼릭 링크 (ln)
+ln -Tfs $DEPLOY_PATH$JAR_NAME $IDLE_APPLICATION_PATH
+
+echo "> $IDLE_PROFILE 에서 구동중인 애플리케이션 pid 확인"
+IDLE_PID=$(pgrep -f $IDLE_APPLICATION)
+
+if [ -z $IDLE_PID ]
+then
+  echo "> 현재 구동중인 애플리케이션이 없으므로 종료하지 않습니다."
+else
+  echo "> kill -15 $IDLE_PID"
+  kill -15 $IDLE_PID
+  sleep 5
 fi
 
-# 타켓 포트에 jar파일을 이용해 새로운 서버 실행
-nohup java -jar -Dserver.port=${TARGET_PORT} ${JAR_FILE} > /home/ubuntu/app/nohup.out 2>&1 &
-echo "> Now new WAS runs at ${TARGET_PORT}."
-exit 0
+echo "> $IDLE_PROFILE 배포"
+nohup java -jar -Dspring.profiles.active=$IDLE_PROFILE $IDLE_APPLICATION_PATH > $DEPLOY_PATH/nohup.out 2>&1 &
+
+# Nginx Port 스위칭을 위한 스크립트
+echo "> 스위칭"
+sleep 10
+/home/ubuntu/app/switch.sh
