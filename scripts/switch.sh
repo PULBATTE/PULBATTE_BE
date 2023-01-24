@@ -1,26 +1,30 @@
-#!/usr/bin/env bash
+# switch.sh
 
-echo "> 현재 구동중인  Port 확인"
-CURRENT_PROFILE=$(curl -s http://localhost/profile)
+#!/bin/bash
 
-if [ $CURRENT_PROFILE == dev ]
-then
-  IDLE_PORT=8082
-elif [ $CURRENT_PROFILE == dev2 ]
-then
-  IDLE_PORT=8081
+# service_url.inc 에서 현재 서비스를 하고 있는 WAS의 포트 번호 가져오기
+CURRENT_PORT=$(cat /etc/nginx/conf.d/service_url.inc  | grep -Po '[0-9]+' | tail -1)
+TARGET_PORT=0
+
+echo "> Nginx currently proxies to ${CURRENT_PORT}."
+
+if [ ${CURRENT_PORT} -eq 8081 ]; then
+    TARGET_PORT=8082
+elif [ ${CURRENT_PORT} -eq 8082 ]; then
+    TARGET_PORT=8081
 else
-  echo "> 일치하는 Profile이 없습니다. Profile: $CURRENT_PROFILE"
-  echo "> 8081을 할당합니다."
-  IDLE_PORT=8081
+    echo "> No WAS is connected to nginx"
+    exit 1
 fi
 
-echo "> 전환할 Port: $IDLE_PORT"
-echo "> Port 전환"
-echo "set \$service_url http://127.0.0.1:${IDLE_PORT};" |sudo tee /etc/nginx/conf.d/service-url.inc
+# 위 커맨드들을 통해 현재 타겟포트 가져오기
 
-PROXY_PORT=$(curl -s http://localhost/profile)
-echo "> Nginx Current Proxy Port: $PROXY_PORT"
+# $ service_url.inc 파일을 현재 바뀐 서버의 포트로 변경
+echo "set \$service_url http://127.0.0.1:${TARGET_PORT};" | tee /etc/nginx/conf.d/service_url.inc
 
-echo "> Nginx Reload"
+echo "> Now Nginx proxies to ${TARGET_PORT}."
+
+# nginx를 reload 해준다.
 sudo service nginx reload
+
+echo "> Nginx reloaded."
