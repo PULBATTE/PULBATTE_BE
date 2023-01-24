@@ -8,7 +8,7 @@ echo "> build 파일명: $JAR_NAME"
 
 
 echo "> build 파일 복사"
-DEPLOY_PATH=/home/ubuntu/temp/
+DEPLOY_PATH=/home/ubuntu/app/temp
 cp $BUILD_PATH $DEPLOY_PATH
 
 echo "> 현재 구동중인 Set 확인"
