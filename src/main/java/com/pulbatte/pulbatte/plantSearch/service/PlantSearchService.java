@@ -11,6 +11,8 @@ import com.pulbatte.pulbatte.plantSearch.dto.PlantListResponseDto;
 import com.pulbatte.pulbatte.plantSearch.repository.PlantQueryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,11 +25,16 @@ public class PlantSearchService {
     private final PlantQueryRepository queryRepository;
     private final PlantRepository plantRepository;
 
-    public PlantListResponseDto getAllPlants() {
-        List<PlantListDto> plantList = queryRepository.findAll();
-        return PlantListResponseDto.builder()
-                .plants(plantList)
-                .build();
+//    public PlantListResponseDto getAllPlants() {
+//        List<PlantListDto> plantList = queryRepository.findAll();
+//        return PlantListResponseDto.builder()
+//                .plants(plantList)
+//                .build();
+//    }
+
+    // 무한 스크롤 처리
+    public Slice<PlantListDto> getAllBySlice(Pageable pageable) {
+        return queryRepository.findAllBySlice(pageable);
     }
 
     public PlantListResponseDto findByPlantName(String keyword) {
