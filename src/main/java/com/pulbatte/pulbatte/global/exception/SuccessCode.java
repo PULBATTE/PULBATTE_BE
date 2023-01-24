@@ -17,7 +17,7 @@ public enum SuccessCode {
 
     //마이 페이지
     UPLOAD_PROFILE(HttpStatus.OK, "프로필 사진 등록 완료"),
-    UPLOAD_NICKNAME(HttpStatus.OK, "닉네임 변경 완료"),
+    UPDATE_PROFILE(HttpStatus.OK, "닉네임 변경 완료"),
     DELETE_USER(HttpStatus.OK,"회원 탈퇴를 완료하였습니다"),
 
     UPLOAD_JOBANDCAREER(HttpStatus.OK, "직무/경력 등록 완료"),
