@@ -56,4 +56,4 @@ nohup java -jar -Dspring.profiles.active=$IDLE_PROFILE $IDLE_APPLICATION_PATH > 
 # Nginx Port 스위칭을 위한 스크립트
 echo "> 스위칭"
 sleep 10
-/home/ubuntu/app/switch.sh
+sudo /home/ubuntu/app/switch.sh
