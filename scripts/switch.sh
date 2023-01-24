@@ -24,7 +24,3 @@ echo "> Nginx Current Proxy Port: $PROXY_PORT"
 
 echo "> Nginx Reload"
 sudo service nginx reload
-
-sleep 10
-echo "> 구동중이었던 프로세스 종료"
-fuser -k ${PROXY_PORT}/tcp
