@@ -19,15 +19,20 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
-public class WebSecurityConfig {
+public class WebSecurityConfig extends WebMvcConfigurerAdapter {
 
 
     private final JwtUtil jwtUtil;
+    public static final String ALLOWED_METHOD_NAMES = "GET,HEAD,POST,PUT,DELETE,TRACE,OPTIONS,PATCH";
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -84,6 +89,16 @@ public class WebSecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
 
+
         return source;
+    }
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedHeaders("refresh_token","refreshToken","response")
+                .allowedMethods(ALLOWED_METHOD_NAMES.split(","))
+                .allowedOrigins("*")
+                .exposedHeaders("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials","RefreshToken","refresh_token","refreshToken","response");	//make client read header("jwt-token")
+
     }
 }
