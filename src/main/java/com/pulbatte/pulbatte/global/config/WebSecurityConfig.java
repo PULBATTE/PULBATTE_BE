@@ -27,7 +27,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @RequiredArgsConstructor
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
-public class WebSecurityConfig extends WebMvcConfigurerAdapter {
+public class WebSecurityConfig implements WebMvcConfigurer {
 
 
     private final JwtUtil jwtUtil;
