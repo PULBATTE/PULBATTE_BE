@@ -33,11 +33,19 @@ public class WebSecurityConfig implements WebMvcConfigurer {
     private final JwtUtil jwtUtil;
     public static final String ALLOWED_METHOD_NAMES = "GET,HEAD,POST,PUT,DELETE,TRACE,OPTIONS,PATCH";
 
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOriginPatterns("*")
+                .allowedMethods("*")
+                .exposedHeaders("Refresh_Token")
+                .allowCredentials(true)
+                .maxAge(3000);
+    }
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
     // 가장 먼저 시큐리티를 사용하기 위해선 선언해준다.
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
@@ -45,7 +53,6 @@ public class WebSecurityConfig implements WebMvcConfigurer {
 //                .requestMatchers(PathRequest.toH2Console())
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()));
     }
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
@@ -88,17 +95,6 @@ public class WebSecurityConfig implements WebMvcConfigurer {
         config.validateAllowCredentials();
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
-
-
         return source;
-    }
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedHeaders("refresh_token","refreshToken","response")
-                .allowedMethods(ALLOWED_METHOD_NAMES.split(","))
-                .allowedOrigins("*")
-                .exposedHeaders("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials","RefreshToken","refresh_token","refreshToken","response");	//make client read header("jwt-token")
-
     }
 }
