@@ -53,7 +53,8 @@ public class  UserService {
             }
             role = UserRoleEnum.ADMIN;                                                      // 맞으면 admin으로 회원가입
         }
-        User user = new User(userId, password, nickname,signUpType, role);
+        String profile = "https://brighto8iz.s3.ap-northeast-2.amazonaws.com/plantTest/%EA%B8%B0%EB%B3%B8%EC%9D%B4%EB%AF%B8%EC%A7%80.png";
+        User user = new User(userId, password, nickname,signUpType, role,profile);
         userRepository.save(user);
         return new MsgResponseDto(SuccessCode.SIGN_UP);
     }

@@ -82,12 +82,17 @@ public class WebSecurityConfig implements WebMvcConfigurer {
 
         CorsConfiguration config = new CorsConfiguration();
         config.addAllowedOrigin("http://localhost:3000");
-        config.addAllowedOrigin("http://localhost:5173");
         config.addAllowedOrigin("http://localhost:8080");                   // 허용할 URl (백엔드 테스트 URL)
-        config.addAllowedOrigin("https://3.34.198.99/");
-        config.addAllowedOrigin("http://3.34.198.99/");
+        config.addAllowedOrigin("https://13.125.7.191");
+        config.addAllowedOrigin("http://13.125.7.191");
+        config.addAllowedOrigin("http://3.38.209.129");
+        config.addAllowedOrigin("https://3.38.209.129");
+        config.addAllowedOrigin("https://api.pulbatte.com");
+        config.addAllowedOrigin("http://api.pulbatte.com");
         config.addAllowedOrigin("https://pulbatte.com");
         config.addAllowedOrigin("http://pulbatte.com");
+        config.addAllowedOrigin("https://www.pulbatte.com");
+        config.addAllowedOrigin("http://www.pulbatte.com");
         config.addExposedHeader(JwtUtil.AUTHORIZATION_HEADER);
         config.addAllowedMethod("*");
         config.addAllowedHeader("*");
