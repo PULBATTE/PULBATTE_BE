@@ -1,7 +1,7 @@
 package com.pulbatte.pulbatte.plantJournal.service;
 
 import com.pulbatte.pulbatte.alarm.entity.AlarmType;
-import com.pulbatte.pulbatte.alarm.service.AlarmService;
+import com.pulbatte.pulbatte.alarm.service.SseService;
 import com.pulbatte.pulbatte.plantJournal.entity.PlantJournal;
 import com.pulbatte.pulbatte.plantJournal.repository.PlantJournalRepository;
 import com.pulbatte.pulbatte.user.entity.User;
@@ -20,7 +20,7 @@ import java.util.List;
 @Slf4j
 public class DDayService {
     private final PlantJournalRepository plantJournalRepository;
-    private final AlarmService alarmService;
+    private final SseService alarmService;
 
     @Transactional
     @Scheduled(cron = "0 0 0 * * ?")	// 매일 00시 정각

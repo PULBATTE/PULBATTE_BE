@@ -9,12 +9,14 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class AlarmResponseDto {
+    private Long id;
     private String content;
     private AlarmType alarmType;
     private Boolean isRead;
 
     @QueryProjection            // Q파일 생성
     public AlarmResponseDto(Alarm alarm) {
+        this.id = alarm.getId();
         this.content = alarm.getContent();
         this.alarmType = alarm.getAlarmType();
         this.isRead = alarm.getIsRead();
