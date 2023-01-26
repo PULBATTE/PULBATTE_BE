@@ -41,14 +41,10 @@ ln -Tfs $DEPLOY_PATH$JAR_NAME $IDLE_APPLICATION_PATH
 echo "> $IDLE_PROFILE 에서 구동중인 애플리케이션 pid 확인"
 IDLE_PID=$(pgrep -f $IDLE_APPLICATION)
 
-if [ -z $IDLE_PID ]
-then
-  echo "> 현재 구동중인 애플리케이션이 없으므로 종료하지 않습니다."
-else
-  echo "> kill -15 $IDLE_PID"
-  kill -15 $IDLE_PID
-  sleep 5
-fi
+echo "> kill -15 $IDLE_PID"
+kill -15 $IDLE_PID
+sleep 5
+
 
 echo "> $IDLE_PROFILE 배포"
 nohup java -jar -Dspring.profiles.active=$IDLE_PROFILE $IDLE_APPLICATION_PATH > $DEPLOY_PATH/nohup.out 2>&1 &
