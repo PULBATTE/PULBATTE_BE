@@ -54,8 +54,9 @@ public enum SuccessCode {
     CREATE_BEGINNER_Plant(HttpStatus.OK,"가이드 식물을 등록 하였습니다."),
 
     // 알림
-    READ_ALARM(HttpStatus.OK, "알림을 읽음 상태로 변경하였습니다.");
-
+    READ_ALARM(HttpStatus.OK, "알림을 읽음 상태로 변경하였습니다."),
+    // 식집사 테스트
+    COMPLETE_TEST(HttpStatus.OK,"테스트가 완료되었습니다.");
     private final HttpStatus httpStatus;
     private final String message;
 }
