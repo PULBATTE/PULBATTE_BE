@@ -62,8 +62,17 @@ public class MypageController {
         return new MsgResponseDto(SuccessCode.UPDATE_PROFILE);
     }
 
+    @PutMapping("/profilename")
+    public MsgResponseDto updateProfilename(
+            @AuthenticationPrincipal UserDetailsImpl userDetails ,
+            @RequestPart String request
+    ){
+        mypageService.updateProfilename(userDetails.getUser(), request);
+        return new MsgResponseDto(SuccessCode.UPDATE_PROFILE);
+    }
+
     // 프로필 이미지 확인
-    @GetMapping("/profileImage")
+    @PutMapping("/profileImage")
     public String getProfileImage(
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ){
@@ -78,5 +87,5 @@ public class MypageController {
         mypageService.deleteUser(userDetails.getUser());
             return new MsgResponseDto(SuccessCode.DELETE_USER);
     }
-    
+
 }

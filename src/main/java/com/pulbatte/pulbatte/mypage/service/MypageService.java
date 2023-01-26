@@ -69,7 +69,13 @@ public class MypageService {
         changeUser.updateNickname(string);
     }
 
-
+    @Transactional
+    public void updateProfilename(User user, String request) {
+        User changeUser = userRepository.findByUserId(user.getUserId()).orElseThrow(
+                () -> new CustomException(ErrorCode.ALREADY_EXIST_USERNAME)
+        );
+        changeUser.updateNickname(request);
+    }
 
     // 회원 탈퇴
     @Transactional
@@ -81,4 +87,7 @@ public class MypageService {
     public MypageResponseDto getProfile(User user) {
         return new MypageResponseDto(user);
     }
+
+
+
 }
