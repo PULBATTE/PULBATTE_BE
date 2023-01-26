@@ -3,7 +3,7 @@ package com.pulbatte.pulbatte.plantJournal.entity;
 import com.pulbatte.pulbatte.user.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.joda.time.LocalDate;
+import java.time.LocalDate;
 
 import javax.persistence.*;
 
@@ -25,10 +25,10 @@ public class DdayClick {
     @JoinColumn(name = "PlantJournal_ID")
     private PlantJournal plantJournal;
 
-    public DdayClick(User user, PlantJournal plantJournal, String clickTag){
+    public DdayClick(User user, PlantJournal plantJournal, String clickTag,LocalDate localDate){
         this.user = user;
         this.plantJournal = plantJournal;
         this.clickTag = clickTag;
-        this.localDate = LocalDate.now();
+        this.localDate = localDate;
     }
 }
