@@ -35,6 +35,8 @@ public class PlantJournalService {
         String image = null;
         if (!multipartFile.isEmpty()) {                                      // 이미지 파일이 존재 할 경우
             image = s3Uploader.upload(multipartFile, "static");      // s3이미지 업로드
+        }else{
+            image = "https://brighto8iz.s3.ap-northeast-2.amazonaws.com/plantTest/%EA%B8%B0%EB%B3%B8%EC%9D%B4%EB%AF%B8%EC%A7%80.png";
         }
         int WaterDDay = plantJournalAddRequestDto.getWaterCycle();
         int nutritionDDay = plantJournalAddRequestDto.getNutritionCycle();   // 영양 주기 Dday를 영양 Cycle로 지정
