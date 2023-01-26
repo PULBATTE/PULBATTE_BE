@@ -55,7 +55,7 @@ public class MypageController {
     @PutMapping("/profile")
     public MsgResponseDto updateProfile(
             @AuthenticationPrincipal UserDetailsImpl userDetails ,
-            @RequestPart String request,
+            @RequestPart StringDto request,
             @RequestPart(value = "image", required = false) MultipartFile multipartFile
     ) throws IOException {
         mypageService.updateProfil(userDetails.getUser(), request, multipartFile);
@@ -63,11 +63,11 @@ public class MypageController {
     }
 
     @PutMapping("/profilename")
-    public MsgResponseDto updateProfilename(
+    public MsgResponseDto updateProfileName(
             @AuthenticationPrincipal UserDetailsImpl userDetails ,
-            @RequestPart String request
+            @RequestPart StringDto request
     ){
-        mypageService.updateProfilename(userDetails.getUser(), request);
+        mypageService.updateProfileName(userDetails.getUser(), request);
         return new MsgResponseDto(SuccessCode.UPDATE_PROFILE);
     }
 
