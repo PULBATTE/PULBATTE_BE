@@ -18,7 +18,7 @@ public class SseController {
     @GetMapping(value = "/subscribe", produces = "text/event-stream")
     public SseEmitter subscribe(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @RequestParam(value = "Last-Event-Id", required = false, defaultValue = "") String lastEventId
+            @RequestHeader(value = "Last-Event-Id", required = false, defaultValue = "") String lastEventId
     ) {
         return sseService.subscribe(userDetails.getUser().getId(), lastEventId);
     }

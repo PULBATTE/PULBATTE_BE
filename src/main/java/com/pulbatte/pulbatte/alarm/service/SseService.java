@@ -1,22 +1,20 @@
 package com.pulbatte.pulbatte.alarm.service;
 
-import com.pulbatte.pulbatte.alarm.dto.AlarmListResponseDto;
 import com.pulbatte.pulbatte.alarm.dto.AlarmResponseDto;
 import com.pulbatte.pulbatte.alarm.entity.Alarm;
 import com.pulbatte.pulbatte.alarm.entity.AlarmType;
-import com.pulbatte.pulbatte.alarm.repository.AlarmQueryRepository;
 import com.pulbatte.pulbatte.alarm.repository.AlarmRepository;
 import com.pulbatte.pulbatte.alarm.repository.EmitterRepository;
 import com.pulbatte.pulbatte.alarm.repository.EmitterRepositoryImpl;
 import com.pulbatte.pulbatte.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -33,6 +31,21 @@ public class SseService {
         SseEmitter emitter = emitterRepository.save(emitterId, new SseEmitter(TIMEOUT));            // emitter 생성
         emitter.onCompletion(() -> emitterRepository.deleteById(emitterId));            // 시간이 만료되면 자동 삭제
         emitter.onTimeout(() -> emitterRepository.deleteById(emitterId));
+
+        if(!emitterRepository.findAllEmitterStartWithByUserId(userId).isEmpty()) {
+            SseEmitter sseEmitter = emitterRepository.findAllEmitterStartWithByUserId(userId).get(userId+1);
+            sseEmitter.complete();
+            SseEmitter.SseEventBuilder eventBuilder = SseEmitter.event()
+                    .reconnectTime(500)
+                    .data(MediaType.APPLICATION_JSON);
+
+            try {
+                emitter.send(eventBuilder);
+            } catch (IOException exception) {
+                emitterRepository.deleteById(emitterId);
+            }
+            emitterRepository.deleteAllEmitterStartWithId(userId);
+        }
 
         // 더미 데이터를 보내 503 에러 방지
         String eventId = makeTimeIncludeId(userId);
@@ -65,7 +78,7 @@ public class SseService {
     }
 
     private void sendLostData(String lastEventId, Long userId, String emitterId, SseEmitter emitter) {
-        Map<String, Object> eventCaches = emitterRepository.findAllEventCacheStartWithByUserId(String.valueOf(userId));
+        Map<String, Object> eventCaches = emitterRepository.findAllEventCacheStartWithByUserId(userId);
         eventCaches.entrySet().stream()
                 .filter(e -> lastEventId.compareTo(e.getKey())<0)
                 .forEach(e -> sendAlarm(emitter, e.getKey(), emitterId, e.getValue()));
@@ -74,7 +87,7 @@ public class SseService {
     @Async
     public void send(AlarmType alarmType, String content, User user) {
         Alarm alarm = alarmRepository.save(createAlarm(alarmType, content, user));
-        String receiveId = String.valueOf(user.getUserId());
+        Long receiveId = user.getId();
 
         String eventId = receiveId + "_" + System.currentTimeMillis();
         Map<String, SseEmitter> emitters = emitterRepository.findAllEmitterStartWithByUserId(receiveId);

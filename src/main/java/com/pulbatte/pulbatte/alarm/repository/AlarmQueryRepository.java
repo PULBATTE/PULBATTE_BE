@@ -32,6 +32,14 @@ public class AlarmQueryRepository {
                 .fetch();
     }
 
+    public Long changeState(Long userId) {
+        return queryFactory
+                .update(alarm)
+                .set(alarm.isRead, true)
+                .where(eqUserId(userId))
+                .execute();
+    }
+
     private BooleanExpression eqUserId(Long userId) {
         if(ObjectUtils.isEmpty(userId)) {
             return null;

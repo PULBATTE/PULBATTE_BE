@@ -52,7 +52,7 @@ class EmitterRepositoryImplTest {
         String emitterId3 = userId + "_" + System.currentTimeMillis();
         emitterRepository.save(emitterId3, new SseEmitter(DEFAULT_TIMEOUT));
 
-        Map<String, SseEmitter> ActualResult = emitterRepository.findAllEmitterStartWithByUserId(String.valueOf(userId));
+        Map<String, SseEmitter> ActualResult = emitterRepository.findAllEmitterStartWithByUserId(userId);
 
         Assertions.assertEquals(3, ActualResult.size());
     }
@@ -75,7 +75,7 @@ class EmitterRepositoryImplTest {
         Alarm alarm3 = new Alarm(AlarmType.comment, "내 게시글에 댓글이 등록되었습니다.", false, new User(1L));
         emitterRepository.saveEventCache(eventCacheId3, alarm3);
 
-        Map<String, Object> ActualResult = emitterRepository.findAllEventCacheStartWithByUserId(String.valueOf(userId));
+        Map<String, Object> ActualResult = emitterRepository.findAllEventCacheStartWithByUserId(userId);
 
         Assertions.assertEquals(3, ActualResult.size());
     }
@@ -90,7 +90,7 @@ class EmitterRepositoryImplTest {
         emitterRepository.save(emitterId, sseEmitter);
         emitterRepository.deleteById(emitterId);
 
-        Assertions.assertEquals(0, emitterRepository.findAllEmitterStartWithByUserId(emitterId).size());
+        Assertions.assertEquals(0, emitterRepository.findAllEmitterStartWithByUserId(userID).size());
     }
 
     @Test
@@ -104,9 +104,9 @@ class EmitterRepositoryImplTest {
         String emitterId2 = userId + "_" + System.currentTimeMillis();
         emitterRepository.save(emitterId2, new SseEmitter(DEFAULT_TIMEOUT));
 
-        emitterRepository.deleteAllEmitterStartWithId(String.valueOf(userId));
+        emitterRepository.deleteAllEmitterStartWithId(userId);
 
-        Assertions.assertEquals(0, emitterRepository.findAllEmitterStartWithByUserId(String.valueOf(userId)).size());
+        Assertions.assertEquals(0, emitterRepository.findAllEmitterStartWithByUserId(userId).size());
     }
 
     @Test
@@ -122,8 +122,8 @@ class EmitterRepositoryImplTest {
         Alarm alarm2 = new Alarm(AlarmType.comment, "내 게시글에 댓글이 등록되었습니다.", false, new User(1L));
         emitterRepository.saveEventCache(eventCacheId2, alarm2);
 
-        emitterRepository.deleteAllEventCacheStartWithId(String.valueOf(userId));
+        emitterRepository.deleteAllEventCacheStartWithId(userId);
 
-        Assertions.assertEquals(0, emitterRepository.findAllEventCacheStartWithByUserId(String.valueOf(userId)).size());
+        Assertions.assertEquals(0, emitterRepository.findAllEventCacheStartWithByUserId(userId).size());
     }
 }

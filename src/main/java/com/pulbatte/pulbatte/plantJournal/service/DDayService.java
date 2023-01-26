@@ -20,7 +20,7 @@ import java.util.List;
 @Slf4j
 public class DDayService {
     private final PlantJournalRepository plantJournalRepository;
-    private final SseService alarmService;
+    private final SseService sseService;
 
     @Transactional
     @Scheduled(cron = "0 0 0 * * ?")	// 매일 00시 정각
@@ -62,13 +62,13 @@ public class DDayService {
 
             for(User target : targets) {
                 if(journal.getWaterDDay()==0) {
-                    alarmService.send(AlarmType.Dday, "물주기 Dday", target);
+                    sseService.send(AlarmType.Dday, "물주기 Dday", target);
                 }
                 else if(journal.getNutritionDDay()==0) {
-                    alarmService.send(AlarmType.Dday, "영양 주기 Dday", target);
+                    sseService.send(AlarmType.Dday, "영양 주기 Dday", target);
                 }
                 else if(journal.getRepottingDDay()==0) {
-                    alarmService.send(AlarmType.Dday, "분갈이 Dday", target);
+                    sseService.send(AlarmType.Dday, "분갈이 Dday", target);
                 }
             }
         }
