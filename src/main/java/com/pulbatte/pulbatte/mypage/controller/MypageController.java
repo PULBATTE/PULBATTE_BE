@@ -28,7 +28,7 @@ public class MypageController {
     @GetMapping("/mypost")
     public Page<PostResponseDto> getMypage(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @PageableDefault(size = 10) Pageable pageable
+            @PageableDefault(size = 5) Pageable pageable
     ){
         return mypageService.getMypage(userDetails.getUser(), pageable);
     }

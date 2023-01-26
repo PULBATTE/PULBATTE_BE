@@ -14,15 +14,12 @@ import com.pulbatte.pulbatte.user.entity.User;
 import com.pulbatte.pulbatte.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -37,20 +34,18 @@ public class MypageService {
 
     // 마이페이지 조회
     public Page<PostResponseDto> getMypage(User user, Pageable pageable) {
-        Page<Post> postList = postRepository.findAllByUserId(user.getId(),pageable);
-        List<PostResponseDto> postResponseDtoList = new ArrayList<>();
-        for(Post post : postList){
-            Long commentCnt = commentRepository.countByPostId(post.getId());
-            Long likeCnt = likeRepository.likeCnt(post.getId());
-            String image = post.getImage();
-            postResponseDtoList.add(new PostResponseDto(post, commentCnt, likeCnt, image));
-        }
-        return new PageImpl<>(postResponseDtoList);
+        Page<Post> postList = postRepository.findAllByUserId(user.getId(), pageable);
+        Page<PostResponseDto> paginList = postList.map(
+                post -> new PostResponseDto(
+                        post, (long) post.getCommentList().size(),
+                        (long) post.getPostLike().size(), post.getImage()
+                ));
+        return paginList;
     }
 
     // 닉네임 중복 확인
-    public void nickDupleCheck(User user,StringDto stringDto) {
-        if(userRepository.findByNickname(stringDto.getNickname()).isPresent()) {
+    public void nickDupleCheck(User user, StringDto stringDto) {
+        if (userRepository.findByNickname(stringDto.getNickname()).isPresent()) {
             throw new CustomException(ErrorCode.ALREADY_EXIST_USERNAME);
         }
     }
@@ -62,8 +57,8 @@ public class MypageService {
                 () -> new CustomException(ErrorCode.ALREADY_EXIST_USERNAME)
         );
         String image = "";
-        if(!multipartFile.isEmpty()){
-            image = s3Uploader.upload(multipartFile,"static");
+        if (!multipartFile.isEmpty()) {
+            image = s3Uploader.upload(multipartFile, "static");
         }
         changeUser.updateProfile(image);
         changeUser.updateNickname(string.getNickname());
@@ -87,7 +82,6 @@ public class MypageService {
     public MypageResponseDto getProfile(User user) {
         return new MypageResponseDto(user);
     }
-
 
 
 }
