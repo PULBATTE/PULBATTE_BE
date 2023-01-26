@@ -36,12 +36,12 @@ IDLE_APPLICATION=$IDLE_PROFILE-demo.jar
 IDLE_APPLICATION_PATH=$DEPLOY_PATH$IDLE_APPLICATION
 
 # 미연결된 Jar로 신규 Jar 심볼릭 링크 (ln)
-ln -Tfs $DEPLOY_PATH$JAR_NAME $IDLE_APPLICATION_PATH
+ln -Tfs $DEPLOY_PATH$JAR_cNAME $IDLE_APPLICATION_PATH
 
 echo "> $IDLE_PROFILE 에서 구동중인 애플리케이션 pid 확인"
 IDLE_PID=$(pgrep -f $IDLE_APPLICATION)
 
-echo "> kill -15 $IDLE_PID"
+echo "> kill -9 $IDLE_PID"
 kill -9 $IDLE_PID
 sleep 5
 
