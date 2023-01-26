@@ -65,6 +65,7 @@ public class PlantJournalDiaryService {
         plantJournalDiaryRepository.delete(plantJournalDiary);
     }
 
+    @Transactional
     public List<CalendarResponseDto> GetCalendar(User user, Long plantjournalid) {
         List<DdayClick> ddayClicks = ddayClickRepository.findAllByUserIdAndPlantJournalId(user.getId(),plantjournalid);
         List<CalendarResponseDto> calendarResponseDtoList = new ArrayList<>();
@@ -86,13 +87,6 @@ public class PlantJournalDiaryService {
                 }
             }
             if (!cheak) {
-//                if (ddayClick.getClickTag().equals("water")) {
-//                    water = 1;
-//                } else if (ddayClick.getClickTag().equals("nutrition")) {
-//                    nutrition = 1;
-//                } else {
-//                    repot = 1;
-//                }
                 calendarResponseDtoList.add(new CalendarResponseDto(ddayClick.getLocalDate(), water, repot, nutrition));
             }
         }
