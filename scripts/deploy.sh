@@ -23,7 +23,7 @@ then
 elif [ $CURRENT_PROFILE == dev ]
 then
   IDLE_PROFILE=dev
- IDLE_PORT=8081
+  IDLE_PORT=8081
 else
   echo "> 일치하는 Profile이 없습니다. Profile: $CURRENT_PROFILE"
   echo "> dev 할당합니다. IDLE_PROFILE: dev"
@@ -41,9 +41,14 @@ ln -Tfs $DEPLOY_PATH$JAR_cNAME $IDLE_APPLICATION_PATH
 echo "> $IDLE_PROFILE 에서 구동중인 애플리케이션 pid 확인"
 IDLE_PID=$(pgrep -f $IDLE_APPLICATION)
 
-echo "> kill -9 $IDLE_PID"
-kill -9 $IDLE_PID
-sleep 5
+if [ -z $IDLE_PID ]
+then
+  echo "> 현재 구동중인 애플리케이션이 없으므로 종료하지 않습니다."
+else
+  echo "> kill -9 $IDLE_PID"
+  kill -9 $IDLE_PID
+  sleep 5
+fi
 
 
 echo "> $IDLE_PROFILE 배포"
