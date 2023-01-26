@@ -57,7 +57,7 @@ public class MypageService {
 
     // 프로필 수정
     @Transactional
-    public void updateProfil(User user, String string, MultipartFile multipartFile) throws IOException {
+    public void updateProfil(User user, StringDto string, MultipartFile multipartFile) throws IOException {
         User changeUser = userRepository.findByUserId(user.getUserId()).orElseThrow(
                 () -> new CustomException(ErrorCode.ALREADY_EXIST_USERNAME)
         );
@@ -66,10 +66,16 @@ public class MypageService {
             image = s3Uploader.upload(multipartFile,"static");
         }
         changeUser.updateProfile(image);
-        changeUser.updateNickname(string);
+        changeUser.updateNickname(string.getNickname());
     }
 
-
+    @Transactional
+    public void updateProfileName(User user, StringDto request) {
+        User changeUser = userRepository.findByUserId(user.getUserId()).orElseThrow(
+                () -> new CustomException(ErrorCode.ALREADY_EXIST_USERNAME)
+        );
+        changeUser.updateNickname(request.getNickname());
+    }
 
     // 회원 탈퇴
     @Transactional
@@ -81,4 +87,7 @@ public class MypageService {
     public MypageResponseDto getProfile(User user) {
         return new MypageResponseDto(user);
     }
+
+
+
 }

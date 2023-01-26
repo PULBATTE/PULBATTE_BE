@@ -38,6 +38,14 @@ public class User {
         this.signUpType = signUpType;       // 회원가입 타입
         this.role = role;                   // 권한
     }
+    public User(String userId, String password, String nickname,int signUpType, UserRoleEnum role, String profileImage) {
+        this.userId = userId;               // id(email 형식)
+        this.password = password;           // 비밀번호
+        this.nickname = nickname;           // 닉네임 (난수)
+        this.signUpType = signUpType;       // 회원가입 타입
+        this.role = role;                   // 권한
+        this.profileImage = profileImage;
+    }
     public User(String username, Long kakaoId, String password, String email, UserRoleEnum role) {
         this.nickname = username;
         this.kakaoId = kakaoId;

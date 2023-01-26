@@ -55,15 +55,24 @@ public class MypageController {
     @PutMapping("/profile")
     public MsgResponseDto updateProfile(
             @AuthenticationPrincipal UserDetailsImpl userDetails ,
-            @RequestPart String request,
+            @RequestPart StringDto request,
             @RequestPart(value = "image", required = false) MultipartFile multipartFile
     ) throws IOException {
         mypageService.updateProfil(userDetails.getUser(), request, multipartFile);
         return new MsgResponseDto(SuccessCode.UPDATE_PROFILE);
     }
 
+    @PutMapping("/profilename")
+    public MsgResponseDto updateProfileName(
+            @AuthenticationPrincipal UserDetailsImpl userDetails ,
+            @RequestPart StringDto request
+    ){
+        mypageService.updateProfileName(userDetails.getUser(), request);
+        return new MsgResponseDto(SuccessCode.UPDATE_PROFILE);
+    }
+
     // 프로필 이미지 확인
-    @GetMapping("/profileImage")
+    @PutMapping("/profileImage")
     public String getProfileImage(
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ){
@@ -78,5 +87,5 @@ public class MypageController {
         mypageService.deleteUser(userDetails.getUser());
             return new MsgResponseDto(SuccessCode.DELETE_USER);
     }
-    
+
 }
