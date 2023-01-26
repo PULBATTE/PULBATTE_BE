@@ -16,7 +16,7 @@ CURRENT_PROFILE=$(curl -s http://localhost/profile)
 echo "> $CURRENT_PROFILE"
 
 # 쉬고 있는 dev 찾기: dev이 사용중이면 dev2가 쉬고 있고, 반대면 dev이 쉬고 있음
-if [ $CURRENT_PROFILE == dev ]
+if [ $CURRENT_PROFILE == dev1 ]
 then
   IDLE_PROFILE=dev1
   IDLE_PORT=8082
