@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
-import org.joda.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,12 +37,24 @@ public class PlantJournalService {
         }else{
             image = "https://brighto8iz.s3.ap-northeast-2.amazonaws.com/plantTest/%EA%B8%B0%EB%B3%B8%EC%9D%B4%EB%AF%B8%EC%A7%80.png";
         }
-        int WaterDDay = plantJournalAddRequestDto.getWaterCycle();
-        int nutritionDDay = plantJournalAddRequestDto.getNutritionCycle();   // 영양 주기 Dday를 영양 Cycle로 지정
-        int repottingDDay = plantJournalAddRequestDto.getRepottingCycle();   // 분갈이 주기 Dday를 분갈이 Cycle로 지정
+        int WaterDDay, nutritionDDay, repottingDDay;
+        if(plantJournalAddRequestDto.getWaterCycle() <= 0){
+            WaterDDay = 1;
+        }else{
+            WaterDDay = plantJournalAddRequestDto.getWaterCycle();
+        }
+        if(plantJournalAddRequestDto.getNutritionCycle() <= 0){
+            nutritionDDay = 1;
+        }else{
+            nutritionDDay = plantJournalAddRequestDto.getNutritionCycle();
+        }
+        if(plantJournalAddRequestDto.getRepottingCycle() <= 0){
+            repottingDDay = 1;
+        }else{
+            repottingDDay = plantJournalAddRequestDto.getRepottingCycle();
+        }
         PlantJournal plantJournal = new PlantJournal(plantJournalAddRequestDto,user,image,WaterDDay,nutritionDDay,repottingDDay);
         plantJournalRepository.save(plantJournal);
-//        return new PlantJournalAddResponseDto(plantJournal);
     }
 
     // 식물 일지 전체 조회
