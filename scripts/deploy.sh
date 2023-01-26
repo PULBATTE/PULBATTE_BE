@@ -42,7 +42,7 @@ echo "> $IDLE_PROFILE 에서 구동중인 애플리케이션 pid 확인"
 IDLE_PID=$(pgrep -f $IDLE_APPLICATION)
 
 echo "> kill -15 $IDLE_PID"
-kill -15 $IDLE_PID
+kill -9 $IDLE_PID
 sleep 5
 
 
