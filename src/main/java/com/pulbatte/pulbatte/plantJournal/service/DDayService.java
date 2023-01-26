@@ -26,9 +26,6 @@ public class DDayService {
     @Scheduled(cron = "0 0 0 * * ?")	// 매일 00시 정각
     public void Ddayschedule() {
         List<PlantJournal> plantJournalList = plantJournalRepository.findAll();
-        System.out.println("12시 Schdul 시작");
-        log.info("12시 Schedul 시작 ");
-        log.info("PlantJournalListCount : " + plantJournalList.size());
         for (PlantJournal plantJournal : plantJournalList){
             int water = plantJournal.getWaterDDay() - 1;
             int nutrition = plantJournal.getNutritionDDay() - 1;
@@ -52,9 +49,10 @@ public class DDayService {
     }
 
     @Transactional
-    @Scheduled(cron = "0 0 0 * * ?")
+    @Scheduled(cron = "0 0 9 * * ?")
     public void createDdayAlarm() {
-        List<PlantJournal> plantJournalList = plantJournalRepository.findAll();
+        List<Plant
+    Journal> plantJournalList = plantJournalRepository.findAll();
         List<User> targets = new ArrayList<>();
 
         for(PlantJournal journal : plantJournalList) {
