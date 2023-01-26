@@ -30,7 +30,7 @@ public class PostController {
     public PostResponseDto createPost(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestPart PostRequestDto request,
-            @RequestPart("image") MultipartFile multipartFile) throws IOException {
+            @RequestPart(value = "image", required = false) MultipartFile multipartFile) throws IOException {
         return postService.createPost(request, userDetails.getUser(), multipartFile);
     }
     // 게시글 전체 조회
