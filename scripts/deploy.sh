@@ -35,14 +35,15 @@ else
 fi
 
 echo "> application.jar 교체"
-IDLE_APPLICATION=$NEW_IDLE_PROFILE-demo.jar
+NEW_IDLE_APPLICATION=$NEW_IDLE_PROFILE-demo.jar
+IDLE_APPLICATION=$IDLE_PROFILE-demo.jar
 IDLE_APPLICATION_PATH=$DEPLOY_PATH$IDLE_APPLICATION
 
 # 미연결된 Jar로 신규 Jar 심볼릭 링크 (ln)
 ln -Tfs $DEPLOY_PATH$JAR_NAME $IDLE_APPLICATION_PATH
 
 echo "> $IDLE_PROFILE 에서 구동중인 애플리케이션 pid 확인"
-IDLE_PID=$(pgrep -f $IDLE_APPLICATION)
+IDLE_PID=$(pgrep -f $NEW_IDLE_APPLICATION)
 
 if [ -z $IDLE_PID ]
 then
