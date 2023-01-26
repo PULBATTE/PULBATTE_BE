@@ -61,17 +61,6 @@ public class PlantQueryRepository {
     }
 
     // 식물 이름 검색
-//    public List<PlantListDto> findByPlantName(@Param("plantName") String plantName) {
-//        return queryFactory
-//                .select(new QPlantListDto(
-//                        plant
-//                ))
-//                .from(plant)
-//                .where(eqPlantName(plantName))
-//                .orderBy(plant.plantName.asc())
-//                .fetch();
-//    }
-
     public List<PlantListDto> findByPlantName(@Param("plantName") String plantName) {
         return queryFactory
                 .select(new QPlantListDto(
@@ -83,15 +72,17 @@ public class PlantQueryRepository {
     }
 
     // 태그 필터링
-    public List<PlantListDto> findByPlantTag(PlantTag tag) {
-        return queryFactory
+    public Slice<PlantListDto> findByPlantTag(PlantTag tag, Pageable pageable) {
+        List<PlantListDto> results = queryFactory
                 .select(new QPlantListDto(
                         plant
                 ))
                 .from(plant)
                 .where(eqPlantTag(tag))
                 .orderBy(plant.plantName.asc())
+                .limit(pageable.getPageSize()+1)            // 다음 페이지가 있는지 판단
                 .fetch();
+        return checkLastPage(pageable, results);
     }
 
 //    private BooleanExpression eqPlantName(String plantName) {
