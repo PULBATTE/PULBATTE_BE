@@ -83,10 +83,10 @@ public class PlantJournalService {
         }else{
             throw new CustomException(ErrorCode.NO_EXIST_CLICKTAG);
         }
-        if(ddayClickRepository.findByLocalDateAndUserAndPlantJournalAndClickTag(LocalDate.now(), user, plantJournal, clicktag).isPresent()){
+        if(ddayClickRepository.findByLocalDateAndUserAndPlantJournalAndClickTag(java.time.LocalDate.now(), user, plantJournal, clicktag).isPresent()){
             throw new CustomException(ErrorCode.ALREADY_DDAY_CLICK);
         }
-        ddayClickRepository.save(new DdayClick(user, plantJournal, clicktag));
+        ddayClickRepository.save(new DdayClick(user, plantJournal, clicktag, java.time.LocalDate.now()));
         return new MsgResponseDto(SuccessCode.DDAY_CLICK_OK);
     }
 }

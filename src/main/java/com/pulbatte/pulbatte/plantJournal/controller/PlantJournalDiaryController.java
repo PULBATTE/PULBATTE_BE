@@ -3,6 +3,7 @@ package com.pulbatte.pulbatte.plantJournal.controller;
 import com.pulbatte.pulbatte.global.MsgResponseDto;
 import com.pulbatte.pulbatte.global.exception.SuccessCode;
 import com.pulbatte.pulbatte.global.security.UserDetailsImpl;
+import com.pulbatte.pulbatte.plantJournal.dto.CalendarResponseDto;
 import com.pulbatte.pulbatte.plantJournal.dto.PlantJournalDiaryRequestDto;
 import com.pulbatte.pulbatte.plantJournal.dto.PlantJournalDiaryResponseDto;
 import com.pulbatte.pulbatte.plantJournal.service.PlantJournalDiaryService;
@@ -29,6 +30,14 @@ public class PlantJournalDiaryController {
     ){
         plantJournalDiaryService.CreatePlantJournalDiary(userDetails.getUser(),plantJournalDiaryRequestDto,plantjournalid);
         return new MsgResponseDto(SuccessCode.CREATE_PLANT_JOURNAL_DIARY);
+    }
+
+    @GetMapping("/diary/calendar/{plantjournalid}")
+    public List<CalendarResponseDto> GetCalendar(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable Long plantjournalid
+            ){
+        return plantJournalDiaryService.GetCalendar(userDetails.getUser(),plantjournalid);
     }
 
     @GetMapping("/diary/{plantjournalid}/{plantjournaldiaryid}") // 식물 일지 다이어리 상세보기
