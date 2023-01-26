@@ -1,7 +1,8 @@
 package com.pulbatte.pulbatte.comment.service;
 
 import com.pulbatte.pulbatte.alarm.entity.AlarmType;
-import com.pulbatte.pulbatte.alarm.service.AlarmService;
+import com.pulbatte.pulbatte.alarm.repository.AlarmRepository;
+import com.pulbatte.pulbatte.alarm.service.SseService;
 import com.pulbatte.pulbatte.comment.dto.CommentRequestDto;
 import com.pulbatte.pulbatte.comment.entity.Comment;
 import com.pulbatte.pulbatte.comment.repository.CommentRepository;
@@ -17,13 +18,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class CommentService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
-    private final AlarmService alarmService;
+    private final SseService sseService;
 
     //댓글 작성
     public MsgResponseDto saveComment(Long id, Long commentId, CommentRequestDto commentRequestDto, User user) {
@@ -41,7 +44,9 @@ public class CommentService {
             }
             commentRepository.save(new Comment(commentRequestDto, post, user, childComment));    //자식 댓글로 저장
         }
-        alarmService.send(AlarmType.comment, "success", user);
+        if(!post.getUser().getUserId().equals(user.getUserId())) {
+            sseService.send(AlarmType.comment,post.getTitle() + " 게시글에 새로운 댓글이 등록되었습니다.", user);
+        }
         return new MsgResponseDto(SuccessCode.CREATE_COMMENT);
     }
     //댓글 수정

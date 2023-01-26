@@ -2,32 +2,35 @@ package com.pulbatte.pulbatte.alarm.controller;
 
 import com.pulbatte.pulbatte.alarm.dto.AlarmListResponseDto;
 import com.pulbatte.pulbatte.alarm.service.AlarmService;
+import com.pulbatte.pulbatte.global.MsgResponseDto;
 import com.pulbatte.pulbatte.global.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Slf4j
 @RestController
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
 public class AlarmController {
     private final AlarmService alarmService;
 
-    @GetMapping(value = "/subscribe", produces = "text/event-stream")
-    @ResponseStatus(HttpStatus.OK)
-    public SseEmitter subscribe(
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @RequestHeader(value = "Last-Event-Id", required = false, defaultValue = "") String lastEventId
+    // 알림 목록
+    @GetMapping(value = "/alarm")
+    public ResponseEntity<AlarmListResponseDto> getAlarmList(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        return alarmService.subscribe(userDetails.getUser().getId(), lastEventId);
+        return ResponseEntity.ok(alarmService.getAlarmList(userDetails.getUser()));
     }
 
-    @GetMapping(value = "/alarm")
-    public AlarmListResponseDto getAlarmList() {
-        return alarmService.getAlarmList();
+    // 알림 읽음 상태 처리
+    @DeleteMapping(value = "/alarm")
+    public ResponseEntity<MsgResponseDto> changeAlarmState(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        return ResponseEntity.ok(alarmService.changeAlarmState(userDetails.getUser()));
     }
 }

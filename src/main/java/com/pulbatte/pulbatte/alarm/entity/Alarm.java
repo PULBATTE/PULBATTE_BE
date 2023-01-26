@@ -6,6 +6,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
@@ -25,6 +27,7 @@ public class Alarm extends TimeStamped {
     @Column(nullable = false)
     private Boolean isRead;
     @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
@@ -34,5 +37,9 @@ public class Alarm extends TimeStamped {
         this.content = content;
         this.isRead = isRead;
         this.user = user;
+    }
+
+    public void setIsRead() {
+        isRead = true;
     }
 }

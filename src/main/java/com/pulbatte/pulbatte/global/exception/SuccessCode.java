@@ -51,7 +51,10 @@ public enum SuccessCode {
 
     // 식집사 가이드
     CREATE_BEGINNER_GRAPH(HttpStatus.OK,"그래프를 등록 하였습니다."),
-    CREATE_BEGINNER_Plant(HttpStatus.OK,"가이드 식물을 등록 하였습니다.");
+    CREATE_BEGINNER_Plant(HttpStatus.OK,"가이드 식물을 등록 하였습니다."),
+
+    // 알림
+    READ_ALARM(HttpStatus.OK, "알림을 읽음 상태로 변경하였습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;
