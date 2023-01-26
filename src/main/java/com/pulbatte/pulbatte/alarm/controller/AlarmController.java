@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AlarmController {
     private final AlarmService alarmService;
 
+    // 알림 목록
     @GetMapping(value = "/alarm")
     public ResponseEntity<AlarmListResponseDto> getAlarmList(
             @AuthenticationPrincipal UserDetailsImpl userDetails
@@ -25,10 +26,11 @@ public class AlarmController {
         return ResponseEntity.ok(alarmService.getAlarmList(userDetails.getUser()));
     }
 
+    // 알림 읽음 상태 처리
     @DeleteMapping(value = "/alarm")
-    public MsgResponseDto changeAlarmState(
+    public ResponseEntity<MsgResponseDto> changeAlarmState(
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        return alarmService.changeAlarmState(userDetails.getUser());
+        return ResponseEntity.ok(alarmService.changeAlarmState(userDetails.getUser()));
     }
 }

@@ -27,7 +27,7 @@ public class AlarmQueryRepository {
                 ))
                 .from(alarm)
                 .join(alarm.user, user)
-                .where(eqUserId(userId))
+                .where(eqUserId(userId), alarm.isRead.eq(false))
                 .orderBy(alarm.createdAt.asc())
                 .fetch();
     }
