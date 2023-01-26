@@ -20,7 +20,7 @@ public class PlantTestController {
             @PathVariable("result") String result,
             @AuthenticationPrincipal UserDetailsImpl userDetails){
         plantTestService.postPlantTest(result,userDetails.getUser());
-        return new MsgResponseDto(SuccessCode.DELETE_BOARD);
+        return new MsgResponseDto(SuccessCode.COMPLETE_TEST);
     }
     @GetMapping
     public PlantTestResponseDto PlantTestResponseDto(
