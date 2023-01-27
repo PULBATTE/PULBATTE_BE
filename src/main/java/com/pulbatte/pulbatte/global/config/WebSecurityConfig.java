@@ -38,7 +38,7 @@ public class WebSecurityConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOriginPatterns("*")
                 .allowedMethods("*")
-                .exposedHeaders("Refresh_Token")
+                .exposedHeaders("*")
                 .allowCredentials(true)
                 .maxAge(3000);
     }
