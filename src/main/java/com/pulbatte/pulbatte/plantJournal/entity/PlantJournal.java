@@ -115,15 +115,15 @@ public class PlantJournal {
         this.nutritionCheck = 0;
     }
     public void WaterClick (int currentWaterDdayClick){
-        this.currentWaterDdayClick = currentWaterDdayClick;
+        this.currentWaterDdayClick = currentWaterDdayClick + 1;
         this.waterCheck = 1;
     }
     public void NutritionClick (int currentNutritionDDayClick){
-        this.currentNutritionDDayClick = currentNutritionDDayClick;
+        this.currentNutritionDDayClick = currentNutritionDDayClick + 1;
         this.nutritionCheck = 1;
     }
     public void RepottingClick (int currentRepottingDDayClick){
-        this.currentRepottingDDayClick = currentRepottingDDayClick;
+        this.currentRepottingDDayClick = currentRepottingDDayClick + 1;
         this.repottingCheck = 1;
     }
 }
