@@ -44,9 +44,9 @@ public class UserController {
     }
     // 아이디 중복 확인
     @GetMapping("/idDupleCheck")
-    public ResponseEntity<Boolean> checkUserNameDuplicate (
+    public MsgResponseDto checkUserNameDuplicate (
             @RequestParam String userId){
-        return ResponseEntity.ok(userService.checkUserIdDuplicate(userId));
+        return userService.checkUserIdDuplicate(userId);
     }
     // 유저 정보
     @GetMapping("/info")

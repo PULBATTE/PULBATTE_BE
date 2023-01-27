@@ -89,12 +89,12 @@ public class  UserService {
         return new MsgResponseDto(SuccessCode.SUCCESS_REFRESH_TOKEN);
     }
     // 중복 아이디 체크
-    public boolean checkUserIdDuplicate(String userId){
+    public MsgResponseDto checkUserIdDuplicate(String userId){
         boolean duplicateId = userRepository.existsByUserId(userId);
-        if ( duplicateId == true ) {                    // Username이 중복되는 경우 true, 중복되지 않은 경우 False
-            return false;
+        if (duplicateId) {                    // Username이 중복되는 경우 true, 중복되지 않은 경우 False
+            return new MsgResponseDto(new CustomException(ErrorCode.ALREADY_EXIST_USERNAME));
         } else {
-            return true;
+            return new MsgResponseDto(SuccessCode.CHECK_USER_ID);
         }
     }
     // 유저 정보
