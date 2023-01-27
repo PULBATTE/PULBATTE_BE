@@ -37,6 +37,7 @@ public class PlantSearchService {
         return queryRepository.findAllBySlice(pageable);
     }
 
+    // 식물 이름 검색
     public PlantListResponseDto findByPlantName(String keyword) {
         List<PlantListDto> plantList = queryRepository.findByPlantName(keyword);
         return PlantListResponseDto.builder()
@@ -44,8 +45,16 @@ public class PlantSearchService {
                 .build();
     }
 
-    public PlantListResponseDto findByPlantTag(PlantTag tag) {
-        List<PlantListDto> plantList = queryRepository.findByPlantTag(tag);
+    public Slice<PlantListDto> findByPlantTag(PlantTag tag, Pageable pageable) {
+//        return PlantListResponseDto.builder()
+//                .plants(plantList)
+//                .build();
+        return queryRepository.findByPlantTag(tag, pageable);
+    }
+
+    // 초보자 태그 조회
+    public PlantListResponseDto findByBeginnerTag(int beginner) {
+        List<PlantListDto> plantList = queryRepository.findByBeginnerTag(beginner);
         return PlantListResponseDto.builder()
                 .plants(plantList)
                 .build();

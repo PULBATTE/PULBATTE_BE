@@ -25,14 +25,26 @@ public class PlantSearchController {
 
     // 식물 이름 검색
     @GetMapping(value = "/search", produces = "application/json; charset=utf8")
-    public ResponseEntity<PlantListResponseDto> findByPlantName(@RequestParam("keyword") String keyword) {
+    public ResponseEntity<PlantListResponseDto> findByPlantName(
+            @RequestParam("keyword") String keyword) {
         return ResponseEntity.ok(searchService.findByPlantName(keyword));
     }
 
     // 카테고리별 식물 조회
     @GetMapping(value = "/categories/{tag}", produces = "application/json; charset=utf8")
-    public PlantListResponseDto findByPlantTag(@PathVariable PlantTag tag) {
-        return searchService.findByPlantTag(tag);
+    public ResponseEntity<Slice<PlantListDto>> findByPlantTag(
+            @PathVariable PlantTag tag,
+            Pageable pageable
+    ) {
+        return ResponseEntity.ok(searchService.findByPlantTag(tag, pageable));
+    }
+
+    // 초보자 태그 조회
+    @GetMapping(value = "/categories/beginner/{beginner}")
+    public ResponseEntity<PlantListResponseDto> findByBeginnerTag(
+            @PathVariable int beginner
+    ) {
+        return ResponseEntity.ok(searchService.findByBeginnerTag(beginner));
     }
 
     // 식물 상세 조회

@@ -2,7 +2,9 @@ package com.pulbatte.pulbatte.plantSearch.repository;
 
 import com.pulbatte.pulbatte.plantSearch.dto.*;
 import com.pulbatte.pulbatte.plantSearch.entity.PlantTag;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberTemplate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -61,21 +63,10 @@ public class PlantQueryRepository {
     }
 
     // 식물 이름 검색
-//    public List<PlantListDto> findByPlantName(@Param("plantName") String plantName) {
-//        return queryFactory
-//                .select(new QPlantListDto(
-//                        plant
-//                ))
-//                .from(plant)
-//                .where(eqPlantName(plantName))
-//                .orderBy(plant.plantName.asc())
-//                .fetch();
-//    }
-
     public List<PlantListDto> findByPlantName(@Param("plantName") String plantName) {
         return queryFactory
                 .select(new QPlantListDto(
-                plant
+                        plant
                 ))
                 .from(plant)
                 .where(eqPlantName(plantName))
@@ -83,13 +74,27 @@ public class PlantQueryRepository {
     }
 
     // 태그 필터링
-    public List<PlantListDto> findByPlantTag(PlantTag tag) {
-        return queryFactory
+    public Slice<PlantListDto> findByPlantTag(PlantTag tag, Pageable pageable) {
+        List<PlantListDto> results = queryFactory
                 .select(new QPlantListDto(
                         plant
                 ))
                 .from(plant)
                 .where(eqPlantTag(tag))
+                .orderBy(plant.plantName.asc())
+                .limit(pageable.getPageSize()+1)            // 다음 페이지가 있는지 판단
+                .fetch();
+        return checkLastPage(pageable, results);
+    }
+
+    // 초보자 태그
+    public List<PlantListDto> findByBeginnerTag(int beginner) {
+        return queryFactory
+                .select(new QPlantListDto(
+                        plant
+                ))
+                .from(plant)
+                .where(isBeginner(beginner))
                 .orderBy(plant.plantName.asc())
                 .fetch();
     }
@@ -101,6 +106,7 @@ public class PlantQueryRepository {
 //        return plant.plantName.contains(plantName);
 //    }
 
+    // FullText Index 적용
     private BooleanExpression eqPlantName(String plantName) {
         if(ObjectUtils.isEmpty(plantName)) {
             return null;
@@ -123,6 +129,13 @@ public class PlantQueryRepository {
             return null;
         }
         return plant.id.eq(plantId);
+    }
+
+    private BooleanExpression isBeginner(int beginner) {
+        if(beginner==0) {
+            return plant.beginner.eq(0);
+        }
+        else return plant.beginner.eq(1);
     }
 
     // 무한 스크롤 처리
