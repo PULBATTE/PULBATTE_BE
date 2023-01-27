@@ -39,6 +39,14 @@ public class PlantSearchController {
         return ResponseEntity.ok(searchService.findByPlantTag(tag, pageable));
     }
 
+    // 초보자 태그 조회
+    @GetMapping(value = "/categories/{beginner}")
+    public ResponseEntity<PlantListResponseDto> findByBeginnerTag(
+            @PathVariable int beginner
+    ) {
+        return ResponseEntity.ok(searchService.findByBeginnerTag(beginner));
+    }
+
     // 식물 상세 조회
     @GetMapping(value = "/detail/{plantId}")
     public ResponseEntity<PlantDetailDto> findPlant(@PathVariable Long plantId) {

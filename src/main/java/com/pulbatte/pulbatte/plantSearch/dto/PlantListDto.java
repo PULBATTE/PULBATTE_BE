@@ -13,6 +13,7 @@ public class PlantListDto {
     private String plantName;
 
     private String plantTag;
+    private int beginner;
     private String image;
 
     @QueryProjection            // Q파일 생성
@@ -20,6 +21,7 @@ public class PlantListDto {
         this.id = plant.getId();
         this.plantName = plant.getPlantName();
         this.plantTag = plant.getPlantTag().toString();
+        this.beginner = plant.getBeginner();
         this.image = plant.getImage();
     }
 }

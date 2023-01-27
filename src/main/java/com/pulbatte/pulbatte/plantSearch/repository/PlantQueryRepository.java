@@ -85,6 +85,18 @@ public class PlantQueryRepository {
         return checkLastPage(pageable, results);
     }
 
+    // 초보자 태그
+    public List<PlantListDto> findByBeginnerTag(int beginner) {
+        return queryFactory
+                .select(new QPlantListDto(
+                        plant
+                ))
+                .from(plant)
+                .where(isBeginner(beginner))
+                .orderBy(plant.plantName.asc())
+                .fetch();
+    }
+
 //    private BooleanExpression eqPlantName(String plantName) {
 //        if(ObjectUtils.isEmpty(plantName)) {
 //            return null;
@@ -114,6 +126,13 @@ public class PlantQueryRepository {
             return null;
         }
         return plant.id.eq(plantId);
+    }
+
+    private BooleanExpression isBeginner(int beginner) {
+        if(ObjectUtils.isEmpty(beginner)) {
+            return null;
+        }
+        return plant.beginner.eq(1);
     }
 
     // 무한 스크롤 처리

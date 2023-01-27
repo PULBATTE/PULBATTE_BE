@@ -52,6 +52,14 @@ public class PlantSearchService {
         return queryRepository.findByPlantTag(tag, pageable);
     }
 
+    // 초보자 태그 조회
+    public PlantListResponseDto findByBeginnerTag(int beginner) {
+        List<PlantListDto> plantList = queryRepository.findByBeginnerTag(beginner);
+        return PlantListResponseDto.builder()
+                .plants(plantList)
+                .build();
+    }
+
     // 식물 상세 조회
     public PlantDetailDto getPlant(Long plantId) {
         Plant plant = plantRepository.findById(plantId).orElseThrow(
