@@ -33,8 +33,8 @@ public class PlantSearchService {
 //    }
 
     // 무한 스크롤 처리
-    public Slice<PlantListDto> getAllBySlice(Pageable pageable) {
-        return queryRepository.findAllBySlice(pageable);
+    public Slice<PlantListDto> getAllBySlice(Long idx, Pageable pageable) {
+        return queryRepository.findAllBySlice(idx, pageable);
     }
 
     // 식물 이름 검색
@@ -65,7 +65,7 @@ public class PlantSearchService {
         Plant plant = plantRepository.findById(plantId).orElseThrow(
                 () -> new CustomException(ErrorCode.NO_PLANT_FOUND)
         );
-        PlantDetailDto detailDto = queryRepository.findOne(plantId);
+//        PlantDetailDto detailDto = queryRepository.findOne(plantId);
         return PlantDetailDto.builder()
                 .plant(plant)
                 .build();

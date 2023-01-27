@@ -2,9 +2,7 @@ package com.pulbatte.pulbatte.plantSearch.repository;
 
 import com.pulbatte.pulbatte.plantSearch.dto.*;
 import com.pulbatte.pulbatte.plantSearch.entity.PlantTag;
-import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberTemplate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -13,16 +11,17 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 
 import static com.pulbatte.pulbatte.plantSearch.entity.QPlant.plant;
+import static org.springframework.util.ObjectUtils.isEmpty;
 
 
 @Repository
 public class PlantQueryRepository {
     private final JPAQueryFactory queryFactory;
+
     public PlantQueryRepository(JPAQueryFactory queryFactory) {
         this.queryFactory = queryFactory;
     }
@@ -39,12 +38,13 @@ public class PlantQueryRepository {
 //    }
 
     // 전체 목록 무한 스크롤
-    public Slice<PlantListDto> findAllBySlice(Pageable pageable) {
+    public Slice<PlantListDto> findAllBySlice(Long lastPlantId, Pageable pageable) {
         List<PlantListDto> results = queryFactory
                 .select(new QPlantListDto(
                         plant
                 ))
                 .from(plant)
+                .where(ltPlantId(lastPlantId))          // no-offset
                 .orderBy(plant.plantName.asc())
                 .limit(pageable.getPageSize()+1)            // 다음 페이지가 있는지 판단
                 .fetch();
@@ -108,7 +108,7 @@ public class PlantQueryRepository {
 
     // FullText Index 적용
     private BooleanExpression eqPlantName(String plantName) {
-        if(ObjectUtils.isEmpty(plantName)) {
+        if(isEmpty(plantName)) {
             return null;
         }
         NumberTemplate booleanTemplate = Expressions.numberTemplate(
@@ -118,14 +118,14 @@ public class PlantQueryRepository {
     }
 
     private BooleanExpression eqPlantTag(PlantTag tag) {
-        if(ObjectUtils.isEmpty(tag)) {
+        if(isEmpty(tag)) {
             return null;
         }
         return plant.plantTag.eq(tag);
     }
 
     private BooleanExpression eqPlantId(Long plantId) {
-        if(ObjectUtils.isEmpty(plantId)) {
+        if(isEmpty(plantId)) {
             return null;
         }
         return plant.id.eq(plantId);
@@ -133,9 +133,14 @@ public class PlantQueryRepository {
 
     private BooleanExpression isBeginner(int beginner) {
         if(beginner==0) {
-            return plant.beginner.eq(0);
+            return null;
         }
         else return plant.beginner.eq(1);
+    }
+
+    // no-offset
+    private BooleanExpression ltPlantId(Long plantId) {
+        return isEmpty(plantId) ? null : plant.id.lt(plantId);
     }
 
     // 무한 스크롤 처리
