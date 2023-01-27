@@ -40,7 +40,7 @@ public class PlantSearchController {
     }
 
     // 초보자 태그 조회
-    @GetMapping(value = "/categories/{beginner}")
+    @GetMapping(value = "/categories/beginner/{beginner}")
     public ResponseEntity<PlantListResponseDto> findByBeginnerTag(
             @PathVariable int beginner
     ) {

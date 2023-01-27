@@ -2,7 +2,9 @@ package com.pulbatte.pulbatte.plantSearch.repository;
 
 import com.pulbatte.pulbatte.plantSearch.dto.*;
 import com.pulbatte.pulbatte.plantSearch.entity.PlantTag;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberTemplate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -64,7 +66,7 @@ public class PlantQueryRepository {
     public List<PlantListDto> findByPlantName(@Param("plantName") String plantName) {
         return queryFactory
                 .select(new QPlantListDto(
-                plant
+                        plant
                 ))
                 .from(plant)
                 .where(eqPlantName(plantName))
@@ -104,6 +106,7 @@ public class PlantQueryRepository {
 //        return plant.plantName.contains(plantName);
 //    }
 
+    // FullText Index 적용
     private BooleanExpression eqPlantName(String plantName) {
         if(ObjectUtils.isEmpty(plantName)) {
             return null;
@@ -129,10 +132,10 @@ public class PlantQueryRepository {
     }
 
     private BooleanExpression isBeginner(int beginner) {
-        if(ObjectUtils.isEmpty(beginner)) {
-            return null;
+        if(beginner==0) {
+            return plant.beginner.eq(0);
         }
-        return plant.beginner.eq(1);
+        else return plant.beginner.eq(1);
     }
 
     // 무한 스크롤 처리
