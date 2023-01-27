@@ -1,9 +1,7 @@
 name: PULBATTE dev CI / CD
 
 on:
-  push:
-    branches: [ dev ]
-  pull_request:
+ push:
     branches: [ dev ]
 
 env:

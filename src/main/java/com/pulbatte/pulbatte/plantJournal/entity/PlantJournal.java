@@ -67,9 +67,21 @@ public class PlantJournal {
         this.user = user;
         this.plantName = plantJournalAddRequestDto.getPlantName();
         this.image = image;
-        this.waterCycle = plantJournalAddRequestDto.getWaterCycle();
-        this.nutritionCycle = plantJournalAddRequestDto.getNutritionCycle();
-        this.repottingCycle = plantJournalAddRequestDto.getRepottingCycle();
+        if(plantJournalAddRequestDto.getWaterCycle() <=0){
+            this.waterCycle = 1;
+        }else{
+            this.waterCycle = plantJournalAddRequestDto.getWaterCycle();
+        }
+        if(plantJournalAddRequestDto.getNutritionCycle() <=0){
+            this.nutritionCycle = 1;
+        }else{
+            this.nutritionCycle = plantJournalAddRequestDto.getNutritionCycle();
+        }
+        if(plantJournalAddRequestDto.getRepottingCycle() <=0){
+            this.repottingCycle = 1;
+        }else{
+            this.repottingCycle = plantJournalAddRequestDto.getRepottingCycle();
+        }
         this.waterDDay = waterDDay;
         this.nutritionDDay = nutritionDDay;
         this.repottingDDay = repottingDDay;

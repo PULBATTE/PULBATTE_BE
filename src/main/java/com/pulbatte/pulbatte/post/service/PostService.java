@@ -42,8 +42,7 @@ public class PostService {
     //게시글 생성
     public PostResponseDto createPost(PostRequestDto requestDto, User user, MultipartFile multipartFile) throws IOException {
         String image = null;
-        if (!multipartFile.isEmpty()) {                                     // 이미지 파일이 존재 할 경우
-            image = s3Uploader.upload(multipartFile, "static");     // s3이미지 업로드
+        if (multipartFile != null &&!multipartFile.isEmpty()) {                                     // 이미지 파일이 존재 할 경우            image = s3Uploader.upload(multipartFile, "static");     // s3이미지 업로드
         }else{
             image = "";
         }

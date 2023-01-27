@@ -6,7 +6,7 @@ CURRENT_PROFILE=$(curl -s http://localhost/profile)
 if [ $CURRENT_PROFILE == dev ]
 then
   IDLE_PORT=8082
-elif [ $CURRENT_PROFILE == dev2 ]
+elif [ $CURRENT_PROFILE == dev1 ]
 then
   IDLE_PORT=8081
 else
