@@ -23,8 +23,11 @@ public class DDayService {
     private final SseService sseService;
 
     @Transactional
-    @Scheduled(cron = "0 0 0 * * ?")	// 매일 00시 정각
+//    @Scheduled(cron = "0 0 0 * * ?")	// 매일 00시 정각
+//    @Scheduled(cron = "0/5 * * * * *") // 5초마다
+    @Scheduled(cron = "0 0 0/1 * * *") // 매 시간마다 스케줄
     public void Ddayschedule() {
+        System.out.println("11111");
         List<PlantJournal> plantJournalList = plantJournalRepository.findAll();
         for (PlantJournal plantJournal : plantJournalList){
             int water = plantJournal.getWaterDDay() - 1;
