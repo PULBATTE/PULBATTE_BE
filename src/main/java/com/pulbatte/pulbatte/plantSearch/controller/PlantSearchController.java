@@ -19,11 +19,8 @@ public class PlantSearchController {
     private final PlantSearchService searchService;
 
     @GetMapping
-    public ResponseEntity<Slice<PlantListDto>> getAllPlants(
-            @RequestParam Long idx,
-            Pageable pageable
-    ) {
-        return ResponseEntity.ok(searchService.getAllBySlice(idx, pageable));
+    public ResponseEntity<Slice<PlantListDto>> getAllPlants(Pageable pageable) {
+        return ResponseEntity.ok(searchService.getAllBySlice(pageable));
     }
 
     // 식물 이름 검색
