@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,7 +45,7 @@ public class PlantSearchService {
                 .build();
     }
 
-    public Page<PlantListDto> findByPlantTag(PlantTag tag, Pageable pageable) {
+    public Page<?> findByPlantTag(PlantTag tag, Pageable pageable) {
 //        return PlantListResponseDto.builder()
 //                .plants(plantList)
 //                .build();

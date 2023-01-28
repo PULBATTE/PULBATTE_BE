@@ -4,5 +4,7 @@ public enum PlantTag {
     leaf,
     flower,
     fruit,
-    cactus
+    cactus,
+    beginner,
+    all
 }

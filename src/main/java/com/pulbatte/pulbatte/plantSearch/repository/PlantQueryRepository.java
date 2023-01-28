@@ -10,6 +10,7 @@ import org.springframework.data.domain.*;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.pulbatte.pulbatte.plantSearch.entity.QPlant.plant;
@@ -79,22 +80,60 @@ public class PlantQueryRepository {
 
     // 태그 필터링
     public Page<PlantListDto> findByPlantTag(PlantTag tag, Pageable pageable) {
-        List<PlantListDto> results = queryFactory
-                .select(new QPlantListDto(
-                        plant
-                ))
-                .from(plant)
-                .where(eqPlantTag(tag))
-                .orderBy(plant.plantName.asc())
-                .limit(pageable.getPageSize())
-                .fetch();
+        List<PlantListDto> results = new ArrayList<>();
+        Long count;
+        if (tag.equals(PlantTag.beginner)) {
+            int beginner = 1;
+            results = queryFactory
+                    .select(new QPlantListDto(
+                            plant
+                    ))
+                    .from(plant)
+                    .where(isBeginner(beginner))
+                    .orderBy(plant.plantName.asc())
+                    .limit(pageable.getPageSize())
+                    .fetch();
 
-        Long count = queryFactory
-                .select(plant.count())
-                .from(plant)
-                .where(eqPlantTag(tag))
-                .fetchOne();
+            count = queryFactory
+                    .select(plant.count())
+                    .from(plant)
+                    .where(isBeginner(beginner))
+                    .fetchOne();
 
+        } else if (tag.equals(PlantTag.all)) {
+            results = queryFactory
+                    .select(new QPlantListDto(
+                            plant
+                    ))
+                    .from(plant)
+                    .orderBy(plant.plantName.asc())
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .fetch();
+
+            count = queryFactory
+                    .select(plant.count())
+                    .from(plant)
+                    .fetchOne();
+
+        } else {
+            results = queryFactory
+                    .select(new QPlantListDto(
+                            plant
+                    ))
+                    .from(plant)
+                    .where(eqPlantTag(tag))
+                    .orderBy(plant.plantName.asc())
+                    .limit(pageable.getPageSize())
+                    .fetch();
+
+            count = queryFactory
+                    .select(plant.count())
+                    .from(plant)
+                    .where(eqPlantTag(tag))
+                    .fetchOne();
+
+        }
         return new PageImpl<>(results, pageable, count);
     }
 
@@ -121,7 +160,7 @@ public class PlantQueryRepository {
 
     // FullText Index 적용
     private BooleanExpression eqPlantName(String plantName) {
-        if(isEmpty(plantName)) {
+        if (isEmpty(plantName)) {
             return null;
         }
         NumberTemplate booleanTemplate = Expressions.numberTemplate(
@@ -131,24 +170,23 @@ public class PlantQueryRepository {
     }
 
     private BooleanExpression eqPlantTag(PlantTag tag) {
-        if(isEmpty(tag)) {
+        if (isEmpty(tag)) {
             return null;
         }
         return plant.plantTag.eq(tag);
     }
 
     private BooleanExpression eqPlantId(Long plantId) {
-        if(isEmpty(plantId)) {
+        if (isEmpty(plantId)) {
             return null;
         }
         return plant.id.eq(plantId);
     }
 
     private BooleanExpression isBeginner(int beginner) {
-        if(beginner==0) {
+        if (beginner == 0) {
             return null;
-        }
-        else return plant.beginner.eq(1);
+        } else return plant.beginner.eq(1);
     }
 
     // no-offset
