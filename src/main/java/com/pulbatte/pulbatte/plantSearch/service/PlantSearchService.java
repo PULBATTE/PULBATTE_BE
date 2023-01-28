@@ -11,6 +11,7 @@ import com.pulbatte.pulbatte.plantSearch.dto.PlantListResponseDto;
 import com.pulbatte.pulbatte.plantSearch.repository.PlantQueryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -33,8 +34,8 @@ public class PlantSearchService {
 //    }
 
     // 무한 스크롤 처리
-    public Slice<PlantListDto> getAllBySlice(Long idx, Pageable pageable) {
-        return queryRepository.findAllBySlice(idx, pageable);
+    public Page<PlantListDto> getAllPlants(Pageable pageable) {
+        return queryRepository.findAll(pageable);
     }
 
     // 식물 이름 검색
@@ -45,7 +46,7 @@ public class PlantSearchService {
                 .build();
     }
 
-    public Slice<PlantListDto> findByPlantTag(PlantTag tag, Pageable pageable) {
+    public Page<PlantListDto> findByPlantTag(PlantTag tag, Pageable pageable) {
 //        return PlantListResponseDto.builder()
 //                .plants(plantList)
 //                .build();
@@ -53,11 +54,8 @@ public class PlantSearchService {
     }
 
     // 초보자 태그 조회
-    public PlantListResponseDto findByBeginnerTag(int beginner) {
-        List<PlantListDto> plantList = queryRepository.findByBeginnerTag(beginner);
-        return PlantListResponseDto.builder()
-                .plants(plantList)
-                .build();
+    public Page<PlantListDto> findByBeginnerTag(int beginner, Pageable pageable) {
+        return queryRepository.findByBeginnerTag(beginner, pageable);
     }
 
     // 식물 상세 조회

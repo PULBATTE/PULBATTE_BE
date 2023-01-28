@@ -6,8 +6,10 @@ import com.pulbatte.pulbatte.plantSearch.entity.PlantTag;
 import com.pulbatte.pulbatte.plantSearch.dto.PlantListResponseDto;
 import com.pulbatte.pulbatte.plantSearch.service.PlantSearchService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,11 +21,10 @@ public class PlantSearchController {
     private final PlantSearchService searchService;
 
     @GetMapping
-    public ResponseEntity<Slice<PlantListDto>> getAllPlants(
-            @RequestParam Long idx,
-            Pageable pageable
+    public ResponseEntity<Page<PlantListDto>> getAllPlants(
+            @PageableDefault(size = 20) Pageable pageable
     ) {
-        return ResponseEntity.ok(searchService.getAllBySlice(idx, pageable));
+        return ResponseEntity.ok(searchService.getAllPlants(pageable));
     }
 
     // 식물 이름 검색
@@ -34,20 +35,21 @@ public class PlantSearchController {
     }
 
     // 카테고리별 식물 조회
-    @GetMapping(value = "/categories/{tag}", produces = "application/json; charset=utf8")
-    public ResponseEntity<Slice<PlantListDto>> findByPlantTag(
+    @GetMapping(value = "/{tag}", produces = "application/json; charset=utf8")
+    public ResponseEntity<Page<PlantListDto>> findByPlantTag(
             @PathVariable PlantTag tag,
-            Pageable pageable
+            @PageableDefault(size = 20) Pageable pageable
     ) {
         return ResponseEntity.ok(searchService.findByPlantTag(tag, pageable));
     }
 
     // 초보자 태그 조회
-    @GetMapping(value = "/categories/beginner/{beginner}")
-    public ResponseEntity<PlantListResponseDto> findByBeginnerTag(
-            @PathVariable int beginner
+    @GetMapping(value = "/beginner/{beginner}")
+    public ResponseEntity<Page<PlantListDto>> findByBeginnerTag(
+            @PathVariable int beginner,
+            @PageableDefault(size = 20) Pageable pageable
     ) {
-        return ResponseEntity.ok(searchService.findByBeginnerTag(beginner));
+        return ResponseEntity.ok(searchService.findByBeginnerTag(beginner, pageable));
     }
 
     // 식물 상세 조회

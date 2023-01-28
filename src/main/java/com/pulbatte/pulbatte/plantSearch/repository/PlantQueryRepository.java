@@ -6,9 +6,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberTemplate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
+import org.springframework.data.domain.*;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -38,17 +36,23 @@ public class PlantQueryRepository {
 //    }
 
     // 전체 목록 무한 스크롤
-    public Slice<PlantListDto> findAllBySlice(Long lastPlantId, Pageable pageable) {
+    public Page<PlantListDto> findAll(Pageable pageable) {
         List<PlantListDto> results = queryFactory
                 .select(new QPlantListDto(
                         plant
                 ))
                 .from(plant)
-                .where(ltPlantId(lastPlantId))          // no-offset
                 .orderBy(plant.plantName.asc())
-                .limit(pageable.getPageSize()+1)            // 다음 페이지가 있는지 판단
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
-        return checkLastPage(pageable, results);
+
+        Long count = queryFactory
+                .select(plant.count())
+                .from(plant)
+                .fetchOne();
+
+        return new PageImpl<>(results, pageable, count);
     }
 
     // 단건 조회
@@ -74,7 +78,7 @@ public class PlantQueryRepository {
     }
 
     // 태그 필터링
-    public Slice<PlantListDto> findByPlantTag(PlantTag tag, Pageable pageable) {
+    public Page<PlantListDto> findByPlantTag(PlantTag tag, Pageable pageable) {
         List<PlantListDto> results = queryFactory
                 .select(new QPlantListDto(
                         plant
@@ -82,29 +86,38 @@ public class PlantQueryRepository {
                 .from(plant)
                 .where(eqPlantTag(tag))
                 .orderBy(plant.plantName.asc())
-                .limit(pageable.getPageSize()+1)            // 다음 페이지가 있는지 판단
+                .limit(pageable.getPageSize())
                 .fetch();
-        return checkLastPage(pageable, results);
+
+        Long count = queryFactory
+                .select(plant.count())
+                .from(plant)
+                .where(eqPlantTag(tag))
+                .fetchOne();
+
+        return new PageImpl<>(results, pageable, count);
     }
 
     // 초보자 태그
-    public List<PlantListDto> findByBeginnerTag(int beginner) {
-        return queryFactory
+    public Page<PlantListDto> findByBeginnerTag(int beginner, Pageable pageable) {
+        List<PlantListDto> results = queryFactory
                 .select(new QPlantListDto(
                         plant
                 ))
                 .from(plant)
                 .where(isBeginner(beginner))
                 .orderBy(plant.plantName.asc())
+                .limit(pageable.getPageSize())
                 .fetch();
-    }
 
-//    private BooleanExpression eqPlantName(String plantName) {
-//        if(ObjectUtils.isEmpty(plantName)) {
-//            return null;
-//        }
-//        return plant.plantName.contains(plantName);
-//    }
+        Long count = queryFactory
+                .select(plant.count())
+                .from(plant)
+                .where(isBeginner(beginner))
+                .fetchOne();
+
+        return new PageImpl<>(results, pageable, count);
+    }
 
     // FullText Index 적용
     private BooleanExpression eqPlantName(String plantName) {
@@ -139,19 +152,19 @@ public class PlantQueryRepository {
     }
 
     // no-offset
-    private BooleanExpression ltPlantId(Long plantId) {
-        return isEmpty(plantId) ? null : plant.id.lt(plantId);
-    }
+//    private BooleanExpression ltPlantId(Long plantId) {
+//        return isEmpty(plantId) ? null : plant.id.lt(plantId);
+//    }
 
     // 무한 스크롤 처리
-    private Slice<PlantListDto> checkLastPage(Pageable pageable, List<PlantListDto> results) {
-        boolean hasNext = false;            // 다음 페이지가 있는지 여부
-
-        if(results.size() > pageable.getPageSize()) {
-            hasNext = true;
-            results.remove(pageable.getPageSize());
-        }
-        return new SliceImpl<>(results, pageable, hasNext);
-    }
+//    private Slice<PlantListDto> checkLastPage(Pageable pageable, List<PlantListDto> results) {
+//        boolean hasNext = false;            // 다음 페이지가 있는지 여부
+//
+//        if(results.size() > pageable.getPageSize()) {
+//            hasNext = true;
+//            results.remove(pageable.getPageSize());
+//        }
+//        return new SliceImpl<>(results, pageable, hasNext);
+//    }
 
 }
