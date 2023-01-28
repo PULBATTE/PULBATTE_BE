@@ -55,21 +55,30 @@ public class PostService {
         Page<Post> postList = postRepository.findAllByOrderByCreatedAtDesc(pageable);
         Page<PostResponseDto> pageList = postList.map(
                 post -> new PostResponseDto(
-                        post, (long) post.getCommentList().size(),
-                        (long) post.getPostLike().size(), post.getImage()
+                        post,
+                        (long) post.getPostLike().size(),
+                        (long) post.getCommentList().size(),
+                        post.getImage()
                 ));
-        List<PostResponseDto> postResponseDto = new ArrayList<>();
+        /*List<PostResponseDto> postResponseDto = new ArrayList<>();
         for (Post post : postList) {
             Long commentCnt = commentRepository.countByPostId(post.getId());            // 댓글 수
             Long likeCnt = likeRepository.likeCnt(post.getId());                        // 좋아요 수
             String image = post.getImage();                                             // 이미지 url
             postResponseDto.add(new PostResponseDto(post,likeCnt,commentCnt,image));
-        }
+        }*/
         return pageList;                                         // 페이징 처리
     }
     // 게시글 태그별 출력 페이징 처리
     public  Page<PostResponseDto> getTagListPosts(String tag , Pageable pageable){
         Page<Post> postPage = postRepository.findAllByTagOrderByCreatedAtDesc(tag,pageable);    // 입력받은 tag 와 같은 게시글 찾기
+        Page<PostResponseDto> pageList = postPage.map(
+                post -> new PostResponseDto(
+                        post,
+                        (long) post.getCommentList().size(),
+                        (long) post.getPostLike().size(),
+                        post.getImage()
+                ));
         List<PostResponseDto> postResponseDto = new ArrayList<>();
         for (Post post : postPage) {
             Long commentCnt = commentRepository.countByPostId(post.getId());                    // 댓글 수
@@ -77,7 +86,7 @@ public class PostService {
             String image = post.getImage();                                                     // 이미지 url
             postResponseDto.add(new PostResponseDto(post,likeCnt,commentCnt,image));
         }
-        return new PageImpl<>(postResponseDto);
+        return pageList;
     }
     // 인기 게시글 출력
     public List<PostFavResponseDto> getPopularListPosts(){
