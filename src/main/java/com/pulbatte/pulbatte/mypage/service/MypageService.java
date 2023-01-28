@@ -37,8 +37,10 @@ public class MypageService {
         Page<Post> postList = postRepository.findAllByUserId(user.getId(), pageable);
         Page<PostResponseDto> paginList = postList.map(
                 post -> new PostResponseDto(
-                        post, (long) post.getCommentList().size(),
-                        (long) post.getPostLike().size(), post.getImage()
+                        post,
+                        (long) post.getPostLike().size(),
+                        (long) post.getCommentList().size(),
+                        post.getImage()
                 ));
         return paginList;
     }
