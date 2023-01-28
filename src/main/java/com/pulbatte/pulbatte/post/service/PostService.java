@@ -53,6 +53,11 @@ public class PostService {
     @Transactional(readOnly = true)
     public Page<PostResponseDto> getListPosts(Pageable pageable) {
         Page<Post> postList = postRepository.findAllByOrderByCreatedAtDesc(pageable);
+        Page<PostResponseDto> pageList = postList.map(
+                post -> new PostResponseDto(
+                        post, (long) post.getCommentList().size(),
+                        (long) post.getPostLike().size(), post.getImage()
+                ));
         List<PostResponseDto> postResponseDto = new ArrayList<>();
         for (Post post : postList) {
             Long commentCnt = commentRepository.countByPostId(post.getId());            // 댓글 수
@@ -60,7 +65,7 @@ public class PostService {
             String image = post.getImage();                                             // 이미지 url
             postResponseDto.add(new PostResponseDto(post,likeCnt,commentCnt,image));
         }
-        return new PageImpl<>(postResponseDto);                                         // 페이징 처리
+        return pageList;                                         // 페이징 처리
     }
     // 게시글 태그별 출력 페이징 처리
     public  Page<PostResponseDto> getTagListPosts(String tag , Pageable pageable){

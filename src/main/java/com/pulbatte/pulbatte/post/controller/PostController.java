@@ -36,7 +36,7 @@ public class PostController {
     // 게시글 전체 조회
     @GetMapping
     public Page<PostResponseDto> getListPosts(
-            @PageableDefault(size = 20) Pageable pageable) {
+            @PageableDefault(size = 10) Pageable pageable) {
         return postService.getListPosts(pageable);
     }
     // 게시글 태그별 조회
