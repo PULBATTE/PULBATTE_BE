@@ -90,6 +90,7 @@ public class PlantQueryRepository {
                     ))
                     .from(plant)
                     .where(isBeginner(beginner))
+                    .offset(pageable.getOffset())
                     .orderBy(plant.plantName.asc())
                     .limit(pageable.getPageSize())
                     .fetch();
@@ -124,6 +125,7 @@ public class PlantQueryRepository {
                     .from(plant)
                     .where(eqPlantTag(tag))
                     .orderBy(plant.plantName.asc())
+                    .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
                     .fetch();
 
