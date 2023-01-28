@@ -8,7 +8,6 @@ import com.pulbatte.pulbatte.plantSearch.service.PlantSearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +35,7 @@ public class PlantSearchController {
 
     // 카테고리별 식물 조회
     @GetMapping(value = "/{tag}", produces = "application/json; charset=utf8")
-    public ResponseEntity<Page<PlantListDto>> findByPlantTag(
+    public ResponseEntity<Page<?>> findByPlantTag(
             @PathVariable PlantTag tag,
             @PageableDefault(size = 20) Pageable pageable
     ) {
