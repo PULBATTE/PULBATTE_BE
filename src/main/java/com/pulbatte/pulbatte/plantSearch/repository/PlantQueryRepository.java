@@ -86,7 +86,7 @@ public class PlantQueryRepository {
                 .from(plant)
                 .where(eqPlantTag(tag))
                 .orderBy(plant.plantName.asc())
-                .limit(pageable.getPageSize()+1)            // 다음 페이지가 있는지 판단
+                .limit(pageable.getPageSize())
                 .fetch();
 
         Long count = queryFactory
@@ -99,15 +99,24 @@ public class PlantQueryRepository {
     }
 
     // 초보자 태그
-    public List<PlantListDto> findByBeginnerTag(int beginner) {
-        return queryFactory
+    public Page<PlantListDto> findByBeginnerTag(int beginner, Pageable pageable) {
+        List<PlantListDto> results = queryFactory
                 .select(new QPlantListDto(
                         plant
                 ))
                 .from(plant)
                 .where(isBeginner(beginner))
                 .orderBy(plant.plantName.asc())
+                .limit(pageable.getPageSize())
                 .fetch();
+
+        Long count = queryFactory
+                .select(plant.count())
+                .from(plant)
+                .where(isBeginner(beginner))
+                .fetchOne();
+
+        return new PageImpl<>(results, pageable, count);
     }
 
     // FullText Index 적용
@@ -148,14 +157,14 @@ public class PlantQueryRepository {
 //    }
 
     // 무한 스크롤 처리
-    private Slice<PlantListDto> checkLastPage(Pageable pageable, List<PlantListDto> results) {
-        boolean hasNext = false;            // 다음 페이지가 있는지 여부
-
-        if(results.size() > pageable.getPageSize()) {
-            hasNext = true;
-            results.remove(pageable.getPageSize());
-        }
-        return new SliceImpl<>(results, pageable, hasNext);
-    }
+//    private Slice<PlantListDto> checkLastPage(Pageable pageable, List<PlantListDto> results) {
+//        boolean hasNext = false;            // 다음 페이지가 있는지 여부
+//
+//        if(results.size() > pageable.getPageSize()) {
+//            hasNext = true;
+//            results.remove(pageable.getPageSize());
+//        }
+//        return new SliceImpl<>(results, pageable, hasNext);
+//    }
 
 }

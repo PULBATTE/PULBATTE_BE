@@ -34,7 +34,7 @@ public class PlantSearchService {
 //    }
 
     // 무한 스크롤 처리
-    public Page<PlantListDto> getAllBySlice(Pageable pageable) {
+    public Page<PlantListDto> getAllPlants(Pageable pageable) {
         return queryRepository.findAll(pageable);
     }
 
@@ -54,11 +54,8 @@ public class PlantSearchService {
     }
 
     // 초보자 태그 조회
-    public PlantListResponseDto findByBeginnerTag(int beginner) {
-        List<PlantListDto> plantList = queryRepository.findByBeginnerTag(beginner);
-        return PlantListResponseDto.builder()
-                .plants(plantList)
-                .build();
+    public Page<PlantListDto> findByBeginnerTag(int beginner, Pageable pageable) {
+        return queryRepository.findByBeginnerTag(beginner, pageable);
     }
 
     // 식물 상세 조회
