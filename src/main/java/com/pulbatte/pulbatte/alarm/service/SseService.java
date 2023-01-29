@@ -15,6 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -29,12 +32,14 @@ public class SseService {
     public SseEmitter subscribe(Long userId, String lastEventId) {
         String emitterId = makeTimeIncludeId(userId);           // emitter 아이디 생성
         SseEmitter emitter = emitterRepository.save(emitterId, new SseEmitter(TIMEOUT));            // emitter 생성
+
         emitter.onCompletion(() -> emitterRepository.deleteById(emitterId));            // 시간이 만료되면 자동 삭제
         emitter.onTimeout(() -> emitterRepository.deleteById(emitterId));
+        emitter.onError((e) -> emitterRepository.deleteById(emitterId));
 
         if(!emitterRepository.findAllEmitterStartWithByUserId(userId).isEmpty()) {
             SseEmitter sseEmitter = emitterRepository.findAllEmitterStartWithByUserId(userId).get(userId+1);
-            sseEmitter.complete();
+//            sseEmitter.complete();
             SseEmitter.SseEventBuilder eventBuilder = SseEmitter.event()
                     .reconnectTime(500)
                     .data(MediaType.APPLICATION_JSON);
@@ -66,13 +71,14 @@ public class SseService {
         try {
             emitter.send(SseEmitter.event()
                     .id(eventId)
-                    .name("connect")
-                    .data(data));
+                    .name("sse")
+                    .data(data, MediaType.APPLICATION_JSON));
         } catch (IOException exception) {
             emitterRepository.deleteById(emitterId);
         }
     }
 
+    // lastEventId가 존재하는지
     private boolean hasLostData(String lastEventId) {
         return !lastEventId.isEmpty();
     }
@@ -90,14 +96,35 @@ public class SseService {
         Long receiveId = user.getId();
 
         String eventId = receiveId + "_" + System.currentTimeMillis();
+        // SseEmitter 가져오기
         Map<String, SseEmitter> emitters = emitterRepository.findAllEmitterStartWithByUserId(receiveId);
         emitters.forEach(
                 (key, emitter) -> {
                     emitterRepository.saveEventCache(key, alarm);
-                    AlarmResponseDto alarmResponseDto = new AlarmResponseDto(alarm);
-                    sendAlarm(emitter, eventId, key, alarmResponseDto);
+//                    AlarmResponseDto alarmResponseDto = new AlarmResponseDto(alarm);
+//                    sendAlarm(emitter, eventId, key, alarmResponseDto);
+                    sendToClient(emitter, key, alarm);
                 }
         );
+    }
+
+    public void sendList(List userList, String content, AlarmType alarmType) {
+        List<Alarm> alarms = new ArrayList<>();
+        Map<String, SseEmitter> sseEmitters;
+
+        for(int i=0; i<userList.size(); i++) {
+            int finalI = i;
+            sseEmitters = new HashMap<>();
+            alarms.add(createAlarm(alarmType, content, (User) userList.get(i)));
+
+            sseEmitters.putAll(emitterRepository.findAllEmitterStartWithByUserId(((User) userList.get(i)).getId()));
+            sseEmitters.forEach(
+                    (key, emitter) -> {
+                        emitterRepository.saveEventCache(key, alarms.get(finalI));
+                        sendToClient(emitter, key, alarms.get(finalI));
+                    }
+            );
+        }
     }
 
     private Alarm createAlarm(AlarmType alarmType, String content, User user) {
@@ -107,5 +134,20 @@ public class SseService {
                 .user(user)
                 .isRead(false)
                 .build();
+    }
+
+    private void sendToClient(SseEmitter emitter, String id, Object data) {
+        try {
+            emitter.send(SseEmitter.event()
+                    .id(id)
+                    .name("sse")
+                    .data(data, MediaType.APPLICATION_JSON)
+                    .reconnectTime(0));
+            emitter.complete();
+            emitterRepository.deleteById(id);
+        } catch (Exception exception) {
+            emitterRepository.deleteById(id);
+            emitter.completeWithError(exception);
+        }
     }
 }
