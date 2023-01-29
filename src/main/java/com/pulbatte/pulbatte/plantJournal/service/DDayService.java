@@ -57,16 +57,14 @@ public class DDayService {
         for(PlantJournal journal : plantJournalList) {
             targets.add(journal.getUser());
 
-            for(User target : targets) {
-                if(journal.getWaterDDay()==0) {
-                    sseService.send(AlarmType.Dday, "물주기 Dday", target);
-                }
-                else if(journal.getNutritionDDay()==0) {
-                    sseService.send(AlarmType.Dday, "영양 주기 Dday", target);
-                }
-                else if(journal.getRepottingDDay()==0) {
-                    sseService.send(AlarmType.Dday, "분갈이 Dday", target);
-                }
+            if(journal.getWaterDDay()==0) {
+                sseService.sendList(targets, "물주기 Dday", AlarmType.Dday);
+            }
+            else if(journal.getNutritionDDay()==0) {
+                sseService.sendList(targets, "영양 주기 Dday", AlarmType.Dday);
+            }
+            else if(journal.getRepottingDDay()==0) {
+                sseService.sendList(targets, "분갈이 Dday", AlarmType.Dday);
             }
         }
     }
