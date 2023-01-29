@@ -1,6 +1,6 @@
 package com.pulbatte.pulbatte.plantTest.controller;
 
-import com.pulbatte.pulbatte.global.MsgResponseDto;
+import com.pulbatte.pulbatte.global.dto.MsgResponseDto;
 import com.pulbatte.pulbatte.global.exception.SuccessCode;
 import com.pulbatte.pulbatte.global.security.UserDetailsImpl;
 import com.pulbatte.pulbatte.plantTest.dto.PlantTestResponseDto;

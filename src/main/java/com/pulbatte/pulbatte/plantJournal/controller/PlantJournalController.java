@@ -1,6 +1,6 @@
 package com.pulbatte.pulbatte.plantJournal.controller;
 
-import com.pulbatte.pulbatte.global.MsgResponseDto;
+import com.pulbatte.pulbatte.global.dto.MsgResponseDto;
 import com.pulbatte.pulbatte.global.exception.SuccessCode;
 import com.pulbatte.pulbatte.global.security.UserDetailsImpl;
 import com.pulbatte.pulbatte.plantJournal.dto.PlantJournalAddRequestDto;

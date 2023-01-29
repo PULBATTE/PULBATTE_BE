@@ -1,6 +1,7 @@
 package com.pulbatte.pulbatte.user.controller;
 
-import com.pulbatte.pulbatte.global.MsgResponseDto;
+import com.pulbatte.pulbatte.global.dto.MsgResponseDto;
+import com.pulbatte.pulbatte.global.dto.RequestToken;
 import com.pulbatte.pulbatte.global.exception.SuccessCode;
 import com.pulbatte.pulbatte.global.jwt.TokenDto;
 import com.pulbatte.pulbatte.global.security.UserDetailsImpl;
@@ -9,7 +10,6 @@ import com.pulbatte.pulbatte.user.dto.SignupRequestDto;
 import com.pulbatte.pulbatte.user.dto.UserResponseDto;
 import com.pulbatte.pulbatte.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,9 +38,12 @@ public class UserController {
         return userService.login(loginRequestDto, response);
     }
     // 토큰 재발행
-    @GetMapping("/issue/token")
-    public MsgResponseDto reFreshToken(@AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletResponse response){
-        return userService.reFreshToken(userDetails.getUser().getUserId(), response);
+    @PostMapping("/issue/token")
+    public TokenDto reFreshToken(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestBody RequestToken requestToken,
+            HttpServletResponse response){
+        return userService.reFreshToken(userDetails.getUser(), response , requestToken);
     }
     // 아이디 중복 확인
     @GetMapping("/idDupleCheck")

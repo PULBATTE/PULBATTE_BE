@@ -3,7 +3,7 @@ package com.pulbatte.pulbatte.post.service;
 import com.pulbatte.pulbatte.comment.dto.CommentResponseDto;
 import com.pulbatte.pulbatte.comment.entity.Comment;
 import com.pulbatte.pulbatte.comment.repository.CommentRepository;
-import com.pulbatte.pulbatte.global.MsgResponseDto;
+import com.pulbatte.pulbatte.global.dto.MsgResponseDto;
 import com.pulbatte.pulbatte.global.S3Uploader;
 import com.pulbatte.pulbatte.global.exception.CustomException;
 import com.pulbatte.pulbatte.global.exception.ErrorCode;
@@ -20,7 +20,6 @@ import com.pulbatte.pulbatte.user.entity.UserRoleEnum;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

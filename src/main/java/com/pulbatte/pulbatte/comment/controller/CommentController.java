@@ -2,7 +2,7 @@ package com.pulbatte.pulbatte.comment.controller;
 
 import com.pulbatte.pulbatte.comment.dto.CommentRequestDto;
 import com.pulbatte.pulbatte.comment.service.CommentService;
-import com.pulbatte.pulbatte.global.MsgResponseDto;
+import com.pulbatte.pulbatte.global.dto.MsgResponseDto;
 import com.pulbatte.pulbatte.global.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

@@ -1,12 +1,11 @@
 package com.pulbatte.pulbatte.comment.service;
 
 import com.pulbatte.pulbatte.alarm.entity.AlarmType;
-import com.pulbatte.pulbatte.alarm.repository.AlarmRepository;
 import com.pulbatte.pulbatte.alarm.service.SseService;
 import com.pulbatte.pulbatte.comment.dto.CommentRequestDto;
 import com.pulbatte.pulbatte.comment.entity.Comment;
 import com.pulbatte.pulbatte.comment.repository.CommentRepository;
-import com.pulbatte.pulbatte.global.MsgResponseDto;
+import com.pulbatte.pulbatte.global.dto.MsgResponseDto;
 import com.pulbatte.pulbatte.global.exception.CustomException;
 import com.pulbatte.pulbatte.global.exception.ErrorCode;
 import com.pulbatte.pulbatte.global.exception.SuccessCode;
@@ -17,8 +16,6 @@ import com.pulbatte.pulbatte.user.entity.UserRoleEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Objects;
 
 @Service
 @Transactional

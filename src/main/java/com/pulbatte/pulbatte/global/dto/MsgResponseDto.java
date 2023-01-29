@@ -1,4 +1,4 @@
-package com.pulbatte.pulbatte.global;
+package com.pulbatte.pulbatte.global.dto;
 
 import com.pulbatte.pulbatte.global.exception.CustomException;
 import com.pulbatte.pulbatte.global.exception.SuccessCode;

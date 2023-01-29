@@ -1,6 +1,7 @@
 package com.pulbatte.pulbatte.user.service;
 
-import com.pulbatte.pulbatte.global.MsgResponseDto;
+import com.pulbatte.pulbatte.global.dto.MsgResponseDto;
+import com.pulbatte.pulbatte.global.dto.RequestToken;
 import com.pulbatte.pulbatte.global.entity.RefreshToken;
 import com.pulbatte.pulbatte.global.exception.CustomException;
 import com.pulbatte.pulbatte.global.exception.ErrorCode;
@@ -20,7 +21,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
@@ -84,9 +84,16 @@ public class  UserService {
         return tokenDto;
     }
     // 토큰 재발행
-    public MsgResponseDto reFreshToken(String userId, HttpServletResponse response){
-        response.addHeader(JwtUtil.ACCESS_TOKEN, jwtUtil.createToken(userId, "Access"));
-        return new MsgResponseDto(SuccessCode.SUCCESS_REFRESH_TOKEN);
+    public TokenDto reFreshToken(User user, HttpServletResponse response, RequestToken requestToken){
+        TokenDto tokenDto = null;
+        RefreshToken refreshToken = refreshTokenRepository.findByAccountUserId(user.getUserId()).orElseThrow(
+                () -> new CustomException(ErrorCode.DISMATCH_TOKEN)
+        );
+        if(refreshToken.getRefreshToken().equals(requestToken.getRefreshToken())){
+            response.addHeader(JwtUtil.ACCESS_TOKEN, jwtUtil.createToken(user.getUserId(), "Access"));
+            tokenDto = jwtUtil.createAllToken(user.getUserId());
+        }
+        return tokenDto;
     }
     // 중복 아이디 체크
     public MsgResponseDto checkUserIdDuplicate(String userId){

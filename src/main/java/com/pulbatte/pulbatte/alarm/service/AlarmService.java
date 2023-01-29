@@ -3,7 +3,7 @@ package com.pulbatte.pulbatte.alarm.service;
 import com.pulbatte.pulbatte.alarm.dto.AlarmListResponseDto;
 import com.pulbatte.pulbatte.alarm.dto.AlarmResponseDto;
 import com.pulbatte.pulbatte.alarm.repository.AlarmQueryRepository;
-import com.pulbatte.pulbatte.global.MsgResponseDto;
+import com.pulbatte.pulbatte.global.dto.MsgResponseDto;
 import com.pulbatte.pulbatte.global.exception.SuccessCode;
 import com.pulbatte.pulbatte.user.entity.User;
 import lombok.RequiredArgsConstructor;

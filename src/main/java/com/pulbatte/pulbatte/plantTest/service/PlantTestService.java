@@ -2,7 +2,6 @@ package com.pulbatte.pulbatte.plantTest.service;
 
 import com.pulbatte.pulbatte.bignner.entity.Beginner;
 import com.pulbatte.pulbatte.bignner.repository.BeginnerRepository;
-import com.pulbatte.pulbatte.global.MsgResponseDto;
 import com.pulbatte.pulbatte.global.exception.CustomException;
 import com.pulbatte.pulbatte.global.exception.ErrorCode;
 import com.pulbatte.pulbatte.plantTest.dto.PlantTestResponseDto;
