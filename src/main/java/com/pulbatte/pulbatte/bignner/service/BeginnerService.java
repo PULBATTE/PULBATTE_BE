@@ -9,7 +9,7 @@ import com.pulbatte.pulbatte.bignner.entity.BeginnerUser;
 import com.pulbatte.pulbatte.bignner.repository.BeginnerGraphRepository;
 import com.pulbatte.pulbatte.bignner.repository.BeginnerRepository;
 import com.pulbatte.pulbatte.bignner.repository.BeginnerUserRepository;
-import com.pulbatte.pulbatte.global.MsgResponseDto;
+import com.pulbatte.pulbatte.global.dto.MsgResponseDto;
 import com.pulbatte.pulbatte.global.exception.CustomException;
 import com.pulbatte.pulbatte.global.exception.ErrorCode;
 import com.pulbatte.pulbatte.global.exception.SuccessCode;

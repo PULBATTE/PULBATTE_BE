@@ -1,15 +1,11 @@
 package com.pulbatte.pulbatte.user.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.pulbatte.pulbatte.global.MsgResponseDto;
-import com.pulbatte.pulbatte.global.exception.SuccessCode;
-import com.pulbatte.pulbatte.global.jwt.JwtUtil;
 import com.pulbatte.pulbatte.post.dto.KakaoUserInfoDto;
 import com.pulbatte.pulbatte.user.service.KakaoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController

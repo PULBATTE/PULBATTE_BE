@@ -1,7 +1,7 @@
 package com.pulbatte.pulbatte.plantJournal.service;
 
 
-import com.pulbatte.pulbatte.global.MsgResponseDto;
+import com.pulbatte.pulbatte.global.dto.MsgResponseDto;
 import com.pulbatte.pulbatte.global.S3Uploader;
 import com.pulbatte.pulbatte.global.exception.CustomException;
 import com.pulbatte.pulbatte.global.exception.ErrorCode;

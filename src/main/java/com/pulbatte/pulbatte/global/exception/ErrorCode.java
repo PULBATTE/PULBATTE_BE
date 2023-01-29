@@ -11,6 +11,7 @@ public enum ErrorCode {
     DISMATCH_ADMIN_TOKEN(HttpStatus.BAD_REQUEST, "관리자 암호가 틀려 등록이 불가능합니다."),
     ALREADY_EXIST_USERNAME(HttpStatus.CONFLICT, "중복된 사용자가 존재합니다."),
     DISMATCH_PASSWORD(HttpStatus.BAD_REQUEST,"비밀번호가 일치하지 않습니다."),
+    DISMATCH_TOKEN(HttpStatus.BAD_REQUEST,"토큰이 일치하지 않습니다."),
 
     // NOT_FOUND
     NO_POST_FOUND(HttpStatus.NOT_FOUND, "게시글이 존재하지 않습니다."),
