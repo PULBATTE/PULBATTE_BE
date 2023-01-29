@@ -60,7 +60,7 @@ public class  UserService {
     }
     // 로그인
     @Transactional(readOnly = false)
-    public MsgResponseDto login(UserRequestDto loginRequestDto, HttpServletResponse response) {
+    public TokenDto login(UserRequestDto loginRequestDto, HttpServletResponse response) {
         String userId = loginRequestDto.getUserId();
         String password = loginRequestDto.getPassword();
         User user = userRepository.findByUserId(userId).orElseThrow(                                                // 아이디 확인
@@ -81,7 +81,7 @@ public class  UserService {
             refreshTokenRepository.save(newToken);
         }
         setHeader(response,tokenDto);
-        return new MsgResponseDto(SuccessCode.LOG_IN);
+        return tokenDto;
     }
     // 토큰 재발행
     public MsgResponseDto reFreshToken(String userId, HttpServletResponse response){
@@ -106,6 +106,5 @@ public class  UserService {
     }
     private void setHeader(HttpServletResponse response, TokenDto tokenDto){
         response.addHeader(JwtUtil.ACCESS_TOKEN,tokenDto.getAccessToken());
-        response.addHeader(JwtUtil.REFRESH_TOKEN,tokenDto.getRefreshToken());
     }
 }

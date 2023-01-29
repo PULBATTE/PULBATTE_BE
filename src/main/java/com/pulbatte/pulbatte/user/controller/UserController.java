@@ -2,6 +2,7 @@ package com.pulbatte.pulbatte.user.controller;
 
 import com.pulbatte.pulbatte.global.MsgResponseDto;
 import com.pulbatte.pulbatte.global.exception.SuccessCode;
+import com.pulbatte.pulbatte.global.jwt.TokenDto;
 import com.pulbatte.pulbatte.global.security.UserDetailsImpl;
 import com.pulbatte.pulbatte.user.dto.UserRequestDto;
 import com.pulbatte.pulbatte.user.dto.SignupRequestDto;
@@ -30,12 +31,11 @@ public class UserController {
     }
     // 로그인
     @PostMapping("/signin")
-    public MsgResponseDto login(
+    public TokenDto login(
             @RequestBody UserRequestDto loginRequestDto,
             HttpServletResponse response) {
         //클라이언트에 반환하기 위해 response 객체
-        userService.login(loginRequestDto, response);
-        return new MsgResponseDto(SuccessCode.LOG_IN);
+        return userService.login(loginRequestDto, response);
     }
     // 토큰 재발행
     @GetMapping("/issue/token")
