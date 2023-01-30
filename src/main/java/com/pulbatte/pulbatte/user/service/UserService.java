@@ -84,14 +84,20 @@ public class  UserService {
         return tokenDto;
     }
     // 토큰 재발행
-    public TokenDto reFreshToken(User user, HttpServletResponse response, RequestToken requestToken){
-        TokenDto tokenDto = null;
+    public TokenDto reFreshToken(/*User user,*/HttpServletResponse response, RequestToken requestToken){
+        TokenDto tokenDto;
+        User user = userRepository.findByUserId(requestToken.getUserEmail()).orElseThrow(
+            () -> new CustomException(ErrorCode.NO_EXIST_USER)
+        );
         RefreshToken refreshToken = refreshTokenRepository.findByAccountUserId(user.getUserId()).orElseThrow(
                 () -> new CustomException(ErrorCode.DISMATCH_TOKEN)
         );
         if(refreshToken.getRefreshToken().equals(requestToken.getRefreshToken())){
             response.addHeader(JwtUtil.ACCESS_TOKEN, jwtUtil.createToken(user.getUserId(), "Access"));
             tokenDto = jwtUtil.createAllToken(user.getUserId());
+            refreshTokenRepository.save(refreshToken.updateToken(tokenDto.getRefreshToken()));
+        }else {
+            throw new CustomException(ErrorCode.DISMATCH_TOKEN);
         }
         return tokenDto;
     }

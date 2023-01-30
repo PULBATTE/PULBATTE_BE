@@ -12,6 +12,8 @@ public enum ErrorCode {
     ALREADY_EXIST_USERNAME(HttpStatus.CONFLICT, "중복된 사용자가 존재합니다."),
     DISMATCH_PASSWORD(HttpStatus.BAD_REQUEST,"비밀번호가 일치하지 않습니다."),
     DISMATCH_TOKEN(HttpStatus.BAD_REQUEST,"토큰이 일치하지 않습니다."),
+    //401 Error
+    ALREADY_VALIDITY_TOKEN(HttpStatus.UNAUTHORIZED,"Expired"),
 
     // NOT_FOUND
     NO_POST_FOUND(HttpStatus.NOT_FOUND, "게시글이 존재하지 않습니다."),
@@ -46,6 +48,7 @@ public enum ErrorCode {
     NO_WATER_D_DAY(HttpStatus.BAD_REQUEST, "물 주는 날이 아닙니다."),
     NO_NUTRITION_D_DAY(HttpStatus.BAD_REQUEST, "영양제 주는 날이 아닙니다."),
     NO_REPOTTING_D_DAY(HttpStatus.BAD_REQUEST, "분갈이 하는 날이 아닙니다."),
+
 
     ALREADY_EXIST_DATE(HttpStatus.BAD_REQUEST,"중복된 데이터입니다"),
     END_GUIDE(HttpStatus.BAD_REQUEST,"가이드가 종료되었습니다.");
