@@ -42,8 +42,8 @@ public class PlantJournalDiaryService {
     }
 
     // 식물 일지 다이어리 리스트
-    public List<PlantJournalDiaryResponseDto> GetPlantJournalDiaryList(User user) {
-        List<PlantJournalDiary> plantJournalDiaryList = plantJournalDiaryRepository.findAllByUserId(user.getId());
+    public List<PlantJournalDiaryResponseDto> GetPlantJournalDiaryList(User user, Long plantjournalid) {
+        List<PlantJournalDiary> plantJournalDiaryList = plantJournalDiaryRepository.findAllByUserIdAndPlantJournalId(user.getId(), plantjournalid);
         List<PlantJournalDiaryResponseDto> plantJournalDiaryResponseDtoList = new ArrayList<>();
         for (PlantJournalDiary plantJournalDiary : plantJournalDiaryList) {
             plantJournalDiaryResponseDtoList.add(new PlantJournalDiaryResponseDto(plantJournalDiary));
