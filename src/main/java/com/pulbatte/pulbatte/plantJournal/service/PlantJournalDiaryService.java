@@ -42,8 +42,8 @@ public class PlantJournalDiaryService {
     }
 
     // 식물 일지 다이어리 리스트
-    public List<PlantJournalDiaryResponseDto> GetPlantJournalDiaryList(User user) {
-        List<PlantJournalDiary> plantJournalDiaryList = plantJournalDiaryRepository.findAllByUserId(user.getId());
+    public List<PlantJournalDiaryResponseDto> GetPlantJournalDiaryList(User user, Long plantjournalid) {
+        List<PlantJournalDiary> plantJournalDiaryList = plantJournalDiaryRepository.findAllByUserIdAndPlantJournalId(user.getId(), plantjournalid);
         List<PlantJournalDiaryResponseDto> plantJournalDiaryResponseDtoList = new ArrayList<>();
         for (PlantJournalDiary plantJournalDiary : plantJournalDiaryList) {
             plantJournalDiaryResponseDtoList.add(new PlantJournalDiaryResponseDto(plantJournalDiary));
@@ -67,8 +67,13 @@ public class PlantJournalDiaryService {
 
     @Transactional
     public List<CalendarResponseDto> GetCalendar(User user, Long plantjournalid) {
-//        List<DdayClick> ddayClicks = ddayClickRepository.findAllByUserIdAndPlantJournalId(user.getId(),plantjournalid);
-        List<DdayClick> ddayClicks = ddayClickRepository.findAllByPlantJournalId(plantjournalid);
+        PlantJournal plantJournal = plantJournalRepository.findById(plantjournalid).orElseThrow(
+                () -> new CustomException(ErrorCode.NO_PLANT_JOURNAL_DIARY_FOUND)
+        );
+        if(plantJournal.getUser().getId() != user.getId()){
+            throw new CustomException(ErrorCode.NO_FORBIDDEN_PLANTJOURNAL);
+        }
+        List<DdayClick> ddayClicks = ddayClickRepository.findAllByUserIdAndPlantJournalId(user.getId(),plantjournalid);
         List<CalendarResponseDto> calendarResponseDtoList = new ArrayList<>();
         for (DdayClick ddayClick : ddayClicks) {
             int water = 0;

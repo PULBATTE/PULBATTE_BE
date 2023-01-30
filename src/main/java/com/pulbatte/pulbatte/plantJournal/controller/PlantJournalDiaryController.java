@@ -49,11 +49,12 @@ public class PlantJournalDiaryController {
         return plantJournalDiaryService.GetPlantJournalDiary(userDetails.getUser(),plantjournalid,plantjournaldiaryid);
     }
 
-    @GetMapping("/diarys")  // 식물 일지 다이어리 리스트 조회
+    @GetMapping("/diarys/{plantjournalid}")  // 식물 일지 다이어리 리스트 조회
     public List<PlantJournalDiaryResponseDto> GetPlantJournalDiaryList(
-            @AuthenticationPrincipal UserDetailsImpl userDetails
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable Long plantjournalid
     ){
-        return plantJournalDiaryService.GetPlantJournalDiaryList(userDetails.getUser());
+        return plantJournalDiaryService.GetPlantJournalDiaryList(userDetails.getUser(),plantjournalid);
     }
 
     @PutMapping("/diary/{plantjournalid}/{plantjournaldiaryid}") // 식물 일지 다이어리 수정
