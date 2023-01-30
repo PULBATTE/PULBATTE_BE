@@ -14,12 +14,14 @@ import com.pulbatte.pulbatte.post.repository.PostRepository;
 import com.pulbatte.pulbatte.user.entity.User;
 import com.pulbatte.pulbatte.user.entity.UserRoleEnum;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class CommentService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
@@ -41,9 +43,9 @@ public class CommentService {
             }
             commentRepository.save(new Comment(commentRequestDto, post, user, childComment));    //자식 댓글로 저장
         }
-        if(!post.getUser().getUserId().equals(user.getUserId())) {
-            sseService.send(AlarmType.comment,post.getTitle() + " 게시글에 새로운 댓글이 등록되었습니다.", user);
-        }
+        log.info("send 실행 전");
+        sseService.send(AlarmType.comment,post.getTitle() + " 게시글에 새로운 댓글이 등록되었습니다.", post.getUser());
+        log.info("send 실행 후");
         return new MsgResponseDto(SuccessCode.CREATE_COMMENT);
     }
     //댓글 수정

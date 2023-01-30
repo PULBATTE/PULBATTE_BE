@@ -3,6 +3,7 @@ package com.pulbatte.pulbatte.alarm.dto;
 import com.pulbatte.pulbatte.alarm.entity.Alarm;
 import com.pulbatte.pulbatte.alarm.entity.AlarmType;
 import com.querydsl.core.annotations.QueryProjection;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
