@@ -1,6 +1,8 @@
 package com.pulbatte.pulbatte.global.jwt;
 
 import com.pulbatte.pulbatte.global.entity.RefreshToken;
+import com.pulbatte.pulbatte.global.exception.CustomException;
+import com.pulbatte.pulbatte.global.exception.ErrorCode;
 import com.pulbatte.pulbatte.global.repository.RefreshTokenRepository;
 import com.pulbatte.pulbatte.global.security.UserDetailsServiceImpl;
 import com.pulbatte.pulbatte.user.entity.UserRoleEnum;
@@ -36,7 +38,7 @@ public class JwtUtil {
     private static final String BEARER_PREFIX = "Bearer ";
     public static final String ACCESS_TOKEN = "Authorization";
     public static final String REFRESH_TOKEN = "Refresh_Token";
-    private static final long TOKEN_TIME = 6000 * 6000 * 100000L; //60 * 60 * 1000L;
+    private static final long TOKEN_TIME = 60 * 60 * 10000000000L;
     private static final long REFRESH_TOKEN_TIME = 6000 * 6000 * 100000L;
     @Value("${jwt.secret.key}")
     private String secretKey;
@@ -83,6 +85,7 @@ public class JwtUtil {
             log.info("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.");
         } catch (ExpiredJwtException e) {
             log.info("Expired JWT token, 만료된 JWT token 입니다.");
+            /*throw new CustomException(ErrorCode.ALREADY_VALIDITY_TOKEN);*/
         } catch (UnsupportedJwtException e) {
             log.info("Unsupported JWT token, 지원되지 않는 JWT 토큰 입니다.");
         } catch (IllegalArgumentException e) {

@@ -40,10 +40,10 @@ public class UserController {
     // 토큰 재발행
     @PostMapping("/issue/token")
     public TokenDto reFreshToken(
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            /*@AuthenticationPrincipal UserDetailsImpl userDetails,*/
             @RequestBody RequestToken requestToken,
             HttpServletResponse response){
-        return userService.reFreshToken(userDetails.getUser(), response , requestToken);
+        return userService.reFreshToken(/*userDetails.getUser(), */response , requestToken);
     }
     // 아이디 중복 확인
     @GetMapping("/idDupleCheck")
