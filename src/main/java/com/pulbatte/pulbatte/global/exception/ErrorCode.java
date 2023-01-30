@@ -25,11 +25,15 @@ public enum ErrorCode {
     NO_EXIST_COMMENT(HttpStatus.NOT_FOUND, "댓글이 존재하지 않습니다."),
     NO_EXIST_CLICKTAG(HttpStatus.NOT_FOUND,"카테고리를 찾을 수 없습니다."),
 
+    //Forbidden
+    NO_FORBIDDEN_PLANTJOURNAL(HttpStatus.FORBIDDEN, "본인의 식물 일지에만 접근이 가능합니다"),
+
     // UNAUTHORIZED
     NO_MODIFY_POST(HttpStatus.UNAUTHORIZED,"게시글 수정 권한이 없습니다."),
     NO_MODIFY_COMMENT(HttpStatus.UNAUTHORIZED,"댓글 수정 권한이 없습니다."),
     NO_DELETE_POST(HttpStatus.UNAUTHORIZED,"게시글 삭제 권한이 없습니다."),
     NO_DELETE_COMMENT(HttpStatus.UNAUTHORIZED,"댓글 삭제 권한이 없습니다."),
+    NO_MODIFY_PLANT_JOURNAL(HttpStatus.UNAUTHORIZED, "본인의 식물만 조회할 수 있습니다."),
 
     // CONFLICT
     DUPLICATE_RESOURCE(HttpStatus.CONFLICT, "데이터가 이미 존재합니다"),
