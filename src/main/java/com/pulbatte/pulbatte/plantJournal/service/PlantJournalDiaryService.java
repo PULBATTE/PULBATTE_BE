@@ -67,7 +67,8 @@ public class PlantJournalDiaryService {
 
     @Transactional
     public List<CalendarResponseDto> GetCalendar(User user, Long plantjournalid) {
-        List<DdayClick> ddayClicks = ddayClickRepository.findAllByUserIdAndPlantJournalId(user.getId(),plantjournalid);
+//        List<DdayClick> ddayClicks = ddayClickRepository.findAllByUserIdAndPlantJournalId(user.getId(),plantjournalid);
+        List<DdayClick> ddayClicks = ddayClickRepository.findAllByPlantJournalId(plantjournalid);
         List<CalendarResponseDto> calendarResponseDtoList = new ArrayList<>();
         for (DdayClick ddayClick : ddayClicks) {
             int water = 0;
@@ -77,17 +78,24 @@ public class PlantJournalDiaryService {
             for (CalendarResponseDto calendarResponseDto : calendarResponseDtoList) {
                 if (calendarResponseDto.getLocalDate().equals(ddayClick.getLocalDate())) {
                     cheak = true;
+                    System.out.println(ddayClick.getClickTag());
                     if (ddayClick.getClickTag().equals("water")) {
                         calendarResponseDto.update(calendarResponseDto.getWater() + 1, calendarResponseDto.getRepot(), calendarResponseDto.getNutrition());
                     } else if (ddayClick.getClickTag().equals("nutrition")) {
-                        calendarResponseDto.update(calendarResponseDto.getWater() + 1, calendarResponseDto.getRepot(), calendarResponseDto.getNutrition() + 1);
+                        calendarResponseDto.update(calendarResponseDto.getWater(), calendarResponseDto.getRepot(), calendarResponseDto.getNutrition() + 1);
                     } else {
                         calendarResponseDto.update(calendarResponseDto.getWater(), calendarResponseDto.getRepot() + 1, calendarResponseDto.getNutrition());
                     }
                 }
             }
             if (!cheak) {
-                calendarResponseDtoList.add(new CalendarResponseDto(ddayClick.getLocalDate(), water, repot, nutrition));
+                if (ddayClick.getClickTag().equals("water")) {
+                    calendarResponseDtoList.add(new CalendarResponseDto(ddayClick.getLocalDate(), water+1, repot, nutrition));
+                } else if (ddayClick.getClickTag().equals("nutrition")) {
+                    calendarResponseDtoList.add(new CalendarResponseDto(ddayClick.getLocalDate(), water, repot, nutrition+1));
+                } else {
+                    calendarResponseDtoList.add(new CalendarResponseDto(ddayClick.getLocalDate(), water, repot+1, nutrition));
+                }
             }
         }
 
