@@ -73,6 +73,15 @@ public class PostController {
             @RequestPart(value = "image" ,required = false) MultipartFile multipartFile) throws IOException {
         return postService.updatePost(userDetails.getUser(), postId, request, multipartFile);
     }
+    // 게시글 내용 수정
+    @PutMapping("/postContents/{postId}")
+    public PostResponseDto updatePostContents(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable Long postId,
+            @RequestPart PostRequestDto request) throws IOException {
+        return postService.updatePostContents(userDetails.getUser(),postId,request);
+    }
+
     // 게시글 삭제
     @DeleteMapping("/{postId}")
     public MsgResponseDto deletePost(
