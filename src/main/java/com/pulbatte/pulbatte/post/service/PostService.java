@@ -192,7 +192,7 @@ public class PostService {
         Post post;
         if (user.getRole().equals(UserRoleEnum.ADMIN)) {                                    // admin 계정일 경우
             post = postRepository.findById(id).orElseThrow(                                 // 입력받은 id와 같은 데이터 수정
-                    () -> new CustomException(ErrorCode.NO_POST_FOUND)                     // 없으면 에러 출력
+                    () -> new CustomException(ErrorCode.NO_POST_FOUND)                      // 없으면 에러 출력
             );
         } else {                                                                            // 일반 user 계정일 경우
             post = postRepository.findByIdAndNickname(id, user.getNickname()).orElseThrow(  // 추가 검증
@@ -214,6 +214,27 @@ public class PostService {
             posts.update(image);
         }
         return new PostResponseDto(post, commentList, image);
+    }
+    // 게시글 내용 수정
+    @Transactional
+    public PostResponseDto updatePostContents(User user, Long id, PostRequestDto request) throws IOException{
+        Post post;
+        if (user.getRole().equals(UserRoleEnum.ADMIN)) {                                    // admin 계정일 경우
+            post = postRepository.findById(id).orElseThrow(                                 // 입력받은 id와 같은 데이터 수정
+                    () -> new CustomException(ErrorCode.NO_POST_FOUND)                      // 없으면 에러 출력
+            );
+        } else {                                                                            // 일반 user 계정일 경우
+            post = postRepository.findByIdAndNickname(id, user.getNickname()).orElseThrow(  // 추가 검증
+                    () -> new CustomException(ErrorCode.NO_POST_FOUND)
+            );
+        }
+        post.update(request);
+        List<CommentResponseDto> commentList = new ArrayList<>();                           // 댓글 리스트
+        for (Comment comment : post.getCommentList()) {
+            commentList.add(new CommentResponseDto(comment));
+        }
+
+        return new PostResponseDto(post, commentList);
     }
     //게시글 삭제
     @Transactional
@@ -242,7 +263,7 @@ public class PostService {
         );
         if (likeRepository.findByPostIdAndUserId(postId, user.getId()).isEmpty()) { // postLike 에 값이 있는지 확인
             likeRepository.save(new PostLike(post, user));                          // 없으면 저장
-            if(likeRepository.likeCnt(postId)>3){
+            if(likeRepository.likeCnt(postId)>4){
                 LocalDateTime favLikeTime = LocalDateTime.now();
                 post.updateFaveLikeTime(favLikeTime);
                 System.out.println(favLikeTime);

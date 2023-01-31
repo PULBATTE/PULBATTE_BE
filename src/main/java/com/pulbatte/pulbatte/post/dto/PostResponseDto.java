@@ -59,6 +59,18 @@ public class PostResponseDto {
         this.modifiedAt = post.getModifiedAt();     // 게시글 수정 시간
         this.commentList = commentList;             // 댓글 리스트
     }
+    // 게시글 내용 수정 Response
+    public PostResponseDto(Post post ,List<CommentResponseDto> commentList){
+        this.id = post.getId();                     // 게시글 아이디
+        this.title = post.getTitle();               // 제목
+        this.content = post.getContent();           // 내용
+        this.nickname = post.getNickname();         // 작성자 닉네임
+        this.image = post.getImage();               // 이미지 url
+        this.tag = post.getTag();                   // 게시글 카테고리
+        this.createdAt = post.getCreatedAt();       // 게시글 작성 시간
+        this.modifiedAt = post.getModifiedAt();     // 게시글 수정 시간
+        this.commentList = commentList;             // 댓글 리스트
+    }
     // 게시글 상세 조회(guest)
     public PostResponseDto(Post post ,List<CommentResponseDto> commentList, String image,Long likeCnt,Long commentCnt,String profileImage){
         this.id = post.getId();                             // 게시글 아이디
