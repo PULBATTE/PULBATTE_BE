@@ -63,7 +63,7 @@ public class JwtUtil {
         return null;
     }
     public TokenDto createAllToken(String userId){
-        return new TokenDto(createToken(userId,"Access"),createToken(userId,"Refresh"));
+        return new TokenDto(createToken(userId,"Access"),createToken(userId,"Refresh"),"200");
     }
     public String createToken(String userId, String type) {
         Date date = new Date();

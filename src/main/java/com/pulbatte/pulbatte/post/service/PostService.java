@@ -42,7 +42,7 @@ public class PostService {
     public PostResponseDto createPost(PostRequestDto requestDto, User user, MultipartFile multipartFile) throws IOException {
         String image = null;
         if (multipartFile != null &&!multipartFile.isEmpty()) {                                     // 이미지 파일이 존재 할 경우            image = s3Uploader.upload(multipartFile, "static");     // s3이미지 업로드
-            image = s3Uploader.upload(multipartFile, "static");                             // s3이미지 업로드
+            image = s3Uploader.upload(multipartFile, "post");                             // s3이미지 업로드
         }else{
             image = "";
         }
@@ -60,13 +60,6 @@ public class PostService {
                         (long) post.getCommentList().size(),
                         post.getImage()
                 ));
-        /*List<PostResponseDto> postResponseDto = new ArrayList<>();
-        for (Post post : postList) {
-            Long commentCnt = commentRepository.countByPostId(post.getId());            // 댓글 수
-            Long likeCnt = likeRepository.likeCnt(post.getId());                        // 좋아요 수
-            String image = post.getImage();                                             // 이미지 url
-            postResponseDto.add(new PostResponseDto(post,likeCnt,commentCnt,image));
-        }*/
         return pageList;                                         // 페이징 처리
     }
     // 게시글 태그별 출력 페이징 처리
@@ -197,11 +190,11 @@ public class PostService {
         }
         String image = null;
         if (!multipartFile.isEmpty()) {                                                     // 사진이 수정된 경우
-            image = (s3Uploader.upload(multipartFile, "static"));                   // 새로들어온 이미지 s3 저장
+            image = (s3Uploader.upload(multipartFile, "post"));                   // 새로들어온 이미지 s3 저장
             Post posts = postRepository.findById(id).orElseThrow(
                     () -> new CustomException(ErrorCode.NO_POST_FOUND)
             );
-            s3Uploader.delete(posts.getImage(), "static");                          // 이전 이미지 파일 삭제
+            s3Uploader.delete(posts.getImage(), "post");                          // 이전 이미지 파일 삭제
             posts.update(image);
         }
         return new PostResponseDto(post, commentList, image);
@@ -222,7 +215,7 @@ public class PostService {
         Post posts = postRepository.findById(id).orElseThrow(
                 () -> new CustomException(ErrorCode.NO_POST_FOUND)
         );
-        s3Uploader.delete(posts.getImage(), "static");                              // 입력받은 아이디와 같은 이미지 삭제
+        s3Uploader.delete(posts.getImage(), "post");                              // 입력받은 아이디와 같은 이미지 삭제
         postRepository.delete(post);
     }
     //게시글 좋아요, 좋아요 취소

@@ -43,7 +43,7 @@ public class PostController {
     @GetMapping("/category/{tag}")
     public Page<PostResponseDto> getTagListPosts(
             @PathVariable String tag,
-            @PageableDefault(size = 20) Pageable pageable){
+            @PageableDefault(size = 10) Pageable pageable){
         return postService.getTagListPosts(tag,pageable);
     }
     // 인기 게시글 조회
