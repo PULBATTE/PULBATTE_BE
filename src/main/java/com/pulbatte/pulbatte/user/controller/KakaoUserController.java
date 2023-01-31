@@ -1,6 +1,7 @@
 package com.pulbatte.pulbatte.user.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.pulbatte.pulbatte.global.jwt.TokenDto;
 import com.pulbatte.pulbatte.post.dto.KakaoUserInfoDto;
 import com.pulbatte.pulbatte.user.service.KakaoService;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,7 @@ public class KakaoUserController {
     private final KakaoService kakaoService;
 
     @PostMapping("/kakao/callback")
-    public KakaoUserInfoDto kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
+    public TokenDto kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
         // code: 카카오 서버로부터 받은 인가 코드
         /*String createToken = kakaoService.kakaoLogin(code, response);
 

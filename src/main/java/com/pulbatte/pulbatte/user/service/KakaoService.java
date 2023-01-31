@@ -39,7 +39,7 @@ public class KakaoService {
 
 
     // kakao 로그인해 사용자 정보 가져오기
-    public KakaoUserInfoDto kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
+    public TokenDto kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
         // 1. 인가 코드에서 액세스 토큰 얻기
         String accessToken = getToken(code);
         // 2. 토큰으로 카카오 API 호출 : "액세스 토큰"으로 "카카오 사용자 정보" 가져오기
@@ -59,7 +59,7 @@ public class KakaoService {
         }
         setHeader(response,tokenDto);
 
-        return kakaoUserInfo;
+        return tokenDto;
         // 4. JWT 토큰 헤더로 반환
 //        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(kakaoUser.getUserId(), kakaoUser.getRole()));
        /* String createToken = jwtUtil.createToken(kakaoUser.getUserId(), kakaoUser.getRole());
