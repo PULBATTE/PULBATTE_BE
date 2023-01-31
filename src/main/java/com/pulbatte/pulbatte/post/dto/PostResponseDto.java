@@ -41,6 +41,7 @@ public class PostResponseDto {
         this.tag = post.getTag();                   // 게시글 카테고리
         this.createdAt = post.getCreatedAt();       // 게시글 작성 시간
         this.modifiedAt = post.getModifiedAt();     // 게시글 수정 시간
+        this.profileImage = post.getUser().getProfileImage();
     }
     // 게시글 수정 Response
     public PostResponseDto(Post post ,List<CommentResponseDto> commentList, String image){

@@ -48,7 +48,7 @@ public class UserController {
     // 아이디 중복 확인
     @GetMapping("/idDupleCheck")
     public MsgResponseDto checkUserNameDuplicate (
-            @RequestParam String userId){
+            @RequestParam("userId") String userId){
         return userService.checkUserIdDuplicate(userId);
     }
     // 유저 정보
