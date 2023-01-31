@@ -15,6 +15,10 @@ public class PostFavResponseDto {
         this.id = post.getId();
         this.title = post.getTitle();
         this.image = post.getImage();
-
+    }
+    public PostFavResponseDto(Post post,String image){
+        this.id = post.getId();
+        this.title = post.getTitle();
+        this.image = image;
     }
 }

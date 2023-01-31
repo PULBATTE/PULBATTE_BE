@@ -68,15 +68,20 @@ public class PostService {
         Page<PostResponseDto> pageList = postPage.map(
                 post -> new PostResponseDto(
                         post,
-                        (long) post.getCommentList().size(),
                         (long) post.getPostLike().size(),
+                        (long) post.getCommentList().size(),
                         post.getImage()
                 ));
         List<PostResponseDto> postResponseDto = new ArrayList<>();
+        String image = null;
         for (Post post : postPage) {
             Long commentCnt = commentRepository.countByPostId(post.getId());                    // 댓글 수
             Long likeCnt = likeRepository.likeCnt(post.getId());                                // 좋아요 수
-            String image = post.getImage();                                                     // 이미지 url
+            if(post.getImage().isEmpty()){
+                image = "https://d3usc6dqsfeh3v.cloudfront.net/post/noimage.png";
+            }else {
+                image = post.getImage();
+            }
             postResponseDto.add(new PostResponseDto(post,likeCnt,commentCnt,image));
         }
         return pageList;
@@ -99,13 +104,19 @@ public class PostService {
                 return o2.getValue().compareTo(o1.getValue());
             }
         });
+        String image = null;
         if(sortLikeList.size()<5){                                                                      // 리스트의 크기가 5보다 작을 때 (인기글의 초대 수 5)
             for (int i=0; i<sortLikeList.size(); i++) {
                 Long postId = sortLikeList.get(i).getKey();                                             // 좋아요가 일정 수가 넘은 post 의 아이디 저장
                 Post post = postRepository.findById(postId).orElseThrow(
                         () -> new CustomException(ErrorCode.NO_POST_FOUND)
                 );                              // 저장한 아이디로 게시글 찾기
-                postFavResponseDto.add(new PostFavResponseDto(post));                                   // 게시글 출력
+                if(post.getImage().isEmpty()){
+                    image = "https://d3usc6dqsfeh3v.cloudfront.net/post/noimage.png";
+                }else {
+                    image = post.getImage();
+                }
+                postFavResponseDto.add(new PostFavResponseDto(post,image));                                   // 게시글 출력
             }
         }else {
             for (int i = 0; i < 5; i++) {                                                               // 게시글의 사이즈가 5보다 클 때 인기게시글이 된 시간으로 정렬 된 리스트에서 1~5번 째 까지만 출력
@@ -113,7 +124,12 @@ public class PostService {
                 Post post = postRepository.findById(postId).orElseThrow(
                         () -> new CustomException(ErrorCode.NO_POST_FOUND)
                 );                              // 저장한 아이디로 게시글 찾기
-                postFavResponseDto.add(new PostFavResponseDto(post));                                   // 게시글 출력
+                if(post.getImage().isEmpty()){
+                    image = "https://d3usc6dqsfeh3v.cloudfront.net/post/noimage.png";
+                }else {
+                    image = post.getImage();
+                }
+                postFavResponseDto.add(new PostFavResponseDto(post,image));                                   // 게시글 출력
             }
         }
        return postFavResponseDto;

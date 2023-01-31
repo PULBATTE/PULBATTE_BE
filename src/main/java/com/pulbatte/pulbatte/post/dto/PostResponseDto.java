@@ -35,7 +35,11 @@ public class PostResponseDto {
         this.title = post.getTitle();               // 제목
         this.content = post.getContent();           // 내용
         this.nickname = post.getNickname();         // 작성자 닉네임
-        this.image = image;                         // 이미지 url
+        if(image.isEmpty()){
+            this.image = "https://d3usc6dqsfeh3v.cloudfront.net/post/noimage.png";
+        }else {
+            this.image = image;                     // 이미지 url
+        }
         this.likeCnt = likeCnt;                     // 좋아요 수
         this.commentCnt=commentCnt;                 // 댓글 수
         this.tag = post.getTag();                   // 게시글 카테고리
