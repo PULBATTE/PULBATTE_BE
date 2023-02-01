@@ -162,7 +162,7 @@ public class PostService {
         }
         return new PostResponseDto(post, commentResponseDtoList, image, likeCnt,commentCnt,profileImage,likeStatus);
     }
-    //게시글 상세 조회
+    //게시글 상세 조회(guest용)
     @Transactional(readOnly = true)
     public PostResponseDto getPostGuest(Long id) {
         Post post = postRepository.findById(id).orElseThrow(
