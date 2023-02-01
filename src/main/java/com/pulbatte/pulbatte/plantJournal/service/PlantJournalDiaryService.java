@@ -13,6 +13,7 @@ import com.pulbatte.pulbatte.plantJournal.repository.PlantJournalDiaryRepository
 import com.pulbatte.pulbatte.plantJournal.repository.PlantJournalRepository;
 import com.pulbatte.pulbatte.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PlantJournalDiaryService {
     private final PlantJournalRepository plantJournalRepository;
     private final PlantJournalDiaryRepository plantJournalDiaryRepository;
@@ -70,10 +72,10 @@ public class PlantJournalDiaryService {
         PlantJournal plantJournal = plantJournalRepository.findById(plantjournalid).orElseThrow(
                 () -> new CustomException(ErrorCode.NO_PLANT_JOURNAL_DIARY_FOUND)
         );
-        if(plantJournal.getUser().getId() != user.getId()){
+        if (!plantJournal.getUser().getId().equals(user.getId())) {
             throw new CustomException(ErrorCode.NO_FORBIDDEN_PLANTJOURNAL);
         }
-        List<DdayClick> ddayClicks = ddayClickRepository.findAllByUserIdAndPlantJournalId(user.getId(),plantjournalid);
+        List<DdayClick> ddayClicks = ddayClickRepository.findAllByUserIdAndPlantJournalId(user.getId(), plantjournalid);
         List<CalendarResponseDto> calendarResponseDtoList = new ArrayList<>();
         for (DdayClick ddayClick : ddayClicks) {
             int water = 0;
@@ -95,11 +97,11 @@ public class PlantJournalDiaryService {
             }
             if (!cheak) {
                 if (ddayClick.getClickTag().equals("water")) {
-                    calendarResponseDtoList.add(new CalendarResponseDto(ddayClick.getLocalDate(), water+1, repot, nutrition));
+                    calendarResponseDtoList.add(new CalendarResponseDto(ddayClick.getLocalDate(), water + 1, repot, nutrition));
                 } else if (ddayClick.getClickTag().equals("nutrition")) {
-                    calendarResponseDtoList.add(new CalendarResponseDto(ddayClick.getLocalDate(), water, repot, nutrition+1));
+                    calendarResponseDtoList.add(new CalendarResponseDto(ddayClick.getLocalDate(), water, repot, nutrition + 1));
                 } else {
-                    calendarResponseDtoList.add(new CalendarResponseDto(ddayClick.getLocalDate(), water, repot+1, nutrition));
+                    calendarResponseDtoList.add(new CalendarResponseDto(ddayClick.getLocalDate(), water, repot + 1, nutrition));
                 }
             }
         }
