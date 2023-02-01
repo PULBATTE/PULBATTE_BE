@@ -3,7 +3,6 @@ package com.pulbatte.pulbatte.alarm.service;
 import com.pulbatte.pulbatte.alarm.dto.AlarmResponseDto;
 import com.pulbatte.pulbatte.alarm.entity.Alarm;
 import com.pulbatte.pulbatte.alarm.entity.AlarmType;
-import com.pulbatte.pulbatte.alarm.repository.AlarmRepository;
 import com.pulbatte.pulbatte.alarm.repository.EmitterRepository;
 import com.pulbatte.pulbatte.alarm.repository.EmitterRepositoryImpl;
 import com.pulbatte.pulbatte.user.entity.User;
@@ -25,39 +24,38 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class SseService {
     private final EmitterRepository emitterRepository = new EmitterRepositoryImpl();
-    private final AlarmRepository alarmRepository;
 
-    private static final Long TIMEOUT = 60 * 1000L * 60L;
+
+    private static final Long TIMEOUT = 60L * 1000L * 60L;
 
     public SseEmitter subscribe(Long userId, String lastEventId) {
         String emitterId = makeTimeIncludeId(userId);           // emitter 아이디 생성
-        SseEmitter emitter = emitterRepository.save(emitterId, new SseEmitter(TIMEOUT));            // emitter 생성
+        SseEmitter emitter= emitterRepository.save(emitterId, new SseEmitter(TIMEOUT));            // emitter 생성
 
-        emitter.onCompletion(() -> emitterRepository.deleteById(emitterId));            // 시간이 만료되면 자동 삭제
-        emitter.onTimeout(() -> emitterRepository.deleteById(emitterId));
-        emitter.onError((e) -> emitterRepository.deleteById(emitterId));
+        String receiveId = String.valueOf(userId);
+        Map<String, SseEmitter> emitters = emitterRepository.findAllEmitterStartWithByUserId(receiveId);
+        log.info(emitters.toString());
 
-        if(!emitterRepository.findAllEmitterStartWithByUserId(userId).isEmpty()) {
-            SseEmitter sseEmitter = emitterRepository.findAllEmitterStartWithByUserId(userId).get(userId+1);
-//            sseEmitter.complete();
-            SseEmitter.SseEventBuilder eventBuilder = SseEmitter.event()
-                    .reconnectTime(500)
-                    .data(MediaType.APPLICATION_JSON);
-
-            try {
-                emitter.send(eventBuilder);
-            } catch (IOException exception) {
+        try {
+            emitter.onCompletion(() -> emitterRepository.deleteById(emitterId));
+            emitter.onTimeout(() -> {           // 시간이 만료되면 repository에서 자동 삭제
                 emitterRepository.deleteById(emitterId);
+            });
+            emitter.onError((e) -> {            // 오류가 발생하면 repository에서 자동 삭제
+                emitterRepository.deleteById(emitterId);
+                log.info(e.getMessage());
+            });
+
+            // 더미 데이터를 보내 503 에러 방지
+            String eventId = makeTimeIncludeId(userId);
+            sendAlarm(emitter, eventId, emitterId, "EventStream Created. [userId = " + userId + "]");
+
+            // 받지 못한 데이터가 있을 경우 다시 전송
+            if(hasLostData(lastEventId)) {
+                sendLostData(lastEventId, userId, emitterId, emitter);
             }
-            emitterRepository.deleteAllEmitterStartWithId(userId);
-        }
-
-        // 더미 데이터를 보내 503 에러 방지
-        String eventId = makeTimeIncludeId(userId);
-        sendAlarm(emitter, eventId, emitterId, "EventStream Created. [userId = " + userId + "]");
-
-        if(hasLostData(lastEventId)) {
-            sendLostData(lastEventId, userId, emitterId, emitter);
+        } catch (Exception exception) {
+            emitterRepository.deleteById(emitterId);
         }
         return emitter;
     }
@@ -84,31 +82,32 @@ public class SseService {
     }
 
     private void sendLostData(String lastEventId, Long userId, String emitterId, SseEmitter emitter) {
-        Map<String, Object> eventCaches = emitterRepository.findAllEventCacheStartWithByUserId(userId);
+        Map<String, Object> eventCaches = emitterRepository.findAllEventCacheStartWithByUserId(String.valueOf(userId));
         eventCaches.entrySet().stream()
                 .filter(e -> lastEventId.compareTo(e.getKey())<0)
                 .forEach(e -> sendAlarm(emitter, e.getKey(), emitterId, e.getValue()));
     }
 
+    // 사용자에게 알림 전송
     @Async
     public void send(AlarmType alarmType, String content, User user) {
-        Alarm alarm = alarmRepository.save(createAlarm(alarmType, content, user));
-        Long receiveId = user.getId();
+        log.info("send 실행");
+        Alarm alarm = createAlarm(alarmType, content, user);
+        String receiveId = String.valueOf(user.getId());
 
-        String eventId = receiveId + "_" + System.currentTimeMillis();
-        // SseEmitter 가져오기
+        // 알림을 받을 사용자의 SseEmitter 가져오기
         Map<String, SseEmitter> emitters = emitterRepository.findAllEmitterStartWithByUserId(receiveId);
         emitters.forEach(
                 (key, emitter) -> {
                     emitterRepository.saveEventCache(key, alarm);
-//                    AlarmResponseDto alarmResponseDto = new AlarmResponseDto(alarm);
-//                    sendAlarm(emitter, eventId, key, alarmResponseDto);
-                    sendToClient(emitter, key, alarm);
+                    AlarmResponseDto alarmResponseDto = new AlarmResponseDto(alarm);
+                    log.info(String.valueOf(alarmResponseDto));
+                    sendToClient(emitter, key, alarmResponseDto);
                 }
         );
     }
 
-    public void sendList(List userList, String content, AlarmType alarmType) {
+    public void sendList(AlarmType alarmType, String content, List userList) {
         List<Alarm> alarms = new ArrayList<>();
         Map<String, SseEmitter> sseEmitters;
 
@@ -117,7 +116,7 @@ public class SseService {
             sseEmitters = new HashMap<>();
             alarms.add(createAlarm(alarmType, content, (User) userList.get(i)));
 
-            sseEmitters.putAll(emitterRepository.findAllEmitterStartWithByUserId(((User) userList.get(i)).getId()));
+            sseEmitters.putAll(emitterRepository.findAllEmitterStartWithByUserId(userList.get(i).toString()));
             sseEmitters.forEach(
                     (key, emitter) -> {
                         emitterRepository.saveEventCache(key, alarms.get(finalI));
@@ -127,6 +126,7 @@ public class SseService {
         }
     }
 
+    // 알림 생성
     private Alarm createAlarm(AlarmType alarmType, String content, User user) {
         return Alarm.builder()
                 .alarmType(alarmType)
@@ -136,18 +136,15 @@ public class SseService {
                 .build();
     }
 
+    // 알림 전송
     private void sendToClient(SseEmitter emitter, String id, Object data) {
         try {
             emitter.send(SseEmitter.event()
                     .id(id)
                     .name("sse")
-                    .data(data, MediaType.APPLICATION_JSON)
-                    .reconnectTime(0));
-            emitter.complete();
+                    .data(data, MediaType.APPLICATION_JSON));
+        } catch (IOException exception) {
             emitterRepository.deleteById(id);
-        } catch (Exception exception) {
-            emitterRepository.deleteById(id);
-            emitter.completeWithError(exception);
         }
     }
 }

@@ -55,7 +55,8 @@ public enum ErrorCode {
 
 
     ALREADY_EXIST_DATE(HttpStatus.BAD_REQUEST,"중복된 데이터입니다"),
-    END_GUIDE(HttpStatus.BAD_REQUEST,"가이드가 종료되었습니다.");
+    END_GUIDE(HttpStatus.BAD_REQUEST,"가이드가 종료되었습니다."),
+    DELETE_IMAGE_FAILED(HttpStatus.BAD_REQUEST, "이미지 삭제에 실패 했습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;

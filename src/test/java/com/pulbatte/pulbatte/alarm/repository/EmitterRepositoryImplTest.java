@@ -10,12 +10,10 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class EmitterRepositoryImplTest {
 
     private EmitterRepository emitterRepository = new EmitterRepositoryImpl();
-    private Long DEFAULT_TIMEOUT = 60l * 1000L * 60L;
+    private Long DEFAULT_TIMEOUT = 15000L;
 
     @Test
     @DisplayName("Emitter 저장")
@@ -52,7 +50,7 @@ class EmitterRepositoryImplTest {
         String emitterId3 = userId + "_" + System.currentTimeMillis();
         emitterRepository.save(emitterId3, new SseEmitter(DEFAULT_TIMEOUT));
 
-        Map<String, SseEmitter> ActualResult = emitterRepository.findAllEmitterStartWithByUserId(userId);
+        Map<String, SseEmitter> ActualResult = emitterRepository.findAllEmitterStartWithByUserId(String.valueOf(userId));
 
         Assertions.assertEquals(3, ActualResult.size());
     }
@@ -75,7 +73,7 @@ class EmitterRepositoryImplTest {
         Alarm alarm3 = new Alarm(AlarmType.comment, "내 게시글에 댓글이 등록되었습니다.", false, new User(1L));
         emitterRepository.saveEventCache(eventCacheId3, alarm3);
 
-        Map<String, Object> ActualResult = emitterRepository.findAllEventCacheStartWithByUserId(userId);
+        Map<String, Object> ActualResult = emitterRepository.findAllEventCacheStartWithByUserId(String.valueOf(userId));
 
         Assertions.assertEquals(3, ActualResult.size());
     }
@@ -90,7 +88,7 @@ class EmitterRepositoryImplTest {
         emitterRepository.save(emitterId, sseEmitter);
         emitterRepository.deleteById(emitterId);
 
-        Assertions.assertEquals(0, emitterRepository.findAllEmitterStartWithByUserId(userID).size());
+        Assertions.assertEquals(0, emitterRepository.findAllEmitterStartWithByUserId(String.valueOf(userID)).size());
     }
 
     @Test
@@ -104,9 +102,9 @@ class EmitterRepositoryImplTest {
         String emitterId2 = userId + "_" + System.currentTimeMillis();
         emitterRepository.save(emitterId2, new SseEmitter(DEFAULT_TIMEOUT));
 
-        emitterRepository.deleteAllEmitterStartWithId(userId);
+        emitterRepository.deleteAllEmitterStartWithId(String.valueOf(userId));
 
-        Assertions.assertEquals(0, emitterRepository.findAllEmitterStartWithByUserId(userId).size());
+        Assertions.assertEquals(0, emitterRepository.findAllEmitterStartWithByUserId(String.valueOf(userId)).size());
     }
 
     @Test
@@ -122,8 +120,8 @@ class EmitterRepositoryImplTest {
         Alarm alarm2 = new Alarm(AlarmType.comment, "내 게시글에 댓글이 등록되었습니다.", false, new User(1L));
         emitterRepository.saveEventCache(eventCacheId2, alarm2);
 
-        emitterRepository.deleteAllEventCacheStartWithId(userId);
+        emitterRepository.deleteAllEventCacheStartWithId(String.valueOf(userId));
 
-        Assertions.assertEquals(0, emitterRepository.findAllEventCacheStartWithByUserId(userId).size());
+        Assertions.assertEquals(0, emitterRepository.findAllEventCacheStartWithByUserId(String.valueOf(userId)).size());
     }
 }

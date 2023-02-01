@@ -58,13 +58,13 @@ public class DDayService {
             targets.add(journal.getUser());
 
             if(journal.getWaterDDay()==0) {
-                sseService.sendList(targets, "물주기 Dday", AlarmType.Dday);
+                sseService.sendList(AlarmType.Dday, "물주기 Dday 입니다.", targets);
             }
             else if(journal.getNutritionDDay()==0) {
-                sseService.sendList(targets, "영양 주기 Dday", AlarmType.Dday);
+                sseService.sendList(AlarmType.Dday, "영양 주기 Dday 입니다.", targets);
             }
             else if(journal.getRepottingDDay()==0) {
-                sseService.sendList(targets, "분갈이 Dday", AlarmType.Dday);
+                sseService.sendList(AlarmType.Dday, "분갈이 주기 Dday 입니다.", targets);
             }
         }
     }
