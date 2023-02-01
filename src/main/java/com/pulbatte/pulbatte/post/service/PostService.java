@@ -93,7 +93,7 @@ public class PostService {
         Map<Long,LocalDateTime> likeList = new HashMap<>();                                             // 게시글 id와 인기게시글이 된 시간을 담을 hashMap 리스트
         for(Post post : postList){
             Long likeCnt = likeRepository.likeCnt(post.getId());                                        // 모든 게시글의 좋아요 수 체크
-            if(likeCnt>3){                                                                              // 좋아요 수가 일정 수 이상이 되면
+            if(likeCnt>4){                                                                              // 좋아요 수가 일정 수 이상이 되면
                 likeList.put(post.getId(),post.getFavLikeTime());                                       // like 리스트에 게시글 id와 인기게시글이 된 시간 저장
             }
         }
