@@ -77,7 +77,7 @@ public class KakaoService {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
         body.add("client_id", "3b06fd5ed713d988623e3713a5264e3e");
-        body.add("redirect_uri", "https://api.pulbatte.com/api/user/kakao/callback");
+        body.add("redirect_uri", "https://pulbatte.com/api/user/kakao/callback");
         body.add("code", code);
 
         // HTTP Entity에 생성한 헤더와 바디 Set
