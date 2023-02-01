@@ -60,7 +60,7 @@ public class MypageService {
         );
         String image = "";
         if (!multipartFile.isEmpty()) {
-            image = s3Uploader.upload(multipartFile, "static");
+            image = s3Uploader.upload(multipartFile, "profile");
         }
         changeUser.updateProfile(image);
         changeUser.updateNickname(string.getNickname());
@@ -77,7 +77,7 @@ public class MypageService {
     // 회원 탈퇴
     @Transactional
     public void deleteUser(User user) {
-        s3Uploader.delete(user.getProfileImage(), "static");
+        s3Uploader.delete(user.getProfileImage(), "profile");
         userRepository.deleteById(user.getId());
     }
 

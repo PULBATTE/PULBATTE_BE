@@ -24,23 +24,32 @@ public class S3Uploader {
     private final AmazonS3Client amazonS3Client;
     @Value("${cloud.aws.s3.bucket}")
     public String bucket;
+    @Value("${cloud.aws.s3.bucket.url}")
+    private String bucketUrl;
+    @Value("${cloud.aws.cloud_front.file_url_format}")
+    private String CLOUD_FRONT_DOMAIN_NAME;
 
     public String upload(MultipartFile multipartFile, String dirName) throws IOException {
         File uploadFile = convert(multipartFile).orElseThrow(() -> new IllegalArgumentException("파일 전환 실패"));
         return upload(uploadFile, dirName);
     }
+
     // S3로 파일 업로드하기
     private String upload(File uploadFile, String dirName) {
         String fileName = dirName + "/" + UUID.randomUUID() + uploadFile.getName();   // S3에 저장된 파일 이름
+        String imagePath = CLOUD_FRONT_DOMAIN_NAME + "/" + fileName;
         String uploadImageUrl = putS3(uploadFile, fileName); // s3로 업로드
+//        log.info(uploadImageUrl);
         removeNewFile(uploadFile);
-        return uploadImageUrl;
+        return imagePath;
     }
+
     // S3로 업로드
     private String putS3(File uploadFile, String fileName) {
         amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile).withCannedAcl(CannedAccessControlList.PublicRead));
         return amazonS3Client.getUrl(bucket, fileName).toString();
     }
+
     // 로컬에 저장된 이미지 지우기
     private void removeNewFile(File targetFile) {
         if (targetFile.delete()) {
@@ -49,6 +58,7 @@ public class S3Uploader {
         }
         log.info("File delete fail");
     }
+
     private Optional<File> convert(MultipartFile multipartFile) throws IOException {
         File convertFile = new File(System.getProperty("user.dir") + "/" + multipartFile.getOriginalFilename());
         // 바로 위에서 지정한 경로에 File이 생성됨 (경로가 잘못되었다면 생성 불가능)
@@ -60,8 +70,25 @@ public class S3Uploader {
         }
         return Optional.empty();
     }
-    public String delete(String fileName, String dirName) {
-        amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, dirName + "/" + fileName));
-        return amazonS3Client.getUrl(bucket, fileName).toString();
+
+    //    public String delete(String fileName, String dirName) {
+//        log.info(fileName);
+//        String
+//        log.info(dirName);
+//        return amazonS3Client.getUrl(bucket, fileName).toString();
+//    }
+    public void delete(String key, String dirName) {
+        String[] imageName = key.split(dirName);
+        key = dirName + imageName[1];
+//        log.info(String.valueOf(deleteObjectRequest));
+        amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, key));
+//        try {
+//             = new DeleteObjectRequest(this.bucket, key);
+//            this.amazonS3Client.deleteObject(deleteObjectRequest);
+//
+//        } catch (SdkClientException e) {
+//            throw new CustomException(ErrorCode.DELETE_IMAGE_FAILED);
+//        }
     }
+
 }
