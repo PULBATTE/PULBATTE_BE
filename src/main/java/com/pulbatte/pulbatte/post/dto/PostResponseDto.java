@@ -34,7 +34,7 @@ public class PostResponseDto {
         this.id = post.getId();                     // 게시글 아이디
         this.title = post.getTitle();               // 제목
         this.content = post.getContent();           // 내용
-        this.nickname = post.getNickname();         // 작성자 닉네임
+        this.nickname = post.getUser().getNickname();         // 작성자 닉네임
         if(image.isEmpty()){
             this.image = "https://d3usc6dqsfeh3v.cloudfront.net/post/noimage.png";
         }else {
@@ -76,8 +76,8 @@ public class PostResponseDto {
         this.id = post.getId();                             // 게시글 아이디
         this.title = post.getTitle();                       // 제목
         this.content = post.getContent();                   // 내용
-        this.profileImage = profileImage;                     // 작성자 프로필 사진 url
-        this.nickname = post.getNickname();                 // 작성자 닉네임
+        this.profileImage = profileImage;                   // 작성자 프로필 사진 url
+        this.nickname = post.getUser().getNickname();         // 작성자 닉네임
         this.image = image;                                 // 이미지 url
         this.likeCnt = likeCnt;                             // 좋아요 수
         this.commentCnt = commentCnt;                       // 댓글 수
@@ -92,7 +92,7 @@ public class PostResponseDto {
         this.title = post.getTitle();                       // 제목
         this.content = post.getContent();                   // 내용
         this.profileImage = profileImage;                     // 작성자 프로필 사진 url
-        this.nickname = post.getNickname();                 // 작성자 닉네임
+        this.nickname = post.getUser().getNickname();         // 작성자 닉네임
         this.image = image;                                 // 이미지 url
         this.likeCnt = likeCnt;                             // 좋아요 수
         this.commentCnt = commentCnt;                       // 댓글 수
