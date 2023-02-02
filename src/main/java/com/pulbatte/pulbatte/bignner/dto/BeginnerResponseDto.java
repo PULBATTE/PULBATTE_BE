@@ -19,11 +19,12 @@ public class BeginnerResponseDto {
     private int ventilation;                    // 통풍
     private Boolean like;                       // 테스트 결과에 따른 추천
     private Boolean overlap;                    // 중복된 데이터인지 확인
+    private String resultPlantString;
     private List<BeginnerGraphResponseDto> beginnerGraph = new ArrayList<>();
 
     public BeginnerResponseDto(Beginner beginner, Boolean like,Boolean overlap){
         this.beginnerPlantName = beginner.getBeginnerPlantName();
-        this.tipList = beginner.getTipList();
+        this.resultPlantString = beginner.getResultPlantString();
         this.image = beginner.getImage();
         this.water = beginner.getWater();
         this.sunshine = beginner.getSunshine();
