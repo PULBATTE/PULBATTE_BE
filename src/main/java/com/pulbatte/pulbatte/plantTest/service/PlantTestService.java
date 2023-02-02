@@ -31,6 +31,10 @@ public class PlantTestService {
 
     @Transactional
     public PlantTestResponseDto getPlantTest(User user){
+        boolean testResultBoolean= false;
+        if(!user.getTestResult().isEmpty()){
+            testResultBoolean = true;
+        }
         String resultCode = user.getTestResult().substring(0,4);
         String plantResultCode = user.getTestResult().substring(4);
         Beginner beginner = beginnerRepository.findByResultPlantCode(plantResultCode).orElseThrow(
@@ -39,6 +43,7 @@ public class PlantTestService {
         TestResult testResult = testResultRepository.findByResultCode(resultCode).orElseThrow(
                 () -> new CustomException(ErrorCode.NO_TEST_RESULT)
         );
-        return new PlantTestResponseDto(beginner,testResult);
+
+        return new PlantTestResponseDto(beginner,testResult,testResultBoolean);
     }
 }
