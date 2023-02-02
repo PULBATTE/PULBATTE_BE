@@ -17,14 +17,16 @@ public class PlantTestResponseDto {
     private String resultPlantImage;
     private String beginnerPlantName;
     private String resultPlantString;
+    private boolean testResultBoolean;
 
     // 테스트 결과 출력
-    public PlantTestResponseDto(Beginner beginner, TestResult testResult){
+    public PlantTestResponseDto(Beginner beginner, TestResult testResult, Boolean testResultBoolean){
         this.resultTitle = testResult.getResultTitle();              // 결과 제목
         this.resultImage = testResult.getResultImage();              // 테스트 결과 성격 이미지
         this.resultString = testResult.getResultString();            // 테스트 결과 성격 멘트
         this.beginnerPlantName = beginner.getBeginnerPlantName();   // 테스트 결과 식물 이름
         this.resultPlantImage = beginner.getImage();                // 테스트 결과 식물 이미지
         this.resultPlantString = beginner.getResultPlantString();   // 테스트 결과 식물 멘트
+        this.testResultBoolean = testResultBoolean;
     }
 }
