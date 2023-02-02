@@ -66,6 +66,15 @@ public class BeginnerService {
         }
         return new MsgResponseDto(SuccessCode.CREATE_BEGINNER_Plant);
     }
+    // 가이드 식물 삭제
+    public MsgResponseDto deleteBeginnerPlant(User user){
+        BeginnerUser beginnerUser = beginnerUserRepository.findByUserId(user.getId()).orElseThrow(
+                () -> new CustomException(ErrorCode.NO_BEGINNER_PLANT)
+        );
+        beginnerUserRepository.delete(beginnerUser);
+        return new MsgResponseDto(SuccessCode.DELETE_BEGINNER_Plant);
+    }
+
     // 가이드 그래프 등록
     public MsgResponseDto postBeginnerGraph(BeginnerRequestDto beginnerRequestDto,User user){
         BeginnerUser beginnerUser = beginnerUserRepository.findByUserId(user.getId()).orElseThrow(
