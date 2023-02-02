@@ -25,6 +25,7 @@ public class BeginnerController {
     ){
         return beginnerService.getBeginnerSelect(userDetails.getUser());
     }
+    // 식집사 가이드 페이지 - 가이드 식물 등록
     @PostMapping("/{beginnerName}")
     public MsgResponseDto postBeginnerPlant(
             @PathVariable String beginnerName,
@@ -32,6 +33,14 @@ public class BeginnerController {
     ){
         return beginnerService.postBeginnerPlant(beginnerName,userDetails.getUser());
     }
+    // 식집사 갑이드 페이지 - 가이드 식물 삭제
+    @DeleteMapping
+    public MsgResponseDto deleteBeginnerPlant(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ){
+        return beginnerService.deleteBeginnerPlant(userDetails.getUser());
+    }
+
     // 식집사 가이드 페이지 - 식물 키우기 페이지 그래프 입력
     @PostMapping
     public MsgResponseDto postBeginnerGraph(
