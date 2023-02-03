@@ -31,6 +31,15 @@ public class PlantJournalController {
         return new MsgResponseDto(SuccessCode.CREATE_PLANT_JOURNAL);
     }
 
+    @DeleteMapping("/plantjournal/{plantjournalid}")
+    public MsgResponseDto DeletePlantJournal(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable Long plantjournalid
+    ) {
+        plantJournalService.DeletePlantJournal(userDetails.getUser(),plantjournalid);
+        return new MsgResponseDto(SuccessCode.DELETE_PLANT_JOURNAL);
+    }
+
     @GetMapping("/plantjournals")  // 식물 일지 목록 불러오기
     public List<PlantJournalsRequestDto> GetPlantJournalList(
             @AuthenticationPrincipal UserDetailsImpl userDetails
@@ -51,7 +60,7 @@ public class PlantJournalController {
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @PathVariable Long plantjournalid,
             @PathVariable String clicktag
-    ){
-        return plantJournalService.ClickDday(userDetails.getUser(),plantjournalid,clicktag);
+    ) {
+        return plantJournalService.ClickDday(userDetails.getUser(), plantjournalid, clicktag);
     }
 }

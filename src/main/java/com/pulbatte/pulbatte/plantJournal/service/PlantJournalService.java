@@ -65,28 +65,41 @@ public class PlantJournalService {
     @Transactional
     public MsgResponseDto ClickDday(User user, Long plantJournalId, String clicktag) {
         PlantJournal plantJournal = plantJournalRepository.findByUserAndId(user, plantJournalId);
-        if (clicktag.equals("water")) {
-            if (plantJournal.getWaterDDay() != 0) {
-                throw new CustomException(ErrorCode.NO_DDAY);
+        switch (clicktag) {
+            case "water" -> {
+                if (plantJournal.getWaterDDay() != 0) {
+                    throw new CustomException(ErrorCode.NO_DDAY);
+                }
+                plantJournal.WaterClick(ddayClickRepository.countAllByUserAndPlantJournalAndClickTag(user, plantJournal, clicktag));            // 해당 식물 DB에 카운트 횟수 저장
             }
-            plantJournal.WaterClick(ddayClickRepository.countAllByUserAndPlantJournalAndClickTag(user, plantJournal, clicktag));            // 해당 식물 DB에 카운트 횟수 저장
-        } else if (clicktag.equals("nutrition")) {
-            if (plantJournal.getNutritionDDay() != 0) {
-                throw new CustomException(ErrorCode.NO_DDAY);
+            case "nutrition" -> {
+                if (plantJournal.getNutritionDDay() != 0) {
+                    throw new CustomException(ErrorCode.NO_DDAY);
+                }
+                plantJournal.NutritionClick(ddayClickRepository.countAllByUserAndPlantJournalAndClickTag(user, plantJournal, clicktag));
             }
-            plantJournal.NutritionClick(ddayClickRepository.countAllByUserAndPlantJournalAndClickTag(user, plantJournal, clicktag));
-        } else if (clicktag.equals("repotting")) {
-            if (plantJournal.getRepottingDDay() != 0) {
-                throw new CustomException(ErrorCode.NO_DDAY);
+            case "repotting" -> {
+                if (plantJournal.getRepottingDDay() != 0) {
+                    throw new CustomException(ErrorCode.NO_DDAY);
+                }
+                plantJournal.RepottingClick(ddayClickRepository.countAllByUserAndPlantJournalAndClickTag(user, plantJournal, clicktag));
             }
-            plantJournal.RepottingClick(ddayClickRepository.countAllByUserAndPlantJournalAndClickTag(user, plantJournal, clicktag));
-        } else {
-            throw new CustomException(ErrorCode.NO_EXIST_CLICKTAG);
+            default -> throw new CustomException(ErrorCode.NO_EXIST_CLICKTAG);
         }
         if (ddayClickRepository.findByLocalDateAndUserAndPlantJournalAndClickTag(java.time.LocalDate.now(), user, plantJournal, clicktag).isPresent()) {
             throw new CustomException(ErrorCode.ALREADY_DDAY_CLICK);
         }
         ddayClickRepository.save(new DdayClick(user, plantJournal, clicktag, java.time.LocalDate.now()));
         return new MsgResponseDto(SuccessCode.DDAY_CLICK_OK);
+    }
+
+
+    public void DeletePlantJournal(User user, Long plantjournalid) {
+        PlantJournal plantJournal = plantJournalRepository.findByUserAndId(user,plantjournalid);
+        if(!plantJournal.getUser().getId().equals(user.getId())){
+            throw new CustomException(ErrorCode.NO_DELETE_PLANTJOURNAL);
+        }
+        plantJournalRepository.delete(plantJournal);
+        s3Uploader.delete(plantJournal.getImage(),"static");
     }
 }
