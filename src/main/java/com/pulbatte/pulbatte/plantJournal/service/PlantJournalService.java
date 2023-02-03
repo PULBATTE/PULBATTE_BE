@@ -36,7 +36,7 @@ public class PlantJournalService {
         if (!multipartFile.isEmpty()) {                                      // 이미지 파일이 존재 할 경우
             image = s3Uploader.upload(multipartFile, "static");      // s3이미지 업로드
         } else {
-            image = "https://brighto8iz.s3.ap-northeast-2.amazonaws.com/plantTest/%EA%B8%B0%EB%B3%B8%EC%9D%B4%EB%AF%B8%EC%A7%80.png";
+            image = "https://d3usc6dqsfeh3v.cloudfront.net/post/noimage.png";
         }
         int WaterDDay, nutritionDDay, repottingDDay;
         WaterDDay = plantJournalAddRequestDto.getWaterCycle();
@@ -51,7 +51,9 @@ public class PlantJournalService {
         List<PlantJournal> PlansJournalsList = plantJournalRepository.findAllByUser(user);
         List<PlantJournalsRequestDto> plantJournalsRequestDtoList = new ArrayList<>();
         for (PlantJournal plantJournal : PlansJournalsList) {
-            plantJournalsRequestDtoList.add(new PlantJournalsRequestDto(plantJournal));
+            String image = plantJournal.getImage();
+            image = "https://d1uh8s8qiogb97.cloudfront." + image.split(".cloudfront.")[1];
+            plantJournalsRequestDtoList.add(new PlantJournalsRequestDto(plantJournal, image));
         }
         return plantJournalsRequestDtoList;
     }

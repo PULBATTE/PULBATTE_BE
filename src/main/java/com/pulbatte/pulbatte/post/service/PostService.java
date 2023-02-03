@@ -81,6 +81,7 @@ public class PostService {
                 image = "https://d3usc6dqsfeh3v.cloudfront.net/post/noimage.png";
             }else {
                 image = post.getImage();
+                image = "https://d1uh8s8qiogb97.cloudfront." + image.split(".cloudfront.")[1];
             }
             postResponseDto.add(new PostResponseDto(post,likeCnt,commentCnt,image));
         }
@@ -115,6 +116,7 @@ public class PostService {
                     image = "https://d3usc6dqsfeh3v.cloudfront.net/post/noimage.png";
                 }else {
                     image = post.getImage();
+                    image = "https://d1uh8s8qiogb97.cloudfront." + image.split(".cloudfront.")[1];
                 }
                 postFavResponseDto.add(new PostFavResponseDto(post,image));                                   // 게시글 출력
             }
@@ -128,6 +130,7 @@ public class PostService {
                     image = "https://d3usc6dqsfeh3v.cloudfront.net/post/noimage.png";
                 }else {
                     image = post.getImage();
+                    image = "https://d1uh8s8qiogb97.cloudfront." + image.split(".cloudfront.")[1];
                 }
                 postFavResponseDto.add(new PostFavResponseDto(post,image));                                   // 게시글 출력
             }
@@ -263,10 +266,9 @@ public class PostService {
         );
         if (likeRepository.findByPostIdAndUserId(postId, user.getId()).isEmpty()) { // postLike 에 값이 있는지 확인
             likeRepository.save(new PostLike(post, user));                          // 없으면 저장
-            if(likeRepository.likeCnt(postId)>4){
+            if (likeRepository.likeCnt(postId) > 4 && post.getFavLikeTime() == null) {
                 LocalDateTime favLikeTime = LocalDateTime.now();
                 post.updateFaveLikeTime(favLikeTime);
-                System.out.println(favLikeTime);
             }
             return new MsgResponseDto(SuccessCode.LIKE);
         } else {
