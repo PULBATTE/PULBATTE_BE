@@ -36,6 +36,7 @@ public enum ErrorCode {
     NO_MODIFY_COMMENT(HttpStatus.UNAUTHORIZED,"댓글 수정 권한이 없습니다."),
     NO_DELETE_POST(HttpStatus.UNAUTHORIZED,"게시글 삭제 권한이 없습니다."),
     NO_DELETE_COMMENT(HttpStatus.UNAUTHORIZED,"댓글 삭제 권한이 없습니다."),
+    NO_DELETE_PLANTJOURNAL(HttpStatus.UNAUTHORIZED,"식물 일지 삭제 권한이 없습니다."),
     NO_MODIFY_PLANT_JOURNAL(HttpStatus.UNAUTHORIZED, "본인의 식물만 조회할 수 있습니다."),
 
     // CONFLICT
