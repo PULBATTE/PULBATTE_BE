@@ -27,8 +27,6 @@ public class MypageService {
 
     private final UserRepository userRepository;
     private final PostRepository postRepository;
-    private final CommentRepository commentRepository;
-    private final LikeRepository likeRepository;
     private final S3Uploader s3Uploader;
 
 
@@ -47,7 +45,7 @@ public class MypageService {
 
     // 닉네임 중복 확인
     public void nickDupleCheck(User user, StringDto stringDto) {
-        if (userRepository.findByNickname(stringDto.getNickname()).isPresent()) {
+        if (userRepository.findByNickname(stringDto.getNickname()).isPresent() && !user.getNickname().equals(stringDto.getNickname())) {
             throw new CustomException(ErrorCode.ALREADY_EXIST_USERNAME);
         }
     }
