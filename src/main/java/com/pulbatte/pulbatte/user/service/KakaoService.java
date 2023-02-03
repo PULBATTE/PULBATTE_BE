@@ -155,7 +155,7 @@ public class KakaoService {
 
                 // 카카오 email
                 String email = kakaoUserInfo.getEmail();
-                String profileImage = "https://brighto8iz.s3.ap-northeast-2.amazonaws.com/plantTest/%EA%B8%B0%EB%B3%B8%EC%9D%B4%EB%AF%B8%EC%A7%80.png";
+                String profileImage = "https://d3usc6dqsfeh3v.cloudfront.net/plantTest/%EA%B8%B0%EB%B3%B8%EC%9D%B4%EB%AF%B8%EC%A7%80.png";
 
                 kakaoUser = new User(kakaoEmail,encodedPassword, nickname,1, UserRoleEnum.USER,profileImage);
             }
