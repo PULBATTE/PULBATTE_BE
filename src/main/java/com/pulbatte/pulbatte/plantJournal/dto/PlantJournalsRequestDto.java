@@ -13,10 +13,10 @@ public class PlantJournalsRequestDto {
     private String image;
     private int withPlantDay;
 
-    public PlantJournalsRequestDto(PlantJournal plantJournal){
+    public PlantJournalsRequestDto(PlantJournal plantJournal, String image){
         this.id = plantJournal.getId();
         this.plantName = plantJournal.getPlantName();
-        this.image = plantJournal.getImage();
+        this.image = image;
         this.withPlantDay = plantJournal.getWithPlantDay();
     }
 
