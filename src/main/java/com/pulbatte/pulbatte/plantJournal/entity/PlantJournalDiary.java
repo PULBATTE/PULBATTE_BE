@@ -31,10 +31,14 @@ public class PlantJournalDiary extends TimeStamped {
 
 
 
-    public PlantJournalDiary(PlantJournalDiaryRequestDto plantJournalDiaryRequestDto, User user, PlantJournal plantJournal){
+    public PlantJournalDiary(
+            PlantJournalDiaryRequestDto plantJournalDiaryRequestDto, User user,
+            PlantJournal plantJournal, LocalDateTime createdAt
+    ){
         this.content = plantJournalDiaryRequestDto.getContent();
         this.user = user;
         this.plantJournal = plantJournal;
+        this.createdAt = createdAt;
     }
 
     public void update(String content){
