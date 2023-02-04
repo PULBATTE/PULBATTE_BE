@@ -89,7 +89,7 @@ public class  UserService {
         User user = userRepository.findByUserId(requestToken.getUserEmail()).orElseThrow(
             () -> new CustomException(ErrorCode.NO_EXIST_USER)
         );
-        RefreshToken refreshToken = refreshTokenRepository.findByAccountUserId(user.getUserId()).orElseThrow(
+        RefreshToken refreshToken = refreshTokenRepository.findByAccountUserId(requestToken.getUserEmail()).orElseThrow(
                 () -> new CustomException(ErrorCode.DISMATCH_TOKEN)
         );
         if(refreshToken.getRefreshToken().equals(requestToken.getRefreshToken())){
