@@ -83,24 +83,6 @@ public class  UserService {
         setHeader(response,tokenDto);
         return tokenDto;
     }
-    // 토큰 재발행
-    public TokenDto reFreshToken(/*User user,*/HttpServletResponse response, RequestToken requestToken){
-        TokenDto tokenDto;
-        User user = userRepository.findByUserId(requestToken.getUserEmail()).orElseThrow(
-            () -> new CustomException(ErrorCode.NO_EXIST_USER)
-        );
-        RefreshToken refreshToken = refreshTokenRepository.findByAccountUserId(user.getUserId()).orElseThrow(
-                () -> new CustomException(ErrorCode.DISMATCH_TOKEN)
-        );
-        if(refreshToken.getRefreshToken().equals(requestToken.getRefreshToken())){
-            response.addHeader(JwtUtil.ACCESS_TOKEN, jwtUtil.createToken(user.getUserId()));
-            tokenDto = jwtUtil.createAllToken(user.getUserId());
-            refreshTokenRepository.save(refreshToken.updateToken(tokenDto.getRefreshToken()));
-        }else {
-            throw new CustomException(ErrorCode.DISMATCH_TOKEN2);
-        }
-        return tokenDto;
-    }
     // 중복 아이디 체크
     public MsgResponseDto checkUserIdDuplicate(String userId){
         boolean duplicateId = userRepository.existsByUserId(userId);
