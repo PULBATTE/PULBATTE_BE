@@ -63,16 +63,25 @@ public class JwtUtil {
         return null;
     }
     public TokenDto createAllToken(String userId){
-        return new TokenDto(createToken(userId,"Access"),createToken(userId,"Refresh"),"200");
+        return new TokenDto(createToken(userId/*,"Access"*/),createRefreshToken(/*userId,"Refresh"*/),"200");
     }
-    public String createToken(String userId, String type) {
+    public String createToken(String userId/*, String type*/) {
         Date date = new Date();
-        long time = type.equals("Access") ? TOKEN_TIME : REFRESH_TOKEN_TIME;
 
         return BEARER_PREFIX +
                 Jwts.builder()
                         .setSubject(userId)
-                        .setExpiration(new Date(date.getTime() + time))
+                        .setExpiration(new Date(date.getTime() + TOKEN_TIME))
+                        .setIssuedAt(date)
+                        .signWith(key, signatureAlgorithm)
+                        .compact();
+    }
+    public String createRefreshToken(/*String userId, String type*/) {
+        Date date = new Date();
+
+        return BEARER_PREFIX +
+                Jwts.builder()
+                        .setExpiration(new Date(date.getTime() + REFRESH_TOKEN_TIME))
                         .setIssuedAt(date)
                         .signWith(key, signatureAlgorithm)
                         .compact();

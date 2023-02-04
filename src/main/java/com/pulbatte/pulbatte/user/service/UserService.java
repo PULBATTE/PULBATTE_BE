@@ -93,7 +93,7 @@ public class  UserService {
                 () -> new CustomException(ErrorCode.DISMATCH_TOKEN)
         );
         if(refreshToken.getRefreshToken().equals(requestToken.getRefreshToken())){
-            response.addHeader(JwtUtil.ACCESS_TOKEN, jwtUtil.createToken(user.getUserId(), "Access"));
+            response.addHeader(JwtUtil.ACCESS_TOKEN, jwtUtil.createToken(user.getUserId()));
             tokenDto = jwtUtil.createAllToken(user.getUserId());
             refreshTokenRepository.save(refreshToken.updateToken(tokenDto.getRefreshToken()));
         }else {
