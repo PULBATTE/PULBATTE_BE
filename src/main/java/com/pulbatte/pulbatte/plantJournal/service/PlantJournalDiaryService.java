@@ -14,9 +14,12 @@ import com.pulbatte.pulbatte.plantJournal.repository.PlantJournalRepository;
 import com.pulbatte.pulbatte.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +36,11 @@ public class PlantJournalDiaryService {
         PlantJournal plantJournal = plantJournalRepository.findById(plantJournalId).orElseThrow(
                 () -> new CustomException(ErrorCode.NO_PLANT_JOURNAL_FOUND)
         );
-        plantJournalDiaryRepository.save(new PlantJournalDiary(plantJournalDiaryRequestDto, user, plantJournal));
+        String[] now = String.valueOf(LocalDateTime.now()).split("T");
+        String date = plantJournalDiaryRequestDto.getCreatedAt() + " " + now[1].substring(0,now[1].length()-3);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS");
+        LocalDateTime createdAt = LocalDateTime.parse(date, formatter);
+        plantJournalDiaryRepository.save(new PlantJournalDiary(plantJournalDiaryRequestDto, user, plantJournal,createdAt));
     }
 
     // 식물 일지 다이어리 상세 조회
