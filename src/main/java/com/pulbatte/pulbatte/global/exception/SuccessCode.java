@@ -8,13 +8,15 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum SuccessCode {
 
+    // 토큰
+    SUCCESS_REFRESH_TOKEN(HttpStatus.OK,"토큰이 재발급 되었습니다."),
+    DELETE_REFRESH_TOKEN(HttpStatus.OK,"리프레시 토큰이 삭제 되었습니다."),
 
     //회원 가입 페이지
     SIGN_UP(HttpStatus.OK, "회원가입에 성공했습니다."),
     LOG_IN(HttpStatus.OK, "로그인에 성공했습니다"),
     CHECK_NICKNAME(HttpStatus.OK,"사용 가능한 닉네임입니다."),
     CHECK_USER_ID(HttpStatus.OK,"사용 가능한 아이디입니다."),
-    SUCCESS_REFRESH_TOKEN(HttpStatus.OK,"토큰이 재발급 되었습니다."),
 
     //마이 페이지
     UPLOAD_PROFILE(HttpStatus.OK, "프로필 사진 등록 완료"),

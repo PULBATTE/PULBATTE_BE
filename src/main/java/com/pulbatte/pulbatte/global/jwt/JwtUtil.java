@@ -40,6 +40,7 @@ public class JwtUtil {
     public static final String REFRESH_TOKEN = "Refresh_Token";
     private static final long TOKEN_TIME = 60 * 60 * 1000L;
     private static final long REFRESH_TOKEN_TIME = 60 * 60 * 12 * 7 * 2 * 1000L;
+
     @Value("${jwt.secret.key}")
     private String secretKey;
     private Key key;
