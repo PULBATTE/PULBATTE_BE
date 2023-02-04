@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface PlantJournalDiaryRepository extends JpaRepository<PlantJournalDiary, Long> {
 
-    List<PlantJournalDiary> findAllByUserIdAndPlantJournalId(Long UserId, Long plantJouranlId);
+
+    List<PlantJournalDiary> findAllByUserIdAndPlantJournalIdOrderByCreatedAtDesc(Long UserId, Long plantJouranlId);
     PlantJournalDiary findByUserAndPlantJournalIdAndId(User user, Long plantJournalId, Long plantJournalDirayId);
 }

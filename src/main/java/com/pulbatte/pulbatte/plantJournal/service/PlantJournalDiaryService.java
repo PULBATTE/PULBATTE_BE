@@ -14,7 +14,6 @@ import com.pulbatte.pulbatte.plantJournal.repository.PlantJournalRepository;
 import com.pulbatte.pulbatte.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,7 +51,7 @@ public class PlantJournalDiaryService {
 
     // 식물 일지 다이어리 리스트
     public List<PlantJournalDiaryResponseDto> GetPlantJournalDiaryList(User user, Long plantjournalid) {
-        List<PlantJournalDiary> plantJournalDiaryList = plantJournalDiaryRepository.findAllByUserIdAndPlantJournalId(user.getId(), plantjournalid);
+        List<PlantJournalDiary> plantJournalDiaryList = plantJournalDiaryRepository.findAllByUserIdAndPlantJournalIdOrderByCreatedAtDesc(user.getId(), plantjournalid);
         List<PlantJournalDiaryResponseDto> plantJournalDiaryResponseDtoList = new ArrayList<>();
         for (PlantJournalDiary plantJournalDiary : plantJournalDiaryList) {
             plantJournalDiaryResponseDtoList.add(new PlantJournalDiaryResponseDto(plantJournalDiary));
