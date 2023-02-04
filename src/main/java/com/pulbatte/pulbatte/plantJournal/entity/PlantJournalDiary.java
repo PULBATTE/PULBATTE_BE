@@ -5,8 +5,10 @@ import com.pulbatte.pulbatte.plantJournal.dto.PlantJournalDiaryRequestDto;
 import com.pulbatte.pulbatte.user.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity(name = "plantjournaldiary")
 @Getter
@@ -24,11 +26,17 @@ public class PlantJournalDiary extends TimeStamped {
     @JoinColumn(name = "PLANTJOURNAL_ID")
     private PlantJournal plantJournal;
 
+    @Column
+    private LocalDateTime createdAt;
+
+
+
     public PlantJournalDiary(PlantJournalDiaryRequestDto plantJournalDiaryRequestDto, User user, PlantJournal plantJournal){
         this.content = plantJournalDiaryRequestDto.getContent();
         this.user = user;
         this.plantJournal = plantJournal;
     }
+
     public void update(String content){
         this.content = content;
     }

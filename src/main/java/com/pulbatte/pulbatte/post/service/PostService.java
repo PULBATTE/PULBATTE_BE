@@ -19,6 +19,7 @@ import com.pulbatte.pulbatte.user.entity.User;
 import com.pulbatte.pulbatte.user.entity.UserRoleEnum;
 import lombok.RequiredArgsConstructor;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,7 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PostService {
 
     private final PostRepository postRepository;
@@ -41,14 +43,15 @@ public class PostService {
     //게시글 생성
     public PostResponseDto createPost(PostRequestDto requestDto, User user, MultipartFile multipartFile) throws IOException {
         String image = null;
-        if (multipartFile != null &&!multipartFile.isEmpty()) {                                     // 이미지 파일이 존재 할 경우            image = s3Uploader.upload(multipartFile, "static");     // s3이미지 업로드
+        if (multipartFile != null && !multipartFile.isEmpty()) {                                     // 이미지 파일이 존재 할 경우            image = s3Uploader.upload(multipartFile, "static");     // s3이미지 업로드
             image = s3Uploader.upload(multipartFile, "post");                             // s3이미지 업로드
-        }else{
+        } else {
             image = "";
         }
         Post post = postRepository.save(new Post(requestDto, user, image));
         return new PostResponseDto(post);
     }
+
     //게시글 전체 출력 페이징 처리
     @Transactional(readOnly = true)
     public Page<PostResponseDto> getListPosts(Pageable pageable) {
@@ -62,9 +65,10 @@ public class PostService {
                 ));
         return pageList;                                         // 페이징 처리
     }
+
     // 게시글 태그별 출력 페이징 처리
-    public  Page<PostResponseDto> getTagListPosts(String tag , Pageable pageable){
-        Page<Post> postPage = postRepository.findAllByTagOrderByCreatedAtDesc(tag,pageable);    // 입력받은 tag 와 같은 게시글 찾기
+    public Page<PostResponseDto> getTagListPosts(String tag, Pageable pageable) {
+        Page<Post> postPage = postRepository.findAllByTagOrderByCreatedAtDesc(tag, pageable);    // 입력받은 tag 와 같은 게시글 찾기
         Page<PostResponseDto> pageList = postPage.map(
                 post -> new PostResponseDto(
                         post,
@@ -77,28 +81,29 @@ public class PostService {
         for (Post post : postPage) {
             Long commentCnt = commentRepository.countByPostId(post.getId());                    // 댓글 수
             Long likeCnt = likeRepository.likeCnt(post.getId());                                // 좋아요 수
-            if(post.getImage().isEmpty()){
+            if (post.getImage().isEmpty()) {
                 image = "https://d3usc6dqsfeh3v.cloudfront.net/post/noimage.png";
-            }else {
+            } else {
                 image = post.getImage();
                 image = "https://d1uh8s8qiogb97.cloudfront." + image.split(".cloudfront.")[1];
             }
-            postResponseDto.add(new PostResponseDto(post,likeCnt,commentCnt,image));
+            postResponseDto.add(new PostResponseDto(post, likeCnt, commentCnt, image));
         }
         return pageList;
     }
+
     // 인기 게시글 출력
-    public List<PostFavResponseDto> getPopularListPosts(){
+    public List<PostFavResponseDto> getPopularListPosts() {
         List<Post> postList = postRepository.findAll();
         List<PostFavResponseDto> postFavResponseDto = new ArrayList<>();
-        Map<Long,LocalDateTime> likeList = new HashMap<>();                                             // 게시글 id와 인기게시글이 된 시간을 담을 hashMap 리스트
-        for(Post post : postList){
+        Map<Long, LocalDateTime> likeList = new HashMap<>();                                             // 게시글 id와 인기게시글이 된 시간을 담을 hashMap 리스트
+        for (Post post : postList) {
             Long likeCnt = likeRepository.likeCnt(post.getId());                                        // 모든 게시글의 좋아요 수 체크
-            if(likeCnt>4){                                                                              // 좋아요 수가 일정 수 이상이 되면
-                likeList.put(post.getId(),post.getFavLikeTime());                                       // like 리스트에 게시글 id와 인기게시글이 된 시간 저장
+            if (likeCnt > 4) {                                                                              // 좋아요 수가 일정 수 이상이 되면
+                likeList.put(post.getId(), post.getFavLikeTime());                                       // like 리스트에 게시글 id와 인기게시글이 된 시간 저장
             }
         }
-        List<Map.Entry<Long,LocalDateTime>> sortLikeList = new LinkedList<>(likeList.entrySet());       // 리스트 정렬을 위해 리스트를 Entry 로 감쌈
+        List<Map.Entry<Long, LocalDateTime>> sortLikeList = new LinkedList<>(likeList.entrySet());       // 리스트 정렬을 위해 리스트를 Entry 로 감쌈
         Collections.sort(sortLikeList, new Comparator<Map.Entry<Long, LocalDateTime>>() {               // 리스트를 인기게시글이 된 시간으로부터 내림차순 정렬 (최근에 인기 게시글이 됐으면 맨 앞)
             @Override
             public int compare(Map.Entry<Long, LocalDateTime> o1, Map.Entry<Long, LocalDateTime> o2) {
@@ -106,40 +111,41 @@ public class PostService {
             }
         });
         String image = null;
-        if(sortLikeList.size()<5){                                                                      // 리스트의 크기가 5보다 작을 때 (인기글의 초대 수 5)
-            for (int i=0; i<sortLikeList.size(); i++) {
+        if (sortLikeList.size() < 5) {                                                                      // 리스트의 크기가 5보다 작을 때 (인기글의 초대 수 5)
+            for (int i = 0; i < sortLikeList.size(); i++) {
                 Long postId = sortLikeList.get(i).getKey();                                             // 좋아요가 일정 수가 넘은 post 의 아이디 저장
                 Post post = postRepository.findById(postId).orElseThrow(
                         () -> new CustomException(ErrorCode.NO_POST_FOUND)
                 );                              // 저장한 아이디로 게시글 찾기
-                if(post.getImage().isEmpty()){
+                if (post.getImage().isEmpty()) {
                     image = "https://d3usc6dqsfeh3v.cloudfront.net/post/noimage.png";
-                }else {
+                } else {
                     image = post.getImage();
                     image = "https://d1uh8s8qiogb97.cloudfront." + image.split(".cloudfront.")[1];
                 }
-                postFavResponseDto.add(new PostFavResponseDto(post,image));                                   // 게시글 출력
+                postFavResponseDto.add(new PostFavResponseDto(post, image));                                   // 게시글 출력
             }
-        }else {
+        } else {
             for (int i = 0; i < 5; i++) {                                                               // 게시글의 사이즈가 5보다 클 때 인기게시글이 된 시간으로 정렬 된 리스트에서 1~5번 째 까지만 출력
                 Long postId = sortLikeList.get(i).getKey();                                             // 좋아요가 일정 수가 넘은 post 의 아이디 저장
                 Post post = postRepository.findById(postId).orElseThrow(
                         () -> new CustomException(ErrorCode.NO_POST_FOUND)
                 );                              // 저장한 아이디로 게시글 찾기
-                if(post.getImage().isEmpty()){
+                if (post.getImage().isEmpty()) {
                     image = "https://d3usc6dqsfeh3v.cloudfront.net/post/noimage.png";
-                }else {
+                } else {
                     image = post.getImage();
                     image = "https://d1uh8s8qiogb97.cloudfront." + image.split(".cloudfront.")[1];
                 }
-                postFavResponseDto.add(new PostFavResponseDto(post,image));                                   // 게시글 출력
+                postFavResponseDto.add(new PostFavResponseDto(post, image));                                   // 게시글 출력
             }
         }
-       return postFavResponseDto;
+        return postFavResponseDto;
     }
+
     //게시글 상세 조회(User용)
     @Transactional
-    public PostResponseDto getPostUser(Long id,User user) {
+    public PostResponseDto getPostUser(Long id, User user) {
         Post post = postRepository.findById(id).orElseThrow(
                 () -> new CustomException(ErrorCode.NO_POST_FOUND)
         );
@@ -150,21 +156,22 @@ public class PostService {
         List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();                     // 댓글 리스트
         for (Comment comment : post.getCommentList()) {
             List<CommentResponseDto> childCommentList = new ArrayList<>();
-            if(comment.getParent()==null){                                                       //부모 댓글이 없을 경우
-                for (Comment childComment : comment.getReplyList()){                              //자식 댓글 리스트의 데이터를 childComment에 저장
+            if (comment.getParent() == null) {                                                       //부모 댓글이 없을 경우
+                for (Comment childComment : comment.getReplyList()) {                              //자식 댓글 리스트의 데이터를 childComment에 저장
                     if (id.equals(childComment.getPost().getId())) {                             //childComment의 id와 받아온 id가 일치할 경우(선택 게시글 저장)
                         childCommentList.add(new CommentResponseDto(childComment));              //저장된 자식댓글을 리스트에 저장
                     }
                 }
-                commentResponseDtoList.add(new CommentResponseDto(comment,childCommentList));
+                commentResponseDtoList.add(new CommentResponseDto(comment, childCommentList));
             }
         }
         Boolean likeStatus = false;
-        if(likeRepository.findByPostIdAndUserId(post.getId(),user.getId()).isPresent()){
+        if (likeRepository.findByPostIdAndUserId(post.getId(), user.getId()).isPresent()) {
             likeStatus = true;
         }
-        return new PostResponseDto(post, commentResponseDtoList, image, likeCnt,commentCnt,profileImage,likeStatus);
+        return new PostResponseDto(post, commentResponseDtoList, image, likeCnt, commentCnt, profileImage, likeStatus);
     }
+
     //게시글 상세 조회(guest용)
     @Transactional(readOnly = true)
     public PostResponseDto getPostGuest(Long id) {
@@ -178,17 +185,18 @@ public class PostService {
         List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();                     // 댓글 리스트
         for (Comment comment : post.getCommentList()) {
             List<CommentResponseDto> childCommentList = new ArrayList<>();
-            if(comment.getParent()==null){                                                       //부모 댓글이 없을 경우
-                for (Comment childComment : comment.getReplyList()){                              //자식 댓글 리스트의 데이터를 childComment에 저장
+            if (comment.getParent() == null) {                                                       //부모 댓글이 없을 경우
+                for (Comment childComment : comment.getReplyList()) {                              //자식 댓글 리스트의 데이터를 childComment에 저장
                     if (id.equals(childComment.getPost().getId())) {                             //childComment의 id와 받아온 id가 일치할 경우(선택 게시글 저장)
                         childCommentList.add(new CommentResponseDto(childComment));              //저장된 자식댓글을 리스트에 저장
                     }
                 }
-                commentResponseDtoList.add(new CommentResponseDto(comment,childCommentList));
+                commentResponseDtoList.add(new CommentResponseDto(comment, childCommentList));
             }
         }
-        return new PostResponseDto(post, commentResponseDtoList, image, likeCnt,commentCnt,profileImage);
+        return new PostResponseDto(post, commentResponseDtoList, image, likeCnt, commentCnt, profileImage);
     }
+
     //게시글 수정
     @Transactional
     public PostResponseDto updatePost(User user, Long id, PostRequestDto requestDto, MultipartFile multipartFile) throws IOException {
@@ -213,14 +221,17 @@ public class PostService {
             Post posts = postRepository.findById(id).orElseThrow(
                     () -> new CustomException(ErrorCode.NO_POST_FOUND)
             );
-            s3Uploader.delete(posts.getImage(), "post");                          // 이전 이미지 파일 삭제
+            if (!post.getImage().equals("")) {
+                s3Uploader.delete(posts.getImage(), "post");                          // 이전 이미지 파일 삭제
+            }
             posts.update(image);
         }
         return new PostResponseDto(post, commentList, image);
     }
+
     // 게시글 내용 수정
     @Transactional
-    public PostResponseDto updatePostContents(User user, Long id, PostRequestDto request) throws IOException{
+    public PostResponseDto updatePostContents(User user, Long id, PostRequestDto request) throws IOException {
         Post post;
         if (user.getRole().equals(UserRoleEnum.ADMIN)) {                                    // admin 계정일 경우
             post = postRepository.findById(id).orElseThrow(                                 // 입력받은 id와 같은 데이터 수정
@@ -239,6 +250,7 @@ public class PostService {
 
         return new PostResponseDto(post, commentList);
     }
+
     //게시글 삭제
     @Transactional
     public void deletePost(Long id, User user) {
@@ -255,9 +267,12 @@ public class PostService {
         Post posts = postRepository.findById(id).orElseThrow(
                 () -> new CustomException(ErrorCode.NO_POST_FOUND)
         );
-        s3Uploader.delete(posts.getImage(), "post");                              // 입력받은 아이디와 같은 이미지 삭제
+        if (!Objects.equals(post.getImage(), "")) {
+            s3Uploader.delete(posts.getImage(), "post");                              // 입력받은 아이디와 같은 이미지 삭제
+        }
         postRepository.delete(post);
     }
+
     //게시글 좋아요, 좋아요 취소
     @Transactional
     public MsgResponseDto postLike(Long postId, User user) {
