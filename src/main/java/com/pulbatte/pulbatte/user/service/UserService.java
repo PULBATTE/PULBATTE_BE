@@ -97,7 +97,7 @@ public class  UserService {
             tokenDto = jwtUtil.createAllToken(user.getUserId());
             refreshTokenRepository.save(refreshToken.updateToken(tokenDto.getRefreshToken()));
         }else {
-            throw new CustomException(ErrorCode.DISMATCH_TOKEN);
+            throw new CustomException(ErrorCode.DISMATCH_TOKEN2);
         }
         return tokenDto;
     }
