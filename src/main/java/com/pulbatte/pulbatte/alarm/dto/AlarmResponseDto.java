@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 public class AlarmResponseDto {
     private Long id;
     private String content;
+    private String url;
     private AlarmType alarmType;
     private Boolean isRead;
     private LocalDateTime createdAt;
@@ -22,6 +23,7 @@ public class AlarmResponseDto {
     public AlarmResponseDto(Alarm alarm) {
         this.id = alarm.getId();
         this.content = alarm.getContent();
+        this.url = alarm.getUrl();
         this.alarmType = alarm.getAlarmType();
         this.isRead = alarm.getIsRead();
         this.createdAt = alarm.getCreatedAt();
