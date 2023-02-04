@@ -6,5 +6,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class PlantJournalDiaryRequestDto {
+    private String createdAt;
     private String content;
 }
