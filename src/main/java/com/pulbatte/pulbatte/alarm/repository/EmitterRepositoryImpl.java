@@ -12,6 +12,10 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class EmitterRepositoryImpl implements EmitterRepository {
 
+    /*
+    멀티 스레드 환경에서 HashMap을 안전하게 사용하기 위해 자바는 concurrent 패키지를 제공한다.
+    ConcurrentHashMap은 thread-safe가 보장된다.
+     */
     private final Map<String, SseEmitter> emitters = new ConcurrentHashMap<>();
     private final Map<String, Object> eventCache = new ConcurrentHashMap<>();
 

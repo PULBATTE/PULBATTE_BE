@@ -1,5 +1,6 @@
 package com.pulbatte.pulbatte.comment.service;
 
+import com.pulbatte.pulbatte.alarm.dto.AlarmRequestDto;
 import com.pulbatte.pulbatte.alarm.entity.AlarmType;
 import com.pulbatte.pulbatte.alarm.service.SseService;
 import com.pulbatte.pulbatte.comment.dto.CommentRequestDto;
@@ -15,6 +16,7 @@ import com.pulbatte.pulbatte.user.entity.User;
 import com.pulbatte.pulbatte.user.entity.UserRoleEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +28,9 @@ public class CommentService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
     private final SseService sseService;
+    private final ApplicationEventPublisher eventPublisher;
 
+    @Transactional
     //댓글 작성
     public MsgResponseDto saveComment(Long id, Long commentId, CommentRequestDto commentRequestDto, User user) {
         Post post = postRepository.findById(id).orElseThrow(
@@ -43,9 +47,21 @@ public class CommentService {
             }
             commentRepository.save(new Comment(commentRequestDto, post, user, childComment));    //자식 댓글로 저장
         }
-        log.info("send 실행 전");
-        sseService.send(AlarmType.comment,post.getTitle() + " 게시글에 새로운 댓글이 등록되었습니다.", post.getUser());
-        log.info("send 실행 후");
+        String url = "/api/posts/user/" + id;               // 게시글 url
+        String content = "내 게시글에 새로운 댓글이 등록되었습니다.";             // 알림 내용
+
+        AlarmRequestDto requestDto = AlarmRequestDto.builder()
+                .type(AlarmType.comment)
+                .content(content)
+                .url(url)
+                .user(post.getUser())
+                .build();
+
+        // 본인이 작성한 게시글에 댓글을 쓰면 알림이 가지 않도록함
+        if(!post.getUser().getId().equals(user.getId())) {
+//            sseService.send(requestDto);                // 게시글 작성자에게 알림 전송
+            eventPublisher.publishEvent(requestDto);
+        }
         return new MsgResponseDto(SuccessCode.CREATE_COMMENT);
     }
     //댓글 수정

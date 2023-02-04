@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Getter
 @NoArgsConstructor
 public class AlarmResponseDto {
@@ -14,6 +16,7 @@ public class AlarmResponseDto {
     private String content;
     private AlarmType alarmType;
     private Boolean isRead;
+    private LocalDateTime createdAt;
 
     @QueryProjection            // Q파일 생성
     public AlarmResponseDto(Alarm alarm) {
@@ -21,5 +24,6 @@ public class AlarmResponseDto {
         this.content = alarm.getContent();
         this.alarmType = alarm.getAlarmType();
         this.isRead = alarm.getIsRead();
+        this.createdAt = alarm.getCreatedAt();
     }
 }
