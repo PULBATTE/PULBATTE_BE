@@ -2,7 +2,6 @@ package com.pulbatte.pulbatte.plantJournal.service;
 
 import com.pulbatte.pulbatte.alarm.dto.AlarmRequestDto;
 import com.pulbatte.pulbatte.alarm.entity.AlarmType;
-import com.pulbatte.pulbatte.alarm.service.SseService;
 import com.pulbatte.pulbatte.plantJournal.entity.PlantJournal;
 import com.pulbatte.pulbatte.plantJournal.repository.PlantJournalRepository;
 import com.pulbatte.pulbatte.user.entity.User;
@@ -24,7 +23,6 @@ import java.util.List;
 @Slf4j
 public class DDayService {
     private final PlantJournalRepository plantJournalRepository;
-    private final SseService sseService;
     private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
@@ -54,7 +52,8 @@ public class DDayService {
     }
 
     @Transactional
-    @Scheduled(cron = "0 0 9 * * ?")
+//    @Scheduled(cron = "0 0 9 * * ?")                // 매일 오전 9시에 실행
+    @Scheduled(cron = "0 0/5 * * * ?")              // 테스트용, 5분 마다 실행
     public ResponseEntity createDdayAlarm() {
         List<PlantJournal> plantJournalList = plantJournalRepository.findAll();
         List<User> targets = new ArrayList<>();

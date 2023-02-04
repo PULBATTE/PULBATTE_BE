@@ -3,6 +3,7 @@ package com.pulbatte.pulbatte.alarm.service;
 import com.pulbatte.pulbatte.alarm.dto.AlarmRequestDto;
 import com.pulbatte.pulbatte.alarm.dto.AlarmResponseDto;
 import com.pulbatte.pulbatte.alarm.entity.Alarm;
+import com.pulbatte.pulbatte.alarm.repository.AlarmRepository;
 import com.pulbatte.pulbatte.alarm.repository.EmitterRepository;
 import com.pulbatte.pulbatte.alarm.repository.EmitterRepositoryImpl;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +24,9 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class SseService {
     private final EmitterRepository emitterRepository = new EmitterRepositoryImpl();
+    private final AlarmRepository alarmRepository;
 
-    private static final Long TIMEOUT = 60L * 1000L * 60L;
+    private static final Long TIMEOUT = 60L * 1000L * 60L;              // 유효시간
 
     public SseEmitter subscribe(Long userId, String lastEventId) throws IOException {
         log.info("Id of lastEventId: {}", lastEventId);
@@ -90,7 +92,7 @@ public class SseService {
     @TransactionalEventListener             // 기본값은 AFTER_COMMIT으로 트랜잭션이 commit되었을 때 event를 실행
     @Transactional(propagation = Propagation.REQUIRES_NEW)              // 메소드를 하나의 transaction으로 묶어둠
     public void send(AlarmRequestDto requestDto) {
-        Alarm alarm = createAlarm(requestDto);
+        Alarm alarm = alarmRepository.save(createAlarm(requestDto));
         String receiveId = String.valueOf(requestDto.getUser().getId());
 
         // 알림을 받을 사용자의 SseEmitter 가져오기
