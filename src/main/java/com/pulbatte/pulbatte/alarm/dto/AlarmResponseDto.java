@@ -14,18 +14,17 @@ import java.time.LocalDateTime;
 public class AlarmResponseDto {
     private Long id;
     private String content;
-    private String url;
     private AlarmType alarmType;
     private Boolean isRead;
     private LocalDateTime createdAt;
 
+    @Builder
     @QueryProjection            // Q파일 생성
-    public AlarmResponseDto(Alarm alarm) {
-        this.id = alarm.getId();
-        this.content = alarm.getContent();
-        this.url = alarm.getUrl();
-        this.alarmType = alarm.getAlarmType();
-        this.isRead = alarm.getIsRead();
-        this.createdAt = alarm.getCreatedAt();
+    public AlarmResponseDto(Long id, String content, AlarmType type, Boolean isRead) {
+        this.id = id;
+        this.content = content;
+        this.alarmType = type;
+        this.isRead = isRead;
+        this.createdAt = LocalDateTime.now();
     }
 }

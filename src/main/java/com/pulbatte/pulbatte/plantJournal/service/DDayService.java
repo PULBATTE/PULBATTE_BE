@@ -52,8 +52,8 @@ public class DDayService {
     }
 
     @Transactional
-//    @Scheduled(cron = "0 0 9 * * ?")                // 매일 오전 9시에 실행
-    @Scheduled(cron = "0 0/5 * * * ?")              // 테스트용, 5분 마다 실행
+    @Scheduled(cron = "0 0 9 * * ?")                // 매일 오전 9시에 실행
+//    @Scheduled(cron = "0 0/5 * * * ?")              // 테스트용, 5분 마다 실행
     public ResponseEntity createDdayAlarm() {
         List<PlantJournal> plantJournalList = plantJournalRepository.findAll();
         List<User> targets = new ArrayList<>();
@@ -65,7 +65,7 @@ public class DDayService {
             String content = "";
 
             if(journal.getWaterDDay()==0) {
-                content = "물주기 Dday 입니다.";
+                content = "오늘은" + journal.getPlantName() + "에 물주는 날입니다.";
                 AlarmRequestDto requestDto = AlarmRequestDto.builder()
                         .type(AlarmType.Dday)
                         .content(content)
@@ -76,7 +76,7 @@ public class DDayService {
                 eventPublisher.publishEvent(requestDto);
             }
             else if(journal.getNutritionDDay()==0) {
-                content = "영양 주기 Dday 입니다.";
+                content = "오늘은" + journal.getPlantName() + "에 영양주는 날입니다.";
                 AlarmRequestDto requestDto = AlarmRequestDto.builder()
                         .type(AlarmType.Dday)
                         .content(content)
@@ -87,7 +87,7 @@ public class DDayService {
                 eventPublisher.publishEvent(requestDto);
             }
             else if(journal.getRepottingDDay()==0) {
-                content = "분갈이 Dday 입니다.";
+                content = "오늘은" + journal.getPlantName() + "에 분갈이하는 날입니다.";
                 AlarmRequestDto requestDto = AlarmRequestDto.builder()
                         .type(AlarmType.Dday)
                         .content(content)
