@@ -17,7 +17,6 @@ public class KakaoUserController {
 
     @PostMapping("/kakao/callback")
     public TokenDto kakaoLogin(
-            @RequestHeader("Authorization") String authorization,
             @RequestParam String code, HttpServletResponse response
     ) throws JsonProcessingException {
         // code: 카카오 서버로부터 받은 인가 코드
@@ -28,7 +27,7 @@ public class KakaoUserController {
         cookie.setPath("/");
         response.addCookie(cookie);
         return new MsgResponseDto(SuccessCode.LOG_IN);*/
-        return kakaoService.kakaoLogin(authorization, code, response);
+        return kakaoService.kakaoLogin(code, response);
     }
 //}
 //    @GetMapping("/kakao/callback")
