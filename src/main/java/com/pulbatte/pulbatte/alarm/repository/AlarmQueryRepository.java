@@ -16,6 +16,7 @@ import static com.pulbatte.pulbatte.user.entity.QUser.user;
 @Repository
 public class AlarmQueryRepository {
     private final JPAQueryFactory queryFactory;
+
     public AlarmQueryRepository(JPAQueryFactory queryFactory) {
         this.queryFactory = queryFactory;
     }
@@ -23,7 +24,10 @@ public class AlarmQueryRepository {
     public List<AlarmResponseDto> findAllByUserId(@Param("userId") Long userId) {
         return queryFactory
                 .select(new QAlarmResponseDto(
-                        alarm
+                        alarm.id,
+                        alarm.content,
+                        alarm.alarmType,
+                        alarm.isRead
                 ))
                 .from(alarm)
                 .join(alarm.user, user)

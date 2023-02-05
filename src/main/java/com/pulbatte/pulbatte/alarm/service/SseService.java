@@ -93,14 +93,19 @@ public class SseService {
     @Transactional(propagation = Propagation.REQUIRES_NEW)              // 메소드를 하나의 transaction으로 묶어둠
     public void send(AlarmRequestDto requestDto) {
         Alarm alarm = alarmRepository.save(createAlarm(requestDto));
+        AlarmResponseDto alarmResponseDto  = AlarmResponseDto.builder()
+                .id(alarm.getId())
+                .content(alarm.getContent())
+                .type(alarm.getAlarmType())
+                .isRead(alarm.getIsRead())
+                .build();
         String receiveId = String.valueOf(requestDto.getUser().getId());
 
         // 알림을 받을 사용자의 SseEmitter 가져오기
         Map<String, SseEmitter> emitters = emitterRepository.findAllEmitterStartWithByUserId(receiveId);
         emitters.forEach(
                 (key, emitter) -> {
-                    emitterRepository.saveEventCache(key, alarm);
-                    AlarmResponseDto alarmResponseDto = new AlarmResponseDto(alarm);
+                    emitterRepository.saveEventCache(key, alarmResponseDto);
                     sendToClient(emitter, key, alarmResponseDto);
                     log.info("alarm = {}", alarmResponseDto.getContent());
                 }

@@ -52,8 +52,8 @@ public class DDayService {
     }
 
     @Transactional
-//    @Scheduled(cron = "0 0 9 * * ?")                // 매일 오전 9시에 실행
-    @Scheduled(cron = "0 0/5 * * * ?")              // 테스트용, 5분 마다 실행
+    @Scheduled(cron = "0 0 9 * * ?")                // 매일 오전 9시에 실행
+//    @Scheduled(cron = "0 0/5 * * * ?")              // 테스트용, 5분 마다 실행
     public ResponseEntity createDdayAlarm() {
         List<PlantJournal> plantJournalList = plantJournalRepository.findAll();
         List<User> targets = new ArrayList<>();
