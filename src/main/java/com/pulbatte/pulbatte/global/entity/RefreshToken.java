@@ -16,15 +16,19 @@ public class RefreshToken {
     @NotBlank
     private String refreshToken;
     @NotBlank
+    private String accessToken;
+    @NotBlank
     private String accountUserId;
 
-    public RefreshToken(String token, String userId) {
-        this.refreshToken = token;
+    public RefreshToken(String refreshToken, String accessToken,String userId) {
+        this.refreshToken = refreshToken;
+        this.accessToken = accessToken;
         this.accountUserId = userId;
     }
 
-    public RefreshToken updateToken(String token) {
-        this.refreshToken = token;
+    public RefreshToken updateToken(String refreshToken, String accessToken) {
+        this.refreshToken = refreshToken;
+        this.accessToken = accessToken;
         return this;
     }
 }
