@@ -22,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
@@ -39,7 +40,7 @@ public class KakaoService {
 
 
     // kakao 로그인해 사용자 정보 가져오기
-    public TokenDto kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
+    public TokenDto kakaoLogin(String authorization, String code, HttpServletResponse response) throws JsonProcessingException {
         // 1. 인가 코드에서 액세스 토큰 얻기
         String accessToken = getToken(code);
         // 2. 토큰으로 카카오 API 호출 : "액세스 토큰"으로 "카카오 사용자 정보" 가져오기
@@ -52,9 +53,9 @@ public class KakaoService {
         Optional<RefreshToken> refreshToken = refreshTokenRepository.findByAccountUserId(kakaoUser.getId().toString());
 
         if(refreshToken.isPresent()){
-            refreshTokenRepository.save(refreshToken.get().updateToken(tokenDto.getRefreshToken()));
+            refreshTokenRepository.save(refreshToken.get().updateToken(tokenDto.getRefreshToken(),authorization));
         }else {
-            RefreshToken newToken = new RefreshToken(tokenDto.getRefreshToken(),kakaoUserInfo.getId().toString());
+            RefreshToken newToken = new RefreshToken(tokenDto.getRefreshToken(),authorization,kakaoUserInfo.getId().toString());
             refreshTokenRepository.save(newToken);
         }
         setHeader(response,tokenDto);

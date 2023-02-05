@@ -26,7 +26,7 @@ public class TokenService {
     private final JwtUtil jwtUtil;
 
     // 토큰 재발행
-    public TokenDto reFreshToken(/*User user,*/HttpServletResponse response, RequestToken requestToken){
+    public TokenDto reFreshToken(/*User user,*/String authorization,HttpServletResponse response, RequestToken requestToken){
         TokenDto tokenDto;
         User user = userRepository.findByUserId(requestToken.getUserEmail()).orElseThrow(
                 () -> new CustomException(ErrorCode.NO_EXIST_USER)
@@ -37,7 +37,7 @@ public class TokenService {
         if(refreshToken.getRefreshToken().equals(requestToken.getRefreshToken())){
             response.addHeader(JwtUtil.ACCESS_TOKEN, jwtUtil.createToken(user.getUserId()));
             tokenDto = jwtUtil.createAllToken(user.getUserId());
-            refreshTokenRepository.save(refreshToken.updateToken(tokenDto.getRefreshToken()));
+            refreshTokenRepository.save(refreshToken.updateToken(tokenDto.getRefreshToken(),authorization));
         }else {
             throw new CustomException(ErrorCode.DISMATCH_TOKEN2);
         }

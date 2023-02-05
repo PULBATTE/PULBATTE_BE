@@ -20,6 +20,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
@@ -75,9 +76,9 @@ public class  UserService {
         Optional<RefreshToken> refreshToken = refreshTokenRepository.findByAccountUserId(loginRequestDto.getUserId().toString());
 
         if(refreshToken.isPresent()){
-            refreshTokenRepository.save(refreshToken.get().updateToken(tokenDto.getRefreshToken()));
+            refreshTokenRepository.save(refreshToken.get().updateToken(tokenDto.getRefreshToken(),tokenDto.getAccessToken()));
         }else {
-            RefreshToken newToken =new RefreshToken(tokenDto.getRefreshToken(),loginRequestDto.getUserId());
+            RefreshToken newToken =new RefreshToken(tokenDto.getAccessToken(),tokenDto.getRefreshToken(),loginRequestDto.getUserId());
             refreshTokenRepository.save(newToken);
         }
         setHeader(response,tokenDto);
