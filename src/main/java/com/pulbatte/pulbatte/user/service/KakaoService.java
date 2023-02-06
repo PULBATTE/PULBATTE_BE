@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pulbatte.pulbatte.global.entity.RefreshToken;
 import com.pulbatte.pulbatte.global.jwt.JwtUtil;
-import com.pulbatte.pulbatte.global.jwt.TokenDto;
+import com.pulbatte.pulbatte.global.dto.TokenDto;
 import com.pulbatte.pulbatte.global.repository.RefreshTokenRepository;
 import com.pulbatte.pulbatte.post.dto.KakaoUserInfoDto;
 import com.pulbatte.pulbatte.user.entity.User;
@@ -22,7 +22,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;

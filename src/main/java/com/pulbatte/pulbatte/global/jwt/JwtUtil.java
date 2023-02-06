@@ -1,11 +1,9 @@
 package com.pulbatte.pulbatte.global.jwt;
 
+import com.pulbatte.pulbatte.global.dto.TokenDto;
 import com.pulbatte.pulbatte.global.entity.RefreshToken;
-import com.pulbatte.pulbatte.global.exception.CustomException;
-import com.pulbatte.pulbatte.global.exception.ErrorCode;
 import com.pulbatte.pulbatte.global.repository.RefreshTokenRepository;
 import com.pulbatte.pulbatte.global.security.UserDetailsServiceImpl;
-import com.pulbatte.pulbatte.user.entity.UserRoleEnum;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
