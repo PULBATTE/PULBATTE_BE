@@ -3,7 +3,6 @@ package com.pulbatte.pulbatte.post.dto;
 import com.pulbatte.pulbatte.comment.dto.CommentResponseDto;
 import com.pulbatte.pulbatte.post.entity.Post;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -38,6 +37,7 @@ public class PostResponseDto {
         if(image.isEmpty()){
             this.image = "https://d3usc6dqsfeh3v.cloudfront.net/post/noimage.png";
         }else {
+            image = "https://d1uh8s8qiogb97.cloudfront." + image.split(".cloudfront.")[1];
             this.image = image;                     // 이미지 url
         }
         this.likeCnt = likeCnt;                     // 좋아요 수

@@ -76,19 +76,6 @@ public class PostService {
                         (long) post.getCommentList().size(),
                         post.getImage()
                 ));
-        List<PostResponseDto> postResponseDto = new ArrayList<>();
-        String image = null;
-        for (Post post : postPage) {
-            Long commentCnt = commentRepository.countByPostId(post.getId());                    // 댓글 수
-            Long likeCnt = likeRepository.likeCnt(post.getId());                                // 좋아요 수
-            if (post.getImage().isEmpty()) {
-                image = "https://d3usc6dqsfeh3v.cloudfront.net/post/noimage.png";
-            } else {
-                image = post.getImage();
-                image = "https://d1uh8s8qiogb97.cloudfront." + image.split(".cloudfront.")[1];
-            }
-            postResponseDto.add(new PostResponseDto(post, likeCnt, commentCnt, image));
-        }
         return pageList;
     }
 
