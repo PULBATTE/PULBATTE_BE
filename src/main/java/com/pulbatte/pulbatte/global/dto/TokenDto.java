@@ -1,4 +1,4 @@
-package com.pulbatte.pulbatte.global.jwt;
+package com.pulbatte.pulbatte.global.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

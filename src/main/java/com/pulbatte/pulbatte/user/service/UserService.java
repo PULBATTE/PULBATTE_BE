@@ -1,13 +1,12 @@
 package com.pulbatte.pulbatte.user.service;
 
 import com.pulbatte.pulbatte.global.dto.MsgResponseDto;
-import com.pulbatte.pulbatte.global.dto.RequestToken;
 import com.pulbatte.pulbatte.global.entity.RefreshToken;
 import com.pulbatte.pulbatte.global.exception.CustomException;
 import com.pulbatte.pulbatte.global.exception.ErrorCode;
 import com.pulbatte.pulbatte.global.exception.SuccessCode;
 import com.pulbatte.pulbatte.global.jwt.JwtUtil;
-import com.pulbatte.pulbatte.global.jwt.TokenDto;
+import com.pulbatte.pulbatte.global.dto.TokenDto;
 import com.pulbatte.pulbatte.global.repository.RefreshTokenRepository;
 import com.pulbatte.pulbatte.user.dto.UserRequestDto;
 import com.pulbatte.pulbatte.user.dto.SignupRequestDto;
@@ -20,7 +19,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestHeader;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;

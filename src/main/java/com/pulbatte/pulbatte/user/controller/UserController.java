@@ -1,9 +1,8 @@
 package com.pulbatte.pulbatte.user.controller;
 
 import com.pulbatte.pulbatte.global.dto.MsgResponseDto;
-import com.pulbatte.pulbatte.global.dto.RequestToken;
 import com.pulbatte.pulbatte.global.exception.SuccessCode;
-import com.pulbatte.pulbatte.global.jwt.TokenDto;
+import com.pulbatte.pulbatte.global.dto.TokenDto;
 import com.pulbatte.pulbatte.global.security.UserDetailsImpl;
 import com.pulbatte.pulbatte.user.dto.UserRequestDto;
 import com.pulbatte.pulbatte.user.dto.SignupRequestDto;
