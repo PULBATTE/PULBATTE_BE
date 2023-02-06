@@ -13,6 +13,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionalEventListener;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
@@ -89,6 +90,7 @@ public class SseService {
     // 사용자에게 알림 전송
     @Async              // event를 비동기로 동작
     @Transactional(propagation = Propagation.REQUIRES_NEW)              // 메소드를 하나의 transaction으로 묶어둠
+    @TransactionalEventListener
     public void send(AlarmRequestDto requestDto) {
         Alarm alarm = alarmRepository.save(createAlarm(requestDto));
         AlarmResponseDto alarmResponseDto  = AlarmResponseDto.builder()
