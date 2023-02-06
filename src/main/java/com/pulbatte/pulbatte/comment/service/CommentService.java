@@ -59,7 +59,6 @@ public class CommentService {
 
         // 본인이 작성한 게시글에 댓글을 쓰면 알림이 가지 않도록함
         if(!post.getUser().getId().equals(user.getId())) {
-//            sseService.send(requestDto);                // 게시글 작성자에게 알림 전송
             eventPublisher.publishEvent(requestDto);
         }
         return new MsgResponseDto(SuccessCode.CREATE_COMMENT);

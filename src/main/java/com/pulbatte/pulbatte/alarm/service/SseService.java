@@ -89,7 +89,6 @@ public class SseService {
 
     // 사용자에게 알림 전송
     @Async              // event를 비동기로 동작
-    @TransactionalEventListener             // 기본값은 AFTER_COMMIT으로 트랜잭션이 commit되었을 때 event를 실행
     @Transactional(propagation = Propagation.REQUIRES_NEW)              // 메소드를 하나의 transaction으로 묶어둠
     public void send(AlarmRequestDto requestDto) {
         Alarm alarm = alarmRepository.save(createAlarm(requestDto));
