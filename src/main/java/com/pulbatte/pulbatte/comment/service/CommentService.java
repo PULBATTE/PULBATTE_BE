@@ -48,7 +48,7 @@ public class CommentService {
             commentRepository.save(new Comment(commentRequestDto, post, user, childComment));    //자식 댓글로 저장
         }
         String url = "/api/posts/user/" + id;               // 게시글 url
-        String content = user.getNickname() + " 님의 게시글 " + "[" + post.getTitle() + "]" + "에 댓글이 등록되었습니다.";             // 알림 내용
+        String content = post.getNickname() + " 님의 게시글 " + "[" + post.getTitle() + "]" + "에 댓글이 등록되었습니다.";             // 알림 내용
 
         AlarmRequestDto requestDto = AlarmRequestDto.builder()
                 .type(AlarmType.comment)
