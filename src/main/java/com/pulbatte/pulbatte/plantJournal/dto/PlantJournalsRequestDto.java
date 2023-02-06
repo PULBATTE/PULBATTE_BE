@@ -20,4 +20,10 @@ public class PlantJournalsRequestDto {
         this.withPlantDay = plantJournal.getWithPlantDay();
     }
 
+    public PlantJournalsRequestDto(PlantJournal plantJournal) {
+        this.id = plantJournal.getId();
+        this.plantName = plantJournal.getPlantName();
+        this.image = plantJournal.getImage();
+        this.withPlantDay = plantJournal.getWithPlantDay();
+    }
 }
