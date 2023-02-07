@@ -113,6 +113,34 @@
   <tbody>
     <tr>
       <td>
+        Front-end <br>검색기능
+      </td>
+      <td>
+        <img src="https://user-images.githubusercontent.com/117730606/217253442-b0f1c07a-5940-403f-bfa0-890868f08d14.png"/>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Front-end <br>React Custom Hook
+      </td>
+      <td>
+        <img src="https://user-images.githubusercontent.com/117730606/217255358-b0962e13-3c01-4075-bc16-b27d72c83fad.png"/>
+      </td>
+    </tr>
+        <tr>
+      <td>
+        Back-end <br>RefreshToken 탈취 위협
+      </td>
+      <td>
+        <img src="https://user-images.githubusercontent.com/117730606/217255758-c60853d0-27a9-4531-bc92-8d2e7aab40c6.png"/>
+      </td>
+    </tr>
+        <tr>
+      <td>
+        Front-end <br>이미지 로딩 속도 개선
+      </td>
+      <td>
+        <img src="https://user-images.githubusercontent.com/117730606/217256001-c24b2f42-73d6-478e-b95e-baadcde4c8db.png"/>
       </td>
     </tr>
   </tbody>
