@@ -160,6 +160,17 @@
   </tbody>
 </table>
 
+## 🎥 시연 GIF | Testing
+
+|홈|식집사 테스트|
+|:---:|:---:|
+|<img src="https://user-images.githubusercontent.com/83339863/217261956-9dbe1273-4484-46c1-9119-041e1ee5d66c.gif" width="400px" height="220px">|<img src="https://user-images.githubusercontent.com/83339863/217262294-dc07ab4f-fb48-4932-8baa-ef3037c8d697.gif" width="400px" height="220px">|
+|식물 검색하기|식물일지|
+|<img src="https://user-images.githubusercontent.com/83339863/217263499-966b9302-7201-45bc-8b64-edf26c58f282.gif" width="400px" height="220px">|<img src="https://user-images.githubusercontent.com/83339863/217281573-f26991e6-4f3d-4b19-a94b-64e119af690b.gif" width="400px" height="220px">|
+|커뮤니티|마이페이지|
+|<img src="https://user-images.githubusercontent.com/83339863/217277950-99a7aac5-c7af-4992-b7c0-fdbcec26cd61.gif" width="400px" height="220px">|<img src="https://user-images.githubusercontent.com/83339863/217283955-327f9e7d-2ad6-4f22-a02d-8fb086c3165f.gif" width="400px" height="220px">|
+
+
 ## 🙂 팀원 | Member
 
 | <img src="https://d3usc6dqsfeh3v.cloudfront.net/post/noimage.png" width="100px;" alt=""/> | <img src="https://d3usc6dqsfeh3v.cloudfront.net/post/noimage.png" width="100px;" alt=""/> | <img src="https://d3usc6dqsfeh3v.cloudfront.net/post/noimage.png" width="100px;" alt=""/> | 
