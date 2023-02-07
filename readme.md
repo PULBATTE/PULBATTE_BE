@@ -6,25 +6,25 @@
 - 키우는 식물을 체계적으로 관리하고 식물과 함께하는 일상을 기록해보세요
 - 식물에 대한 정보와 이야기를 식집사 이웃들과 공유해보세요!
 
-⛺풀밭에 사이트 바로가기
+⛺풀밭에 사이트 [바로가기](https://pulbatte.com/)
 
 ## 🔭 목차 | Contents
-1. [개발기간](#1-개발기간-|-Project-Period)
-2. 아키텍처
-3. 주요 기능
-4. 기술 스택
-5. 기술적 의사결정
-6. 트러블 슈팅
-7. 팀원
+1. [개발 기간](#1-개발-기간--project-period)
+2. [아키텍처](#2-아키텍처--architecture)
+3. [주요 기능](#3-주요-기능--main-function)
+4. [기술 스택](#4-기술-스택--technology-stack)
+5. [기술적 의사결정](#5-기술적-의사결정--technical-decision-making)
+6. [트러블 슈팅](#6-트러블-슈팅--trouble-shooting)
+7. [팀원](#7-팀원--member)
 
-1. [서비스 완성 요구사항](#1-서비스-완성-요구사항)
-## 1. 서비스 완성 요구사항
 
-## 1. 개발기간 | Project Period
+## 1. 개발 기간 | Project Period
 2022.12.30(금) ~ 2023.02.10(금) (6주간)
+
 
 ## 2. 아키텍처 | Architecture
 ![image](https://user-images.githubusercontent.com/109057365/217228976-5bf84631-cd76-4e0e-9cc0-0588765e8a0e.png)
+
 
 ## 3. 주요 기능 | Main Function
 - 식집사 테스트/ 가이드
@@ -42,6 +42,7 @@
 - 커뮤니티
   - 태그별 게시판 (질문과 답변, 식물자랑, 기타, 추천 게시판)
   - 인기 게시물
+
 
 ## 4. 기술 스택 | Technology Stack
 ### Front-End
@@ -75,9 +76,12 @@
   <img src="https://img.shields.io/badge/KakaoTalk-FFCD00?style=for-the-badge&logo=KakaoTalk&logoColor=white">
 </div>
 
-## 5. 기술적 의사결정 | technical decision-making
 
-## 6. 트러블 슈팅 | Trouble shooting
+## 5. 기술적 의사결정 | Technical Decision-Making
+
+
+## 6. 트러블 슈팅 | Trouble Shooting
+
 
 ## 7. 팀원 | Member
 <table>
