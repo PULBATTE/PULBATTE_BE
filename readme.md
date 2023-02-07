@@ -78,10 +78,45 @@
 
 
 ## 5. 기술적 의사결정 | Technical Decision-Making
+<table>
+  <tbody>
+    <tr>
+      <td>react-query</td>
+      <td>리액트 쿼리는 전역 상태를 고려할 필요 없이, 어느 곳에서든지 캐싱 설정(axios)같은 것을 정의할 수 있습니다. 덕분에 중복되는 api 요청들을 줄이게 되면서 UI/UX 개발에 도움을 받을 수 있는 것이 장점이라고 생각하여 사용하였습니다.</td>
+    </tr>
+    <tr>
+      <td>Querydsl</td>
+      <td>태그별 필터 조회 구현을 위한 동적 쿼리 작성을 고려하여 Querydsl을 사용하였습니다.</td>
+    </tr>
+    <tr>
+      <td>github action</td>
+      <td>효율적인 협업을 위해서 github에서 지원하는 github action을 사용하여 자동 배포를 진행하였다.</td>
+    </tr>
+    <tr>
+      <td>nginx</td>
+      <td>서버 확장에 용이하고 리버스 프록시를 통해 보안적으로 뛰어나며 무중단 배포를 통한 사용자의 편의성 또한 제공하고 이용자가 많아졌을 경우의 확장성을 생각하여 사용하였습니다.</td>
+    </tr>
+    <tr>
+      <td>cloudfront</td>
+      <td>사용자에게 제공되는 컨텐츠의 전송 속도를 높이고, cloudfront를 사용해 제공함으로써 보안성을 강화하기 위해 사용하였습니다.</td>
+    </tr>
+    <tr>
+      <td>lambda</td>
+      <td>이미지 리사이징은 CPU, 메모리를 많이 사용하기 때문에 독립적인 서버에서 이미지 리사이징을 하게 된다면 서버의 부담을 줄일 수 있기 때문에 사용하였습니다.</td>
+    </tr>
+  </tbody>
+</table>
 
 
 ## 6. 트러블 슈팅 | Trouble Shooting
-
+<table>
+  <tbody>
+    <tr>
+      <td>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
 ## 7. 팀원 | Member
 <table>
