@@ -1,50 +1,52 @@
-# 프로젝트 소개
+# <img width="175px" alt="KakaoTalk_20230124_062552666" src="https://user-images.githubusercontent.com/94878158/217268241-2913424a-2ab3-4be1-912b-200bd617c949.png">
 ![image](https://user-images.githubusercontent.com/109057365/217227124-c653778b-2ea8-44f0-b804-d98a0dfbe0b8.png)
-## 식집사들을 위한 식물 관리 사이트
-- 성향에 맞는 식물을 테스트해보고, 테스트한 식물의 성장도를 기록할 수 있어요
-- 식물의 특징을 필터링해서 검색하고 다양한 식물의 정보를 찾아볼 수 있어요
-- 키우는 식물을 체계적으로 관리하고 식물과 함께하는 일상을 기록해보세요
-- 식물에 대한 정보와 이야기를 식집사 이웃들과 공유해보세요!
+## 프로젝트 소개
+✅ 식집사들을 위한 식물 관리 사이트 ✅
+- 성향에 맞는 식물을 테스트해보고, 테스트한 식물의 성장도를 기록할 수 있어요 📈
+- 식물의 특징을 필터링해서 검색하고 다양한 식물의 정보를 찾아볼 수 있어요 ❓
+- 키우는 식물을 체계적으로 관리하고 식물과 함께하는 일상을 기록해보세요 📆
+- 식물에 대한 정보와 이야기를 식집사 이웃들과 공유해보세요! 💬
 
-⛺풀밭에 사이트 [바로가기](https://pulbatte.com/)
+ 👉 풀밭에 사이트 [바로가기](https://pulbatte.com/) <br/>
+ 👉 풀밭에 노션 [바로가기](https://www.notion.so/7d7967b21cd644548d633b8e58fb6409)
 
 ## 🔭 목차 | Contents
-1. [개발 기간](#1-개발-기간--project-period)
-2. [아키텍처](#2-아키텍처--architecture)
-3. [주요 기능](#3-주요-기능--main-function)
-4. [기술 스택](#4-기술-스택--technology-stack)
-5. [기술적 의사결정](#5-기술적-의사결정--technical-decision-making)
-6. [트러블 슈팅](#6-트러블-슈팅--trouble-shooting)
-7. [팀원](#7-팀원--member)
+1️⃣ [개발 기간](#-개발-기간--project-period) <br/>
+2️⃣ [아키텍처](#-아키텍처--architecture) <br/>
+3️⃣ [주요 기능](#-주요-기능--main-function) <br/>
+4️⃣ [기술 스택](#-기술-스택--technology-stack) <br/>
+5️⃣ [기술적 의사결정](#-기술적-의사결정--technical-decision-making) <br/>
+6️⃣ [트러블 슈팅](#-트러블-슈팅--trouble-shooting) <br/>
+7️⃣ [팀원](#-팀원--member)
 
 
-## 1. 개발 기간 | Project Period
+## ⏰ 개발 기간 | Project Period
 2022.12.30(금) ~ 2023.02.10(금) (6주간)
 
 
-## 2. 아키텍처 | Architecture
+## 🛠 아키텍처 | Architecture
 ![image](https://user-images.githubusercontent.com/109057365/217228976-5bf84631-cd76-4e0e-9cc0-0588765e8a0e.png)
 
 
-## 3. 주요 기능 | Main Function
-- 식집사 테스트/ 가이드
+## 🌱 주요 기능 | Main Function
+✔️ 식집사 테스트/ 가이드
   - 16가지 유형의 성격 테스트
   - 6가지 의 식물 추천 및 가이드
 
-- 식물 찾아보기
+✔️ 식물 찾아보기
   - 300여종의 식물 검색
   - 5가지 필터 (초보자, 잎, 열매, 꽃, 다육/선인장)
   
-- 식물 일지
+✔️ 식물 일지
   - 내가 키우는 식물을 등록하고 관리
   - 각 식물의 관리도를 그래프로 나타내고, 일기를 작성 가능
 
-- 커뮤니티
+✔️ 커뮤니티
   - 태그별 게시판 (질문과 답변, 식물자랑, 기타, 추천 게시판)
   - 인기 게시물
 
 
-## 4. 기술 스택 | Technology Stack
+## ⚙ 기술 스택 | Technology Stack
 ### Front-End
 
 ### Back-End
@@ -69,7 +71,7 @@
   <img src="https://img.shields.io/badge/JSON Web Tokens-000000?style=for-the-badge&logo=JSON Web Tokens&logoColor=white">
 </div>
 
-### Dev tools
+### 개발 환경 | Environment
 <div>
   <img src="https://img.shields.io/badge/IntelliJ IDEA-000000?style=for-the-badge&logo=IntelliJ IDEA&logoColor=white">
   <img src="https://img.shields.io/badge/Github-181717?style=for-the-badge&logo=Github&logoColor=white">
@@ -77,7 +79,7 @@
 </div>
 
 
-## 5. 기술적 의사결정 | Technical Decision-Making
+## 📑 기술적 의사결정 | Technical Decision-Making
 <table>
   <tbody>
     <tr>
@@ -108,12 +110,15 @@
 </table>
 
 
-## 6. 트러블 슈팅 | Trouble Shooting
+## 🛠 트러블 슈팅 | Trouble Shooting
 <table>
   <tbody>
     <tr>
       <td>
-        Front-end <br>검색기능
+        Front-end
+      </td>
+      <td>
+        검색기능
       </td>
       <td>
         <img src="https://user-images.githubusercontent.com/117730606/217253442-b0f1c07a-5940-403f-bfa0-890868f08d14.png"/>
@@ -121,7 +126,10 @@
     </tr>
     <tr>
       <td>
-        Front-end <br>React Custom Hook
+        Front-end
+      </td>
+      <td>
+        React Custom Hook
       </td>
       <td>
         <img src="https://user-images.githubusercontent.com/117730606/217255358-b0962e13-3c01-4075-bc16-b27d72c83fad.png"/>
@@ -129,7 +137,10 @@
     </tr>
         <tr>
       <td>
-        Back-end <br>RefreshToken 탈취 위협
+        Back-end 
+      </td>
+      <td>
+        RefreshToken 탈취 위협
       </td>
       <td>
         <img src="https://user-images.githubusercontent.com/117730606/217255758-c60853d0-27a9-4531-bc92-8d2e7aab40c6.png"/>
@@ -137,7 +148,10 @@
     </tr>
         <tr>
       <td>
-        Front-end <br>이미지 로딩 속도 개선
+        Back-end 
+      </td>
+      <td>
+        이미지 로딩 속도 개선
       </td>
       <td>
         <img src="https://user-images.githubusercontent.com/117730606/217256001-c24b2f42-73d6-478e-b95e-baadcde4c8db.png"/>
@@ -146,17 +160,10 @@
   </tbody>
 </table>
 
-## 7. 팀원 | Member
-<table>
-  <tbody>
-    <tr>
-      <td align="center"><a href=""><img src="https://d3usc6dqsfeh3v.cloudfront.net/post/noimage.png" width="100px;" alt=""/><br /><sub><b>BE 팀장 : 김인광</b></sub></a><br /></td>
-      <td align="center"><a href=""><img src="https://d3usc6dqsfeh3v.cloudfront.net/post/noimage.png" width="100px;" alt=""/><br /><sub><b>BE 팀원 : 이상현</b></sub></a><br /></td>
-      <td align="center"><a href=""><img src="https://d3usc6dqsfeh3v.cloudfront.net/post/noimage.png" width="100px;" alt=""/><br /><sub><b>BE 팀원 : 박소연</b></sub></a><br /></td>
-     <tr/>
-    <td align="center"><a href=""><img src="https://d3usc6dqsfeh3v.cloudfront.net/post/noimage.png" width="100px;" alt=""/><br /><sub><b>FE 부팀장 : 강민승</b></sub></a><br /></td>
-      <td align="center"><a href=""><img src="https://d3usc6dqsfeh3v.cloudfront.net/post/noimage.png" width="100px;" alt=""/><br /><sub><b>FE 팀원 : 정다솔</b></sub></a><br /></td>
-      <td align="center"><a href=""><img src="https://d3usc6dqsfeh3v.cloudfront.net/post/noimage.png" width="100px;" alt=""/><br /><sub><b>Design 팀원 : 최미진</b></sub></a><br /></td>
-    </tr>
-  </tbody>
-</table>
+## 🙂 팀원 | Member
+
+| <img src="https://d3usc6dqsfeh3v.cloudfront.net/post/noimage.png" width="100px;" alt=""/> | <img src="https://d3usc6dqsfeh3v.cloudfront.net/post/noimage.png" width="100px;" alt=""/> | <img src="https://d3usc6dqsfeh3v.cloudfront.net/post/noimage.png" width="100px;" alt=""/> | 
+|:---:|:---:|:---:|
+| BE 팀장 김인광 | BE 팀원 이상현 | BE 팀원 박소연 |
+| <img src="https://d3usc6dqsfeh3v.cloudfront.net/post/noimage.png" width="100px;" alt=""/> | <img src="https://d3usc6dqsfeh3v.cloudfront.net/post/noimage.png" width="100px;" alt=""/> | <img src="https://d3usc6dqsfeh3v.cloudfront.net/post/noimage.png" width="100px;" alt=""/> |
+| FE 부팀장 강민승 | FE 팀원 정다솔 | Design 최미진 |
