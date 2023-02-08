@@ -76,7 +76,7 @@ public class  UserService {
         if(refreshToken.isPresent()){
             refreshTokenRepository.save(refreshToken.get().updateToken(tokenDto.getRefreshToken(),tokenDto.getAccessToken()));
         }else {
-            RefreshToken newToken =new RefreshToken(tokenDto.getAccessToken(),tokenDto.getRefreshToken(),loginRequestDto.getUserId());
+            RefreshToken newToken =new RefreshToken(tokenDto.getRefreshToken(),tokenDto.getAccessToken(),loginRequestDto.getUserId());
             refreshTokenRepository.save(newToken);
         }
         setHeader(response,tokenDto);
