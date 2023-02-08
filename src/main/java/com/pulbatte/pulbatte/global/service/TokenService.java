@@ -32,7 +32,7 @@ public class TokenService {
         RefreshToken refreshToken = refreshTokenRepository.findByAccountUserId(user.getUserId()).orElseThrow(
                 () -> new CustomException(ErrorCode.DISMATCH_TOKEN)
         );
-        if(refreshToken.getRefreshToken().equals(requestToken.getRefreshToken())){
+        if(refreshToken.getRefreshToken().equals(requestToken.getRefreshToken())&&refreshToken.getAccessToken().equals(authorization)){
             response.addHeader(JwtUtil.ACCESS_TOKEN, jwtUtil.createToken(user.getUserId()));
             tokenDto = jwtUtil.createAllToken(user.getUserId());
             refreshTokenRepository.save(refreshToken.updateToken(tokenDto.getRefreshToken(),authorization));
