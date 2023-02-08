@@ -54,8 +54,8 @@ public class BeginnerService {
         return beginnerResponseDtoList;
     }
     // 가이드 식물 등록
-    public MsgResponseDto postBeginnerPlant(String beginnerName, User user){
-        Beginner beginner = beginnerRepository.findByBeginnerPlantName(beginnerName).orElseThrow(
+    public MsgResponseDto postBeginnerPlant(Long beginnerId, User user){
+        Beginner beginner = beginnerRepository.findById(beginnerId).orElseThrow(
                 () -> new CustomException(ErrorCode.NO_BEGINNER_PLANT)
         );
         if(beginnerUserRepository.findByUserId(user.getId()).isEmpty()){
