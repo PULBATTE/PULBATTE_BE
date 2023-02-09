@@ -14,6 +14,7 @@ public class PlantDetailDto {
     private int beginner;
     private String content;         // 식물 설명
     private PlantTag plantTag;          // 식물 태그
+    private String holder;              // 이미지 저작권자
     private String image;           // 이미지 url
     private String waterType;           // 물 주기
     private String water;           // 물 주기 상세 내용
@@ -31,6 +32,7 @@ public class PlantDetailDto {
         this.beginner = plant.getBeginner();
         this.content = plant.getContent();
         this.plantTag = plant.getPlantTag();
+        this.holder = plant.getHolder();
         this.image = plant.getImage();
         this.waterType = plant.getWaterType();
         this.water = plant.getWater();
