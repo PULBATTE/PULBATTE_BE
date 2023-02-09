@@ -24,7 +24,6 @@ import java.util.List;
 @Slf4j
 public class DDayService {
     private final PlantJournalRepository plantJournalRepository;
-    private final SseService sseService;
     private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
@@ -73,8 +72,7 @@ public class DDayService {
                         .url(url)
                         .user(journal.getUser())
                         .build();
-                sseService.send(requestDto);
-//                eventPublisher.publishEvent(requestDto);
+                eventPublisher.publishEvent(requestDto);
             }
             else if(journal.getNutritionDDay()==0) {
                 content = "오늘은" + journal.getPlantName() + " 에 영양주는 날입니다.";
@@ -84,8 +82,7 @@ public class DDayService {
                         .url(url)
                         .user(journal.getUser())
                         .build();
-                sseService.send(requestDto);
-//                eventPublisher.publishEvent(requestDto);
+                eventPublisher.publishEvent(requestDto);
             }
             else if(journal.getRepottingDDay()==0) {
                 content = "오늘은" + journal.getPlantName() + " 에 분갈이하는 날입니다.";
@@ -95,8 +92,7 @@ public class DDayService {
                         .url(url)
                         .user(journal.getUser())
                         .build();
-                sseService.send(requestDto);
-//                eventPublisher.publishEvent(requestDto);
+                eventPublisher.publishEvent(requestDto);
             }
         }
         return new ResponseEntity(HttpStatus.OK);
