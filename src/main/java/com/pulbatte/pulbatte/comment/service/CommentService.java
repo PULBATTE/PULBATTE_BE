@@ -27,7 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class CommentService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
-    private final SseService sseService;
     private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
@@ -59,7 +58,7 @@ public class CommentService {
 
         // 본인이 작성한 게시글에 댓글을 쓰면 알림이 가지 않도록함
         if(!post.getUser().getId().equals(user.getId())) {
-            sseService.send(requestDto);
+            eventPublisher.publishEvent(requestDto);
         }
         return new MsgResponseDto(SuccessCode.CREATE_COMMENT);
     }
