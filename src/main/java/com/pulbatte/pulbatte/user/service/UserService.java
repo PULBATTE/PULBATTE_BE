@@ -74,7 +74,7 @@ public class  UserService {
         Optional<RefreshToken> refreshToken = refreshTokenRepository.findByAccountUserId(loginRequestDto.getUserId().toString());
 
         if(refreshToken.isPresent()){
-            refreshTokenRepository.save(refreshToken.get().updateToken(tokenDto.getRefreshToken(),tokenDto.getAccessToken()));
+            refreshToken.get().updateToken(tokenDto.getRefreshToken(),tokenDto.getAccessToken());
         }else {
             RefreshToken newToken =new RefreshToken(tokenDto.getRefreshToken(),tokenDto.getAccessToken(),loginRequestDto.getUserId());
             refreshTokenRepository.save(newToken);
