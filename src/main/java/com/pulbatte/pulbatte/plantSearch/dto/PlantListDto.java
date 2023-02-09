@@ -11,6 +11,7 @@ public class PlantListDto {
 
     private Long id;
     private String plantName;
+    private String holder;
 
     private String plantTag;
     private String image;
@@ -19,6 +20,7 @@ public class PlantListDto {
     public PlantListDto(Plant plant) {
         this.id = plant.getId();
         this.plantName = plant.getPlantName();
+        this.holder = plant.getHolder();
         this.plantTag = plant.getPlantTag().toString();
         this.image = plant.getImage();
     }
