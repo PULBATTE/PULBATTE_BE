@@ -50,7 +50,6 @@ public class DDayService {
             int totalRepottingDdayClick = withplantDay/plantJournal.getRepottingCycle();
             plantJournal.Ddaymiuns(water, nutrition,repotting,withplantDay,totalWaterDdayClick,totalNutritionDdayClick,totalRepottingDdayClick);
         }
-
     }
 
     @Transactional

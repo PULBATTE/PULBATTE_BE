@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity(name = "plantjournal")
 @Getter
@@ -18,7 +19,6 @@ public class PlantJournal {
     @ManyToOne
     @JoinColumn(name = "USERS_ID")
     private User user;
-
     @Column
     private String plantName;                       // 식물 이름
     @Column
@@ -62,6 +62,11 @@ public class PlantJournal {
     @Column
     private int repottingCheck;                     // 분갈이 Dday 눌렀는지 체크
 
+    @OneToMany(mappedBy = "plantJournal",cascade = CascadeType.REMOVE)
+    private List<PlantJournalDiary> plantJournalDiaryList;
+
+    @OneToMany(mappedBy = "plantJournal",cascade = CascadeType.REMOVE)
+    private List<DdayClick> ddayClickList;
 
     public PlantJournal(PlantJournalAddRequestDto plantJournalAddRequestDto,User user, String image,int waterDDay,int nutritionDDay,int repottingDDay){
         this.user = user;
