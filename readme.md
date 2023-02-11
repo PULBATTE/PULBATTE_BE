@@ -181,9 +181,7 @@
 
 ## 🙂 팀원 | Member
 
-| <img src="https://user-images.githubusercontent.com/117730606/218255345-d8b78f88-4b04-400b-b0a2-3df12c5be401.jpg" width="100px;" alt=""/> 
-| <img src="https://avatars.githubusercontent.com/u/109057365?s=400&u=aec944568894f0b9c054ecce7d5d43e67e962288&v=4" width="100px;" alt=""/> 
-| <img src="https://d3usc6dqsfeh3v.cloudfront.net/post/noimage.png" width="100px;" alt=""/> | 
+| <img src="https://user-images.githubusercontent.com/117730606/218255345-d8b78f88-4b04-400b-b0a2-3df12c5be401.jpg" width="100px;" alt=""/> | <img src="https://avatars.githubusercontent.com/u/109057365?s=400&u=aec944568894f0b9c054ecce7d5d43e67e962288&v=4" width="100px;" alt=""/> | <img src="https://d3usc6dqsfeh3v.cloudfront.net/post/noimage.png" width="100px;" alt=""/> | 
 |:---:|:---:|:---:|
 | BE 팀장 김인광 | BE 팀원 이상현 | BE 팀원 박소연 |
 | <img src="https://user-images.githubusercontent.com/83339863/217834853-eb7cc798-94aa-4224-8247-125cc8e8736e.jpeg" width="100px;" alt=""/> | <img src="https://d3usc6dqsfeh3v.cloudfront.net/post/noimage.png" width="100px;" alt=""/> | <img src="https://d3usc6dqsfeh3v.cloudfront.net/post/noimage.png" width="100px;" alt=""/> |
