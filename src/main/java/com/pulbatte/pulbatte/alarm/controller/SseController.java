@@ -21,7 +21,6 @@ public class SseController {
      consumes -> 들어오는 데이터 타입을 정의
      produces -> 반환하는 데이터 타입을 정의
      */
-    @CrossOrigin
     @GetMapping(value = "/subscribe", consumes = MediaType.ALL_VALUE, produces = "text/event-stream")
     public SseEmitter subscribe(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
