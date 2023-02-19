@@ -26,8 +26,9 @@ public class RefreshToken {
         this.accountUserId = userId;
     }
 
-    public void updateToken(String refreshToken, String accessToken) {
+    public RefreshToken updateToken(String refreshToken, String accessToken) {
         this.refreshToken = refreshToken;
         this.accessToken = accessToken;
+        return this;
     }
 }

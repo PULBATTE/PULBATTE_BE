@@ -22,10 +22,10 @@ public class TokenController {
     @PostMapping("/retoken")
     public TokenDto reFreshToken(
             /*@AuthenticationPrincipal UserDetailsImpl userDetails,*/
-            @RequestHeader("Authorization") String authorization,
+           /* @RequestHeader("Authorization") String authorization,*/
             @RequestBody RequestToken requestToken,
             HttpServletResponse response){
-        return tokenService.reFreshToken(/*userDetails.getUser(), */authorization,response , requestToken);
+        return tokenService.reFreshToken(/*userDetails.getUser(), *//*authorization,*/response , requestToken);
     }
     // 리프레시 토큰 삭제
     @DeleteMapping("/deletetoken")

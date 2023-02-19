@@ -25,7 +25,7 @@ public class TokenService {
 
     // 토큰 재발행
     @Transactional
-    public TokenDto reFreshToken(/*User user,*/String authorization,HttpServletResponse response, RequestToken requestToken){
+    public TokenDto reFreshToken(/*User user,*//*String authorization,*/HttpServletResponse response, RequestToken requestToken){
         TokenDto tokenDto;
         User user = userRepository.findByUserId(requestToken.getUserEmail()).orElseThrow(
                 () -> new CustomException(ErrorCode.NO_EXIST_USER)
@@ -33,9 +33,11 @@ public class TokenService {
         RefreshToken refreshToken = refreshTokenRepository.findByAccountUserId(user.getUserId()).orElseThrow(
                 () -> new CustomException(ErrorCode.DISMATCH_TOKEN)
         );
-        if(refreshToken.getRefreshToken().equals(requestToken.getRefreshToken())&&refreshToken.getAccessToken().equals(authorization)){
-            response.addHeader(JwtUtil.ACCESS_TOKEN, jwtUtil.createToken(user.getUserId()));
+        if(refreshToken.getRefreshToken().equals(requestToken.getRefreshToken())&&refreshToken.getAccessToken().equals(requestToken.getAccessToken())){
+            /*response.addHeader(JwtUtil.ACCESS_TOKEN, jwtUtil.createToken(user.getUserId()));*/
             tokenDto = jwtUtil.createAllToken(user.getUserId());
+            response.addHeader(JwtUtil.ACCESS_TOKEN,tokenDto.getAccessToken());
+            /*refreshToken.updateToken(tokenDto.getRefreshToken(),tokenDto.getAccessToken());*/
             refreshToken.updateToken(tokenDto.getRefreshToken(),tokenDto.getAccessToken());
         }else {
             throw new CustomException(ErrorCode.DISMATCH_TOKEN2);

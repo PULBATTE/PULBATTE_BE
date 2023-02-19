@@ -20,6 +20,7 @@ import org.springframework.util.StringUtils;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Key;
+import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.Date;
 import java.util.Optional;
@@ -36,7 +37,7 @@ public class JwtUtil {
     private static final String BEARER_PREFIX = "Bearer ";
     public static final String ACCESS_TOKEN = "Authorization";
     public static final String REFRESH_TOKEN = "Refresh_Token";
-    private static final long TOKEN_TIME = /*60 * 60 * 1000L; */5000;
+    private static final long TOKEN_TIME = 60 * 60 * 2 *1000L;
     private static final long REFRESH_TOKEN_TIME = 60 * 60 * 12 * 7 * 2 * 1000L;
 
     @Value("${jwt.secret.key}")
@@ -62,7 +63,7 @@ public class JwtUtil {
         return null;
     }
     public TokenDto createAllToken(String userId){
-        return new TokenDto(createToken(userId/*,"Access"*/),createRefreshToken(/*userId,"Refresh"*/),"200");
+        return new TokenDto(createToken(userId/*,"Access"*/),createRefreshToken(/*userId,"Refresh"*/),"200", LocalDateTime.now());
     }
     public String createToken(String userId/*, String type*/) {
         Date date = new Date();

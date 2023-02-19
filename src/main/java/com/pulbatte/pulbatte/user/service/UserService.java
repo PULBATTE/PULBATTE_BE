@@ -58,7 +58,7 @@ public class  UserService {
         return new MsgResponseDto(SuccessCode.SIGN_UP);
     }
     // 로그인
-    @Transactional(readOnly = false)
+    @Transactional
     public TokenDto login(UserRequestDto loginRequestDto, HttpServletResponse response) {
         String userId = loginRequestDto.getUserId();
         String password = loginRequestDto.getPassword();
