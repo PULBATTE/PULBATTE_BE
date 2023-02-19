@@ -58,7 +58,7 @@ public class  UserService {
         return new MsgResponseDto(SuccessCode.SIGN_UP);
     }
     // 로그인
-    @Transactional(readOnly = false)
+    @Transactional
     public TokenDto login(UserRequestDto loginRequestDto, HttpServletResponse response) {
         String userId = loginRequestDto.getUserId();
         String password = loginRequestDto.getPassword();
@@ -74,7 +74,7 @@ public class  UserService {
         Optional<RefreshToken> refreshToken = refreshTokenRepository.findByAccountUserId(loginRequestDto.getUserId().toString());
 
         if(refreshToken.isPresent()){
-            refreshTokenRepository.save(refreshToken.get().updateToken(tokenDto.getRefreshToken(),tokenDto.getAccessToken()));
+            refreshToken.get().updateToken(tokenDto.getRefreshToken(),tokenDto.getAccessToken());
         }else {
             RefreshToken newToken =new RefreshToken(tokenDto.getRefreshToken(),tokenDto.getAccessToken(),loginRequestDto.getUserId());
             refreshTokenRepository.save(newToken);
