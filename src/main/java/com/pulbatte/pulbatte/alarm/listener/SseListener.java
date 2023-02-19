@@ -14,7 +14,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
 public class SseListener {
     private final SseService sseService;
 
-//    @TransactionalEventListener
+    @TransactionalEventListener
     @Transactional(propagation = Propagation.REQUIRES_NEW)              // 기본값은 AFTER_COMMIT으로 트랜잭션이 commit되었을 때 event를 실행
     @Async
     public void handleAlarm(AlarmRequestDto requestDto) {

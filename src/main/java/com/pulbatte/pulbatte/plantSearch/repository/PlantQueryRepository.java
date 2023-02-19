@@ -2,6 +2,7 @@ package com.pulbatte.pulbatte.plantSearch.repository;
 
 import com.pulbatte.pulbatte.plantSearch.dto.*;
 import com.pulbatte.pulbatte.plantSearch.entity.PlantTag;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberTemplate;
@@ -25,22 +26,13 @@ public class PlantQueryRepository {
         this.queryFactory = queryFactory;
     }
 
-    // 전체 목록 가져오기
-//    public List<PlantListDto> findAll() {
-//        return queryFactory
-//                .select(new QPlantListDto(
-//                        plant
-//                ))
-//                .from(plant)
-//                .orderBy(plant.plantName.asc())
-//                .fetch();
-//    }
-
     // 전체 목록 무한 스크롤
     public Page<PlantListDto> findAll(Pageable pageable) {
         List<PlantListDto> results = queryFactory
-                .select(new QPlantListDto(
-                        plant
+                .select(Projections.fields(PlantListDto.class,
+                        plant.id,
+                        plant.plantName,
+                        plant.image
                 ))
                 .from(plant)
                 .orderBy(plant.plantName.asc())
@@ -70,8 +62,10 @@ public class PlantQueryRepository {
     // 식물 이름 검색
     public List<PlantListDto> findByPlantName(@Param("plantName") String plantName) {
         return queryFactory
-                .select(new QPlantListDto(
-                        plant
+                .select(Projections.fields(PlantListDto.class,
+                        plant.id,
+                        plant.plantName,
+                        plant.image
                 ))
                 .from(plant)
                 .where(eqPlantName(plantName))
@@ -85,8 +79,10 @@ public class PlantQueryRepository {
         if (tag.equals(PlantTag.beginner)) {
             int beginner = 1;
             results = queryFactory
-                    .select(new QPlantListDto(
-                            plant
+                    .select(Projections.fields(PlantListDto.class,
+                            plant.id,
+                            plant.plantName,
+                            plant.image
                     ))
                     .from(plant)
                     .where(isBeginner(beginner))
@@ -103,8 +99,10 @@ public class PlantQueryRepository {
 
         } else if (tag.equals(PlantTag.all)) {
             results = queryFactory
-                    .select(new QPlantListDto(
-                            plant
+                    .select(Projections.fields(PlantListDto.class,
+                            plant.id,
+                            plant.plantName,
+                            plant.image
                     ))
                     .from(plant)
                     .orderBy(plant.plantName.asc())
@@ -119,8 +117,10 @@ public class PlantQueryRepository {
 
         } else {
             results = queryFactory
-                    .select(new QPlantListDto(
-                            plant
+                    .select(Projections.fields(PlantListDto.class,
+                            plant.id,
+                            plant.plantName,
+                            plant.image
                     ))
                     .from(plant)
                     .where(eqPlantTag(tag))
@@ -142,8 +142,10 @@ public class PlantQueryRepository {
     // 초보자 태그
     public Page<PlantListDto> findByBeginnerTag(int beginner, Pageable pageable) {
         List<PlantListDto> results = queryFactory
-                .select(new QPlantListDto(
-                        plant
+                .select(Projections.fields(PlantListDto.class,
+                        plant.id,
+                        plant.plantName,
+                        plant.image
                 ))
                 .from(plant)
                 .where(isBeginner(beginner))
