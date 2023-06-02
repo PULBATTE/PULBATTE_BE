@@ -192,21 +192,4 @@ public class PlantQueryRepository {
             return null;
         } else return plant.beginner.eq(1);
     }
-
-    // no-offset
-//    private BooleanExpression ltPlantId(Long plantId) {
-//        return isEmpty(plantId) ? null : plant.id.lt(plantId);
-//    }
-
-    // 무한 스크롤 처리
-//    private Slice<PlantListDto> checkLastPage(Pageable pageable, List<PlantListDto> results) {
-//        boolean hasNext = false;            // 다음 페이지가 있는지 여부
-//
-//        if(results.size() > pageable.getPageSize()) {
-//            hasNext = true;
-//            results.remove(pageable.getPageSize());
-//        }
-//        return new SliceImpl<>(results, pageable, hasNext);
-//    }
-
 }
