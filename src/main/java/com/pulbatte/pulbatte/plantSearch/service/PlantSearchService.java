@@ -27,13 +27,6 @@ public class PlantSearchService {
     private final PlantQueryRepository queryRepository;
     private final PlantRepository plantRepository;
 
-//    public PlantListResponseDto getAllPlants() {
-//        List<PlantListDto> plantList = queryRepository.findAll();
-//        return PlantListResponseDto.builder()
-//                .plants(plantList)
-//                .build();
-//    }
-
     @Transactional(readOnly = true)
     public CustomPageImpl<PlantListDto> getAllPlants(Long cursorId, Pageable pageable) {
         return queryRepository.findAll(cursorId, pageable);
@@ -47,11 +40,8 @@ public class PlantSearchService {
                 .build();
     }
 
-    public Page<?> findByPlantTag(PlantTag tag, Pageable pageable) {
-//        return PlantListResponseDto.builder()
-//                .plants(plantList)
-//                .build();
-        return queryRepository.findByPlantTag(tag, pageable);
+    public Page<?> findByPlantTag(PlantTag tag, Long cursorId, Pageable pageable) {
+        return queryRepository.findByPlantTag(tag, cursorId, pageable);
     }
 
     // 초보자 태그 조회

@@ -39,9 +39,10 @@ public class PlantSearchController {
     @GetMapping(value = "/{tag}", produces = "application/json; charset=utf8")
     public ResponseEntity<Page<?>> findByPlantTag(
             @PathVariable PlantTag tag,
+            Long cursorId,
             @PageableDefault(size = 20) Pageable pageable
     ) {
-        return ResponseEntity.ok(searchService.findByPlantTag(tag, pageable));
+        return ResponseEntity.ok(searchService.findByPlantTag(tag, cursorId, pageable));
     }
 
     // 초보자 태그 조회
