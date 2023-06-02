@@ -2,6 +2,7 @@ package com.pulbatte.pulbatte.plantSearch.controller;
 
 import com.pulbatte.pulbatte.plantSearch.dto.PlantDetailDto;
 import com.pulbatte.pulbatte.plantSearch.dto.PlantListDto;
+import com.pulbatte.pulbatte.plantSearch.entity.CustomPageImpl;
 import com.pulbatte.pulbatte.plantSearch.entity.PlantTag;
 import com.pulbatte.pulbatte.plantSearch.dto.PlantListResponseDto;
 import com.pulbatte.pulbatte.plantSearch.service.PlantSearchService;
@@ -20,10 +21,11 @@ public class PlantSearchController {
     private final PlantSearchService searchService;
 
     @GetMapping
-    public ResponseEntity<Page<PlantListDto>> getAllPlants(
+    public ResponseEntity<CustomPageImpl<PlantListDto>> getAllPlants(
+            Long cursorId,
             @PageableDefault(size = 20) Pageable pageable
     ) {
-        return ResponseEntity.ok(searchService.getAllPlants(pageable));
+        return ResponseEntity.ok(searchService.getAllPlants(cursorId, pageable));
     }
 
     // 식물 이름 검색
@@ -37,9 +39,10 @@ public class PlantSearchController {
     @GetMapping(value = "/{tag}", produces = "application/json; charset=utf8")
     public ResponseEntity<Page<?>> findByPlantTag(
             @PathVariable PlantTag tag,
+            Long cursorId,
             @PageableDefault(size = 20) Pageable pageable
     ) {
-        return ResponseEntity.ok(searchService.findByPlantTag(tag, pageable));
+        return ResponseEntity.ok(searchService.findByPlantTag(tag, cursorId, pageable));
     }
 
     // 초보자 태그 조회

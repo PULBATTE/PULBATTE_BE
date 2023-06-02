@@ -1,6 +1,7 @@
 package com.pulbatte.pulbatte.plantSearch.repository;
 
 import com.pulbatte.pulbatte.plantSearch.dto.*;
+import com.pulbatte.pulbatte.plantSearch.entity.CustomPageImpl;
 import com.pulbatte.pulbatte.plantSearch.entity.PlantTag;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -26,8 +27,7 @@ public class PlantQueryRepository {
         this.queryFactory = queryFactory;
     }
 
-    // 전체 목록 무한 스크롤
-    public Page<PlantListDto> findAll(Pageable pageable) {
+    public CustomPageImpl<PlantListDto> findAll(Long cursorId, Pageable pageable) {
         List<PlantListDto> results = queryFactory
                 .select(Projections.fields(PlantListDto.class,
                         plant.id,
@@ -35,17 +35,12 @@ public class PlantQueryRepository {
                         plant.image
                 ))
                 .from(plant)
+                .where(eqCursorId(cursorId))
                 .orderBy(plant.plantName.asc())
-                .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        Long count = queryFactory
-                .select(plant.count())
-                .from(plant)
-                .fetchOne();
-
-        return new PageImpl<>(results, pageable, count);
+        return new CustomPageImpl<PlantListDto>(results, pageable, results.size());
     }
 
     // 단건 조회
@@ -73,9 +68,9 @@ public class PlantQueryRepository {
     }
 
     // 태그 필터링
-    public Page<PlantListDto> findByPlantTag(PlantTag tag, Pageable pageable) {
+    public CustomPageImpl<PlantListDto> findByPlantTag(PlantTag tag, Long cursorId, Pageable pageable) {
         List<PlantListDto> results = new ArrayList<>();
-        Long count;
+
         if (tag.equals(PlantTag.beginner)) {
             int beginner = 1;
             results = queryFactory
@@ -85,17 +80,10 @@ public class PlantQueryRepository {
                             plant.image
                     ))
                     .from(plant)
-                    .where(isBeginner(beginner))
-                    .offset(pageable.getOffset())
+                    .where(isBeginner(beginner), eqCursorId(cursorId))
                     .orderBy(plant.plantName.asc())
                     .limit(pageable.getPageSize())
                     .fetch();
-
-            count = queryFactory
-                    .select(plant.count())
-                    .from(plant)
-                    .where(isBeginner(beginner))
-                    .fetchOne();
 
         } else if (tag.equals(PlantTag.all)) {
             results = queryFactory
@@ -105,15 +93,11 @@ public class PlantQueryRepository {
                             plant.image
                     ))
                     .from(plant)
+                    .where(eqPlantTag(tag), eqCursorId(cursorId))
                     .orderBy(plant.plantName.asc())
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
                     .fetch();
-
-            count = queryFactory
-                    .select(plant.count())
-                    .from(plant)
-                    .fetchOne();
 
         } else {
             results = queryFactory
@@ -123,20 +107,14 @@ public class PlantQueryRepository {
                             plant.image
                     ))
                     .from(plant)
-                    .where(eqPlantTag(tag))
+                    .where(eqPlantTag(tag), eqCursorId(cursorId))
                     .orderBy(plant.plantName.asc())
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
                     .fetch();
 
-            count = queryFactory
-                    .select(plant.count())
-                    .from(plant)
-                    .where(eqPlantTag(tag))
-                    .fetchOne();
-
         }
-        return new PageImpl<>(results, pageable, count);
+        return new CustomPageImpl<PlantListDto>(results, pageable, results.size());
     }
 
     // 초보자 태그
@@ -160,6 +138,10 @@ public class PlantQueryRepository {
                 .fetchOne();
 
         return new PageImpl<>(results, pageable, count);
+    }
+
+    private BooleanExpression eqCursorId(Long cursorId) {
+        return cursorId == null? null : plant.id.gt(cursorId);
     }
 
     // FullText Index 적용
@@ -192,21 +174,4 @@ public class PlantQueryRepository {
             return null;
         } else return plant.beginner.eq(1);
     }
-
-    // no-offset
-//    private BooleanExpression ltPlantId(Long plantId) {
-//        return isEmpty(plantId) ? null : plant.id.lt(plantId);
-//    }
-
-    // 무한 스크롤 처리
-//    private Slice<PlantListDto> checkLastPage(Pageable pageable, List<PlantListDto> results) {
-//        boolean hasNext = false;            // 다음 페이지가 있는지 여부
-//
-//        if(results.size() > pageable.getPageSize()) {
-//            hasNext = true;
-//            results.remove(pageable.getPageSize());
-//        }
-//        return new SliceImpl<>(results, pageable, hasNext);
-//    }
-
 }
