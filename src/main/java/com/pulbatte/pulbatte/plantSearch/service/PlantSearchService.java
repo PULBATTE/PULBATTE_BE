@@ -4,6 +4,7 @@ import com.pulbatte.pulbatte.global.exception.CustomException;
 import com.pulbatte.pulbatte.global.exception.ErrorCode;
 import com.pulbatte.pulbatte.plantJournal.repository.PlantRepository;
 import com.pulbatte.pulbatte.plantSearch.dto.PlantDetailDto;
+import com.pulbatte.pulbatte.plantSearch.entity.CustomPageImpl;
 import com.pulbatte.pulbatte.plantSearch.entity.Plant;
 import com.pulbatte.pulbatte.plantSearch.entity.PlantTag;
 import com.pulbatte.pulbatte.plantSearch.dto.PlantListDto;
@@ -14,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -32,9 +34,9 @@ public class PlantSearchService {
 //                .build();
 //    }
 
-    // 무한 스크롤 처리
-    public Page<PlantListDto> getAllPlants(Pageable pageable) {
-        return queryRepository.findAll(pageable);
+    @Transactional(readOnly = true)
+    public CustomPageImpl<PlantListDto> getAllPlants(Long cursorId, Pageable pageable) {
+        return queryRepository.findAll(cursorId, pageable);
     }
 
     // 식물 이름 검색

@@ -1,6 +1,8 @@
 package com.pulbatte.pulbatte.plantSearch.repository;
 
+import com.pulbatte.pulbatte.global.repository.RefreshTokenRepository;
 import com.pulbatte.pulbatte.plantSearch.dto.*;
+import com.pulbatte.pulbatte.plantSearch.entity.CustomPageImpl;
 import com.pulbatte.pulbatte.plantSearch.entity.PlantTag;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -21,13 +23,15 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 @Repository
 public class PlantQueryRepository {
     private final JPAQueryFactory queryFactory;
+    private final RefreshTokenRepository refreshTokenRepository;
 
-    public PlantQueryRepository(JPAQueryFactory queryFactory) {
+    public PlantQueryRepository(JPAQueryFactory queryFactory,
+                                RefreshTokenRepository refreshTokenRepository) {
         this.queryFactory = queryFactory;
+        this.refreshTokenRepository = refreshTokenRepository;
     }
 
-    // 전체 목록 무한 스크롤
-    public Page<PlantListDto> findAll(Pageable pageable) {
+    public CustomPageImpl<PlantListDto> findAll(Long cursorId, Pageable pageable) {
         List<PlantListDto> results = queryFactory
                 .select(Projections.fields(PlantListDto.class,
                         plant.id,
@@ -35,17 +39,12 @@ public class PlantQueryRepository {
                         plant.image
                 ))
                 .from(plant)
+                .where(eqCursorId(cursorId))
                 .orderBy(plant.plantName.asc())
-                .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        Long count = queryFactory
-                .select(plant.count())
-                .from(plant)
-                .fetchOne();
-
-        return new PageImpl<>(results, pageable, count);
+        return new CustomPageImpl<>(results, pageable, results.size());
     }
 
     // 단건 조회
@@ -160,6 +159,10 @@ public class PlantQueryRepository {
                 .fetchOne();
 
         return new PageImpl<>(results, pageable, count);
+    }
+
+    private BooleanExpression eqCursorId(Long cursorId) {
+        return cursorId == null? null : plant.id.gt(cursorId);
     }
 
     // FullText Index 적용

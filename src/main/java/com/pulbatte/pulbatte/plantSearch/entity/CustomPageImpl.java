@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 @Getter
-public class CustomPageImpl<T> extends PageImpl<T> {
+    public class CustomPageImpl<T> extends PageImpl<T> {
 
     @JsonCreator
     public CustomPageImpl(List content, Pageable pageable, long total) {
