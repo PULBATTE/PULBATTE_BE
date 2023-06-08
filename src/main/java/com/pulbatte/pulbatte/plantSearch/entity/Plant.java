@@ -25,7 +25,7 @@ public class Plant {
     @Column
     private String content;                 //식물 설명
 
-    @Enumerated(value = EnumType.STRING)
+    @Convert(converter = PlantTagConverter.class)
     @Column
     private PlantTag plantTag;                //식물 태그
 
